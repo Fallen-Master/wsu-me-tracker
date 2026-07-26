@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Rafael's WSU ME Transfer Tracker</title>
+<style>
+/* ============================================================
+   ALL YOUR DATA IS IN data.js — you don't need to touch this file
+   to update a course. See README.md.
+   ============================================================ */
+:root{
+  --gold:#FFCD00;
+  --gold-soft:#FFE580;
+  --black:#111111;
+  --ink:#1c1c1c;
+  --muted:#6b6b6b;
+  --bg:#faf9f6;
+  --card:#ffffff;
+  --line:#e9e7e1;
+  --green:#1f9d55;
+  --green-soft:#e4f5ec;
+  --amber:#b7791f;
+  --amber-soft:#fdf3e0;
+  --blue:#2b6cb0;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.05);
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.5;
+  padding-bottom:56px;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
+.section{margin-top:34px}
+.section-sub{color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+/* ---------- HERO ---------- */
+.hero{
+  background:linear-gradient(160deg,#000 0%,#1a1a1a 60%,#232323 100%);
+  color:#fff;border-radius:0 0 26px 26px;padding:26px 0 30px;
+  box-shadow:0 6px 24px rgba(0,0,0,.18);
+}
+.hero .wrap{display:flex;flex-direction:column;gap:20px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.hero h1{font-size:1.5rem;line-height:1.15;letter-spacing:-.02em}
+.hero .goal{color:var(--gold);font-weight:600;font-size:1.02rem;margin-top:4px}
+.hero .meta{color:#c9c9c9;font-size:.83rem;margin-top:8px}
+.hero .meta b{color:#fff;font-weight:600}
+.badge{display:inline-block;background:rgba(255,205,0,.14);color:var(--gold);
+  border:1px solid rgba(255,205,0,.35);border-radius:999px;padding:3px 11px;font-size:.72rem;font-weight:600;letter-spacing:.02em}
+
+/* progress ring */
+.ring-wrap{display:flex;align-items:center;gap:16px}
+.ring{position:relative;width:118px;height:118px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .pct{font-size:1.7rem;font-weight:700;letter-spacing:-.02em}
+.ring .lbl{font-size:.62rem;color:#bdbdbd;text-transform:uppercase;letter-spacing:.08em}
+.motiv{font-size:1.02rem;font-weight:600}
+.motiv b{color:var(--gold)}
+.motiv .sub{display:block;color:#bdbdbd;font-size:.8rem;font-weight:400;margin-top:4px}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.kpi{padding:15px 16px}
+.kpi .n{font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.kpi .n small{font-size:.85rem;color:var(--muted);font-weight:600}
+.kpi .k{color:var(--muted);font-size:.76rem;margin-top:7px;text-transform:uppercase;letter-spacing:.04em}
+.kpi.ok .n{color:var(--green)}
+.kpi.gold{background:linear-gradient(150deg,#fffdf3,#fff8dc);border-color:#f2e6a8}
+
+/* ---------- TABS ---------- */
+.tabs{display:flex;gap:6px;background:#f0efe9;padding:5px;border-radius:12px;margin-bottom:14px}
+.tab{flex:1;border:none;background:transparent;padding:9px 6px;border-radius:8px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s}
+.tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.tab .cnt{opacity:.6;font-weight:600}
+
+/* ---------- COURSE ROWS ---------- */
+.course{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.course:last-child{border-bottom:none}
+.course .check{width:22px;height:22px;border-radius:7px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;background:#fff}
+.course.done .check{background:var(--green);border-color:var(--green)}
+.course .check svg{opacity:0;transition:.15s}
+.course.done .check svg{opacity:1}
+.course.static .check{cursor:default;border-radius:50%;border-color:var(--green);background:var(--green)}
+.course .body{flex:1;min-width:0}
+.course .title{font-weight:600;font-size:.92rem}
+.course.done .title{color:var(--muted)}
+.course .code{color:var(--muted);font-weight:600;font-size:.78rem}
+.course .notes{color:var(--muted);font-size:.79rem;margin-top:3px}
+.course .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.grade{background:var(--green-soft);color:var(--green)}
+.pill.cr{background:#f0efe9;color:#555}
+.pill.hi{background:#fdeaea;color:#c53030}
+.pill.med{background:var(--amber-soft);color:var(--amber)}
+.pill.low{background:#eef2f7;color:var(--blue)}
+.pill.verify{background:#fdf3e0;color:var(--amber)}
+
+/* ---------- ROADMAP ---------- */
+.term{margin-bottom:10px;overflow:hidden}
+.term-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;gap:10px}
+.term-head .t{font-weight:700;font-size:.95rem}
+.term-head .t span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:6px}
+.term-head .load{font-size:.72rem;color:var(--muted);background:#f0efe9;padding:3px 9px;border-radius:999px;font-weight:600}
+.term-head .chev{color:var(--muted);transition:.2s;font-size:.9rem}
+.term.open .chev{transform:rotate(90deg)}
+.term-body{display:none;padding:0 16px 14px;border-top:1px solid var(--line)}
+.term.open .term-body{display:block}
+.term-body ul{list-style:none;margin-top:10px}
+.term-body li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:.86rem;border-bottom:1px dashed var(--line)}
+.term-body li:last-child{border-bottom:none}
+.term-body li span:last-child{color:var(--muted);flex-shrink:0}
+.term.grad .term-head{background:linear-gradient(150deg,#fffdf3,#fff4c8);border-color:#f2e6a8}
+.term.grad .t{color:#8a6d00}
+
+/* ---------- AID ---------- */
+.aid-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.aid{padding:14px 15px}
+.aid .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+.aid .name{font-weight:600;font-size:.86rem}
+.aid .amt{font-size:1.15rem;font-weight:700;letter-spacing:-.01em;margin:3px 0 5px}
+.aid .d{color:var(--muted);font-size:.78rem}
+.tag{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+.tag.on{background:var(--green-soft);color:var(--green)}
+.tag.soon{background:var(--amber-soft);color:var(--amber)}
+.tag.off{background:#f0efe9;color:#888}
+
+/* ---------- TASKS ---------- */
+.task{display:flex;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);align-items:flex-start}
+.task:last-child{border-bottom:none}
+.task .check{width:22px;height:22px;border-radius:7px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff;transition:.15s}
+.task.done .check{background:var(--green);border-color:var(--green)}
+.task .check svg{opacity:0}.task.done .check svg{opacity:1}
+.task .txt{font-size:.88rem}
+.task.done .txt{color:var(--muted);text-decoration:line-through}
+.task .n{font-weight:700;color:var(--gold-dark,#b58a00);margin-right:2px}
+
+/* ---------- CONTACTS ---------- */
+.contacts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.contact{padding:13px 15px}
+.contact .who{font-weight:600;font-size:.86rem}
+.contact a{color:var(--blue);text-decoration:none;font-size:.8rem;display:block;margin-top:3px;word-break:break-word}
+
+.reset{background:none;border:none;color:var(--muted);font-size:.76rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:16px}
+.foot{text-align:center;color:var(--muted);font-size:.74rem;margin:30px 0 10px;line-height:1.7}
+
+@media(max-width:560px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .aid-grid,.contacts{grid-template-columns:1fr}
+  .hero-top{flex-direction:column}
+  .hero h1{font-size:1.35rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <span class="badge">Pre-Engineering AS · Butler CC</span>
+        <h1 style="margin-top:10px">Rafael Gomez</h1>
+        <div class="goal">BS Mechanical Engineering · Wichita State</div>
+        <div class="meta">Long-term: aerospace → <b>SpaceX</b> 🚀</div>
+      </div>
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg width="118" height="118" viewBox="0 0 118 118">
+            <circle cx="59" cy="59" r="50" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="11"/>
+            <circle id="ringFill" cx="59" cy="59" r="50" fill="none" stroke="#FFCD00" stroke-width="11" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+          </svg>
+          <div class="val"><div class="pct" id="ringPct">0%</div><div class="lbl">complete</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="motiv" id="motiv">Loading…</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ KPIs ============ -->
+  <section class="section" style="margin-top:22px">
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <!-- ============ COURSE TRACKER ============ -->
+  <section class="section">
+    <h2>Course Tracker</h2>
+    <div class="section-sub">Tap a course in “Still Needed” or “In Progress” to check it off. Your progress ring updates and saves on this device.</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="card" id="courseList"></div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section class="section">
+    <h2>Roadmap to Graduation</h2>
+    <div class="section-sub">Part-time plan · ~6–9 credits/semester. Tap a semester to expand.</div>
+    <div id="roadmap"></div>
+  </section>
+
+  <!-- ============ FINANCIAL AID ============ -->
+  <section class="section">
+    <h2>Financial Aid</h2>
+    <div class="section-sub">FAFSA filed July 2026 for 2026–27 · independent student, family of 4.</div>
+    <div class="aid-grid" id="aid"></div>
+  </section>
+
+  <!-- ============ TASKS ============ -->
+  <section class="section">
+    <h2>Next Actions</h2>
+    <div class="section-sub">In priority order. Tap to check off.</div>
+    <div class="card" id="tasks"></div>
+    <button class="reset" id="resetBtn">Reset all check-offs on this device</button>
+  </section>
+
+  <!-- ============ CONTACTS ============ -->
+  <section class="section">
+    <h2>Key Contacts</h2>
+    <div class="contacts" id="contacts"></div>
+  </section>
+
+  <div class="foot">
+    68 credits earned toward a 129-credit BS ME · Overall GPA 3.07<br>
+    You're not behind. You're building this on your own terms. Keep going. 💪
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+/* ============================================================
+   RENDERING LOGIC — you shouldn't need to edit below this line.
+   To update your data, edit data.js.
+   ============================================================ */
+const STORE_KEY = 'rafael-wsu-tracker-v1';
+let state = load();
+
+function load(){ try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return {}} }
+function save(){ try{localStorage.setItem(STORE_KEY, JSON.stringify(state))}catch(e){} }
+
+// merge saved checkoffs into course/task data
+DATA.courses.forEach(c=>{ if(c.id in state) c.done = state[c.id]; });
+DATA.tasks.forEach(t=>{ if(t.id in state) t.done = state[t.id]; });
+
+const CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+/* ---------- progress ---------- */
+function computeProgress(){
+  const base = DATA.creditsEarnedBase;
+  const bonus = DATA.courses
+    .filter(c=>c.done && (c.status==='needed'||c.status==='progress'))
+    .reduce((s,c)=>s+c.credits,0);
+  const earned = base + bonus;
+  const pct = Math.min(100, Math.round(earned/DATA.totalCredits*100));
+  return {earned, pct, remaining: DATA.totalCredits-earned};
+}
+function renderRing(){
+  const {earned,pct,remaining}=computeProgress();
+  const circ=314.16;
+  document.getElementById('ringFill').style.strokeDashoffset = circ-(circ*pct/100);
+  document.getElementById('ringPct').textContent = pct+'%';
+  document.getElementById('motiv').innerHTML =
+    `<b>${earned} credits down, ${remaining} to go.</b>`+
+    `<span class="sub">${earned} / ${DATA.totalCredits} toward your BS in Mechanical Engineering</span>`;
+}
+
+/* ---------- KPIs ---------- */
+function renderKpis(){
+  const el=document.getElementById('kpis');
+  el.innerHTML = DATA.kpis.map(k=>`
+    <div class="card kpi ${k.cls||''}">
+      <div class="n">${k.value}${k.unit?`<small> ${k.unit}</small>`:''}</div>
+      <div class="k">${k.label}</div>
+    </div>`).join('');
+}
+
+/* ---------- courses ---------- */
+let activeTab='needed';
+function renderTabs(){
+  const counts={completed:0,progress:0,needed:0};
+  DATA.courses.forEach(c=>counts[c.status]++);
+  const tabs=[
+    {id:'needed',label:'Still Needed'},
+    {id:'progress',label:'In Progress'},
+    {id:'completed',label:'Completed'},
+  ];
+  document.getElementById('tabs').innerHTML = tabs.map(t=>
+    `<button class="tab ${t.id===activeTab?'active':''}" data-tab="${t.id}">${t.label} <span class="cnt">${counts[t.id]}</span></button>`
+  ).join('');
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderTabs();renderCourses();});
+}
+function prioPill(p){
+  if(p==='high')return '<span class="pill hi">High priority</span>';
+  if(p==='med')return '<span class="pill med">Medium</span>';
+  if(p==='low')return '<span class="pill low">Low priority</span>';
+  return '';
+}
+function renderCourses(){
+  const list=DATA.courses.filter(c=>c.status===activeTab);
+  const el=document.getElementById('courseList');
+  el.innerHTML=list.map(c=>{
+    const done=!!c.done;
+    const isStatic=c.status==='completed';
+    const right = isStatic
+      ? `<span class="pill grade">${c.grade}</span><span class="pill cr">${c.credits} cr</span><span class="course-term" style="color:var(--muted);font-size:.72rem">${c.term||''}</span>`
+      : `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
+    return `<div class="course ${done?'done':''} ${isStatic?'static':''}" data-id="${c.id}" data-static="${isStatic}">
+      <div class="check">${CHECK}</div>
+      <div class="body">
+        <div class="code">${c.code}</div>
+        <div class="title">${c.title}</div>
+        ${c.notes?`<div class="notes">${c.notes}</div>`:''}
+      </div>
+      <div class="right">${right}</div>
+    </div>`;
+  }).join('') || '<div style="padding:20px;text-align:center;color:var(--muted);font-size:.85rem">Nothing here.</div>';
+
+  el.querySelectorAll('.course').forEach(row=>{
+    if(row.dataset.static==='true')return;
+    row.querySelector('.check').onclick=()=>{
+      const id=row.dataset.id;
+      const c=DATA.courses.find(x=>x.id===id);
+      c.done=!c.done; state[id]=c.done; save();
+      renderCourses(); renderRing(); renderTabs();
+    };
+  });
+}
+
+/* ---------- roadmap ---------- */
+function renderRoadmap(){
+  document.getElementById('roadmap').innerHTML = DATA.roadmap.map((t,i)=>`
+    <div class="card term ${i===0?'open':''} ${t.grad?'grad':''}">
+      <div class="term-head">
+        <div class="t">${t.term}${t.note?`<span>${t.note}</span>`:''}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="load">${t.load}</span>
+          <span class="chev">▶</span>
+        </div>
+      </div>
+      <div class="term-body">
+        <ul>${t.courses.map(c=>`<li><span>${c.name}</span><span>${c.cr}</span></li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('.term-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
+}
+
+/* ---------- aid ---------- */
+function renderAid(){
+  document.getElementById('aid').innerHTML = DATA.aid.map(a=>`
+    <div class="card aid">
+      <div class="h"><div class="name">${a.name}</div><span class="tag ${a.tagCls}">${a.tag}</span></div>
+      <div class="amt">${a.amount}</div>
+      <div class="d">${a.detail}</div>
+    </div>`).join('');
+}
+
+/* ---------- tasks ---------- */
+function renderTasks(){
+  const el=document.getElementById('tasks');
+  el.innerHTML=DATA.tasks.map((t,i)=>`
+    <div class="task ${t.done?'done':''}" data-id="${t.id}">
+      <div class="check">${CHECK}</div>
+      <div class="txt"><span class="n">${i+1}.</span> ${t.text}</div>
+    </div>`).join('');
+  el.querySelectorAll('.task').forEach(row=>{
+    row.querySelector('.check').onclick=()=>{
+      const id=row.dataset.id, t=DATA.tasks.find(x=>x.id===id);
+      t.done=!t.done; state[id]=t.done; save(); renderTasks();
+    };
+  });
+}
+
+/* ---------- contacts ---------- */
+function renderContacts(){
+  document.getElementById('contacts').innerHTML = DATA.contacts.map(c=>`
+    <div class="card contact">
+      <div class="who">${c.who}</div>
+      ${c.email?`<a href="mailto:${c.email}">${c.email}</a>`:''}
+      ${c.phone?`<a href="tel:${c.phone.replace(/[^0-9]/g,'')}">${c.phone}</a>`:''}
+    </div>`).join('');
+}
+
+document.getElementById('resetBtn').onclick=()=>{
+  if(confirm('Reset all check-offs on this device? Your data.js is not affected.')){
+    localStorage.removeItem(STORE_KEY); location.reload();
+  }
+};
+
+renderRing();renderKpis();renderTabs();renderCourses();renderRoadmap();renderAid();renderTasks();renderContacts();
+</script>
+</body>
+</html>
