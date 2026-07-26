@@ -141,6 +141,10 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .task .txt{font-size:.88rem}
 .task.done .txt{color:var(--muted);text-decoration:line-through}
 .task .n{font-weight:700;color:var(--gold-dark,#b58a00);margin-right:2px}
+.ctag{font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;margin-left:5px;display:inline-block;vertical-align:middle}
+.ctag.deadline{background:#fdeaea;color:#c53030}
+.ctag.aid{background:var(--green-soft);color:var(--green)}
+.ctag.school{background:#eef2f7;color:var(--blue)}
 
 /* ---------- CONTACTS ---------- */
 .contacts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
@@ -148,6 +152,17 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .contact .who{font-weight:600;font-size:.86rem}
 .contact a{color:var(--blue);text-decoration:none;font-size:.8rem;display:block;margin-top:3px;word-break:break-word}
 
+/* ---------- LOCK ---------- */
+.lock{padding:22px 18px;text-align:center}
+.lock .lk{font-size:1.6rem;line-height:1}
+.lock .lt{font-weight:600;margin:8px 0 2px}
+.lock .ls{color:var(--muted);font-size:.8rem;margin-bottom:14px}
+.lock .row{display:flex;gap:8px;max-width:320px;margin:0 auto}
+.lock input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;font-family:inherit;background:var(--bg)}
+.lock input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.25)}
+.lock button{background:var(--black);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit}
+.lock .err{color:#c53030;font-size:.78rem;margin-top:9px;min-height:1em}
+.relock{background:none;border:none;color:var(--muted);font-size:.74rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:10px}
 .reset{background:none;border:none;color:var(--muted);font-size:.76rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:16px}
 .foot{text-align:center;color:var(--muted);font-size:.74rem;margin:30px 0 10px;line-height:1.7}
 
@@ -207,18 +222,11 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
     <div id="roadmap"></div>
   </section>
 
-  <!-- ============ FINANCIAL AID ============ -->
+  <!-- ============ SEMESTER CHECKLIST ============ -->
   <section class="section">
-    <h2>Financial Aid</h2>
-    <div class="section-sub">FAFSA filed July 2026 for 2026–27 · independent student, family of 4.</div>
-    <div class="aid-grid" id="aid"></div>
-  </section>
-
-  <!-- ============ TASKS ============ -->
-  <section class="section">
-    <h2>Next Actions</h2>
-    <div class="section-sub">In priority order. Tap to check off.</div>
-    <div class="card" id="tasks"></div>
+    <h2>Semester Checklist</h2>
+    <div class="section-sub">Everything to get done, by term — FAFSA, state grant, scholarships, registration, advising. Tap to check off; saved on this device.</div>
+    <div id="checklist"></div>
     <button class="reset" id="resetBtn">Reset all check-offs on this device</button>
   </section>
 
@@ -246,9 +254,9 @@ let state = load();
 function load(){ try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return {}} }
 function save(){ try{localStorage.setItem(STORE_KEY, JSON.stringify(state))}catch(e){} }
 
-// merge saved checkoffs into course/task data
+// merge saved checkoffs into course/checklist data
 DATA.courses.forEach(c=>{ if(c.id in state) c.done = state[c.id]; });
-DATA.tasks.forEach(t=>{ if(t.id in state) t.done = state[t.id]; });
+DATA.checklist.forEach(g=>g.items.forEach(it=>{ if(it.id in state) it.done = state[it.id]; }));
 
 const CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
@@ -352,28 +360,43 @@ function renderRoadmap(){
   document.querySelectorAll('.term-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
 }
 
-/* ---------- aid ---------- */
-function renderAid(){
-  document.getElementById('aid').innerHTML = DATA.aid.map(a=>`
-    <div class="card aid">
-      <div class="h"><div class="name">${a.name}</div><span class="tag ${a.tagCls}">${a.tag}</span></div>
-      <div class="amt">${a.amount}</div>
-      <div class="d">${a.detail}</div>
-    </div>`).join('');
-}
+/* ---------- semester checklist ---------- */
+const TAG_LABEL={deadline:'Deadline', aid:'Aid', school:'School'};
+function renderChecklist(){
+  const el=document.getElementById('checklist');
+  el.innerHTML = DATA.checklist.map((g,gi)=>{
+    const total=g.items.length, done=g.items.filter(i=>i.done).length;
+    const allDone = done===total;
+    const rows=g.items.map(it=>{
+      const tag = (it.tag && TAG_LABEL[it.tag]) ? ` <span class="ctag ${it.tag}">${TAG_LABEL[it.tag]}</span>` : '';
+      return `<div class="task ${it.done?'done':''}" data-id="${it.id}">
+        <div class="check">${CHECK}</div>
+        <div class="txt">${it.text}${tag}</div>
+      </div>`;
+    }).join('');
+    return `<div class="card term ${gi===0?'open':''} ${g.recurring?'grad':''}">
+      <div class="term-head">
+        <div class="t">${g.term}${g.note?`<span>${g.note}</span>`:''}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="load">${done}/${total}${allDone&&total?' ✓':''}</span>
+          <span class="chev">▶</span>
+        </div>
+      </div>
+      <div class="term-body" style="padding-top:0">${rows}</div>
+    </div>`;
+  }).join('');
 
-/* ---------- tasks ---------- */
-function renderTasks(){
-  const el=document.getElementById('tasks');
-  el.innerHTML=DATA.tasks.map((t,i)=>`
-    <div class="task ${t.done?'done':''}" data-id="${t.id}">
-      <div class="check">${CHECK}</div>
-      <div class="txt"><span class="n">${i+1}.</span> ${t.text}</div>
-    </div>`).join('');
+  el.querySelectorAll('.term-head').forEach(h=>h.onclick=(e)=>{
+    if(e.target.closest('.task')) return;
+    h.parentElement.classList.toggle('open');
+  });
   el.querySelectorAll('.task').forEach(row=>{
-    row.querySelector('.check').onclick=()=>{
-      const id=row.dataset.id, t=DATA.tasks.find(x=>x.id===id);
-      t.done=!t.done; state[id]=t.done; save(); renderTasks();
+    row.querySelector('.check').onclick=(e)=>{
+      e.stopPropagation();
+      const id=row.dataset.id;
+      let item; DATA.checklist.forEach(g=>g.items.forEach(i=>{if(i.id===id)item=i;}));
+      if(!item)return;
+      item.done=!item.done; state[id]=item.done; save(); renderChecklist();
     };
   });
 }
@@ -394,7 +417,7 @@ document.getElementById('resetBtn').onclick=()=>{
   }
 };
 
-renderRing();renderKpis();renderTabs();renderCourses();renderRoadmap();renderAid();renderTasks();renderContacts();
+renderRing();renderKpis();renderTabs();renderCourses();renderRoadmap();renderChecklist();renderContacts();
 </script>
 </body>
 </html>

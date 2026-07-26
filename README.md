@@ -45,6 +45,25 @@ marked completed.
 
 ---
 
+## The semester checklist
+
+Instead of listing dollar figures, the site has a **Semester Checklist** — every
+to-do grouped by term (FAFSA, KS Comprehensive Grant, WSU scholarships,
+registration, advisor emails). Tap an item to check it off; it saves on your
+device. There's also an "Every year — don't forget" group for recurring deadlines.
+
+To add, remove, or reword an item, edit the `checklist` array in `data.js`. Each
+item needs a unique `id`. Example:
+
+```js
+{id:"ck_mynewtask", text:"Do the thing before Friday", tag:"deadline"},
+```
+
+`tag` is optional and can be `"deadline"`, `"aid"`, or `"school"` (it just colors
+a little label). No personal or financial account data lives on the site.
+
+---
+
 ## How to push changes to GitHub
 
 If you have the repo on your computer:

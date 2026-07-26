@@ -88,36 +88,48 @@ const DATA = {
      courses:[{name:"Target aerospace internships: Spirit, Textron, Bombardier",cr:"→ SpaceX"}]},
   ],
 
-  // ---- FINANCIAL AID ----
-  aid: [
-    {name:"Pell Grant", amount:"up to $4,445/yr", tag:"Awarded", tagCls:"on",
-     detail:"Prorates by load — full at 12+ cr, ~50% at 6–8 cr."},
-    {name:"Federal Direct Loans", amount:"up to $10,500/yr", tag:"Eligible", tagCls:"on",
-     detail:"Independent student. Requires 6+ credits."},
-    {name:"WSU Engineering Scholarships", amount:"90+ funds", tag:"Opens Nov 1", tagCls:"soon",
-     detail:"App: Nov 1, 2026 → Mar 1, 2027. Ask advisor which allow part-time."},
-    {name:"KS Comprehensive Grant", amount:"varies", tag:"Apply by Apr 1", tagCls:"soon",
-     detail:"2027–28 window opens ~Nov 2026. First-come, first-served."},
-    {name:"Federal Work-Study", amount:"eligible", tag:"Skipping", tagCls:"off",
-     detail:"Likely skip — already working 40 hrs/week."},
-    {name:"WSU Transfer Merit", amount:"up to $3,000/yr", tag:"Full-time only", tagCls:"off",
-     detail:"Requires full-time — likely N/A given part-time plan."},
-    {name:"KS Promise Act", amount:"tuition aid", tag:"Not pursuing", tagCls:"off",
-     detail:"2-yr KS work commitment conflicts with SpaceX (TX/CA/FL/WA)."},
-    {name:"FAFSA 2026–27", amount:"Filed", tag:"Done", tagCls:"on",
-     detail:"Filed July 2026. Renew each October for next year."},
-  ],
-
-  // ---- TASKS ----
-  tasks: [
-    {id:"t1", text:"Email WSU Engineering advisor: part-time ME plan, CH 106→CH 110 substitution, which scholarships allow part-time, ME vs AE for a SpaceX goal."},
-    {id:"t2", text:"Confirm: does CH 106 Intro Chem substitute for CH 110 College Chemistry I?"},
-    {id:"t3", text:"Meet Butler advisor — confirm courses align with 2026–27 WSU Engineering Transfer Guide."},
-    {id:"t4", text:"Register for Spring 2027: Physics I (+ CH 110 if needed)."},
-    {id:"t5", text:"Apply for WSU Engineering scholarships when the app opens Nov 1, 2026."},
-    {id:"t6", text:"Calendar reminder Feb 1, 2027 → apply for 2027–28 KS Comprehensive Grant."},
-    {id:"t7", text:"Start WSU transfer application ~1 semester before target transfer term."},
-    {id:"t8", text:"Renew FAFSA each October for the next school year."},
+  // ---- SEMESTER CHECKLIST ----
+  // Everything to DO — aid, scholarships, registration, advising — by term.
+  // Tap an item to check it off (saves on your device). Add items freely.
+  // tag (optional): "deadline" | "aid" | "school" | "done"
+  checklist: [
+    {term:"Right Now · Fall 2026", note:"Current semester", items:[
+      {id:"ck_fafsa2627", text:"FAFSA 2026–27 — filed ✓", done:true, tag:"done"},
+      {id:"ck_advisor", text:"Email WSU Engineering advisor: part-time ME plan, CH 106→CH 110 substitution, which scholarships allow part-time, ME vs AE for a SpaceX goal", tag:"school"},
+      {id:"ck_chsub", text:"Confirm with advisor: does CH 106 substitute for CH 110?", tag:"school"},
+      {id:"ck_butler", text:"Meet Butler advisor — confirm courses match the 2026–27 WSU transfer guide", tag:"school"},
+      {id:"ck_fafsa2728", text:"October: renew FAFSA for 2027–28 (opens Oct 1)", tag:"aid"},
+      {id:"ck_wsusch_open", text:"Nov 1: WSU Engineering scholarship application opens — start it (90+ funds)", tag:"aid"},
+      {id:"ck_reg_sp27", text:"Register for Spring 2027 — Physics I (+ CH 110 if needed)", tag:"school"},
+    ]},
+    {term:"Spring 2027", note:"Physics I + Chemistry", items:[
+      {id:"ck_wsusch_due", text:"Mar 1: submit WSU Engineering scholarship application (deadline)", tag:"deadline"},
+      {id:"ck_ksgrant2728", text:"Before Apr 1: apply for 2027–28 KS Comprehensive Grant (first-come, first-served)", tag:"deadline"},
+      {id:"ck_reg_su27", text:"Register for Summer & Fall 2027", tag:"school"},
+    ]},
+    {term:"Summer 2027", note:"Light load", items:[
+      {id:"ck_take_su27", text:"Take MA 260 Differential Equations or EN 102 Engineering Graphics II", tag:"school"},
+    ]},
+    {term:"Fall 2027", note:"Physics II + Statics", items:[
+      {id:"ck_fafsa2829", text:"October: renew FAFSA for 2028–29", tag:"aid"},
+      {id:"ck_wsusch_27", text:"Nov 1: WSU Engineering scholarships open again — apply", tag:"aid"},
+      {id:"ck_reg_sp28", text:"Register for Spring 2028", tag:"school"},
+    ]},
+    {term:"Spring 2028", note:"Finish Butler prereqs + apply to transfer", items:[
+      {id:"ck_wsusch_28", text:"Mar 1: WSU Engineering scholarship deadline", tag:"deadline"},
+      {id:"ck_ksgrant2829", text:"Before Apr 1: apply for 2028–29 KS Comprehensive Grant", tag:"deadline"},
+      {id:"ck_transfer_app", text:"Submit WSU transfer application for Fall 2028", tag:"deadline"},
+      {id:"ck_reg_fa28", text:"Register for Fall 2028", tag:"school"},
+    ]},
+    {term:"Fall 2028 · Transfer to WSU", note:"Junior standing", items:[
+      {id:"ck_wsu_advisor", text:"Meet WSU advisor — plan the upper-division ME course sequence", tag:"school"},
+      {id:"ck_orgs", text:"Join AIAA and/or Shocker Racing (Formula SAE) for the aerospace résumé", tag:"school"},
+    ]},
+    {term:"Every year — don't forget", note:"Recurring deadlines", recurring:true, items:[
+      {id:"ck_r_fafsa", text:"Renew FAFSA every October for the next school year", tag:"aid"},
+      {id:"ck_r_ksgrant", text:"Apply for the KS Comprehensive Grant every year before April 1", tag:"aid"},
+      {id:"ck_r_wsusch", text:"Apply for WSU Engineering scholarships every year (Nov 1 – Mar 1)", tag:"aid"},
+    ]},
   ],
 
   // ---- CONTACTS ----
