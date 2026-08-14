@@ -1,114 +1,177 @@
 /* ==================================================================
    RAFAEL'S WSU ME TRACKER — ALL YOUR DATA LIVES HERE
    ------------------------------------------------------------------
-   To mark a "Still Needed" course as done permanently, change its
-   "status" from "needed" to "completed", add a "grade" and "term".
-   (Or just tap it on the site — that saves on your phone/laptop.)
-   Save the file, commit, push. The site updates in ~1 minute.
+   HOW THE PERCENTAGE WORKS NOW (this is the big change):
+
+   Progress is NOT "every credit I ever earned / 128".
+   Progress is "credits that actually FILL A DEGREE REQUIREMENT / 128".
+
+   That's how WSU's transfer portal gets 38%. Credits you earned that
+   don't slot into a required bucket (Intro to Business, Fitness for
+   Life, the CATIA courses, WSU Tech electives) are real credits — WSU
+   accepts them — but they do NOT move the degree-completion number.
+   They're listed at the bottom under `extras` so you can see them.
+
+   TO ADD A CLASS: just use the "+ Add a class" button on the site.
+   It saves on your phone/laptop. No need to edit this file or ask
+   Claude. Edit this file only if you want a change baked into the
+   repo permanently.
    ================================================================== */
 const DATA = {
-  totalCredits: 129,       // WSU BS Mechanical Engineering total
-  creditsEarnedBase: 68,   // credits already earned & banked
+  program: "BS Mechanical Engineering · Wichita State University",
+  catalogYear: "2026–27",
+  totalCredits: 128,
 
-  // ---- KPI cards ----
-  kpis: [
-    {label:"Credits earned",           value:"68", unit:"/ 129", cls:"gold"},
-    {label:"Overall GPA",              value:"3.07"},
-    {label:"Spring 2026 GPA",          value:"3.54", cls:"ok"},   // Dean's Honor Roll
-    {label:"Transfers to WSU",         value:"~64", unit:"cr"},   // junior standing
-    {label:"Remaining at WSU",         value:"~62–64", unit:"cr"},
-    {label:"KS Gen-Ed",                value:"Complete", cls:"ok"},
+  /* ---- REQUIREMENT BUCKETS ----
+     req    = credits the degree requires in this bucket
+     The five buckets add up to exactly 128. No double-counting. */
+  buckets: [
+    {id:"englcomm", name:"English & Communication",        req:9,  blurb:"ENGL 101, ENGL 102, COMM 111"},
+    {id:"gened",    name:"General Education Electives",     req:18, blurb:"Social & behavioral, arts & humanities, math/stats, designated electives — your transcript shows KS Systemwide Gen Ed COMPLETE"},
+    {id:"mathsci",  name:"Engineering Math & Natural Sciences", req:30, blurb:"Calc I–III, Diff Eq, Chemistry, Physics I & II + lab"},
+    {id:"engcore",  name:"Engineering Core (ME)",           req:56, blurb:"Statics through senior capstone — the actual ME degree"},
+    {id:"techelec", name:"Technical Electives",             req:15, blurb:"Mechanical design, manufacturing, thermal & energy systems"},
   ],
 
-  // ---- COURSES ----
-  // status: "completed" | "progress" | "needed"
-  // prio (needed only): "high" | "med" | "low"
+  /* ---- ENGINEERING+ / APPLIED LEARNING (0 credits, still required) ---- */
+  nonCredit: [
+    {id:"eplus",   name:"Engineering+ Requirements", detail:"3 of 7 activities · chair approval", done:false},
+    {id:"applied", name:"Applied Learning Experience", detail:"Satisfied by ME 662 Senior Capstone Design", done:false},
+  ],
+
+  /* ==================================================================
+     COURSES
+     bucket : which requirement it fills ("" = fills nothing, see extras)
+     status : "completed" | "progress" | "needed"
+     applies: true  = WSU has confirmed this fills a requirement
+              false = earned, but fills no requirement (doesn't count)
+     ================================================================== */
   courses: [
-    // ===== IN PROGRESS (Fall 2026) =====
-    {id:"ma253", status:"progress", code:"MA 253", title:"Calc III w/ Analytic Geometry", credits:3,
-     notes:"Current semester — Fall 2026."},
+    // ---------- ENGLISH & COMMUNICATION (9/9 — DONE) ----------
+    {id:"eg101",  bucket:"englcomm", status:"completed", applies:true, code:"EG 101", title:"English Composition 1", wsu:"ENGL 101", credits:3, grade:"B", term:"Sp 2015"},
+    {id:"eg102",  bucket:"englcomm", status:"completed", applies:true, code:"EG 102", title:"English Composition 2", wsu:"ENGL 102", credits:3, grade:"C", term:"Fa 2015"},
+    {id:"sp100",  bucket:"englcomm", status:"completed", applies:true, code:"SP 100", title:"Public Speaking", wsu:"COMM 111", credits:3, grade:"A", term:"Fa 2025"},
 
-    // ===== STILL NEEDED (for WSU Mechanical Engineering) =====
-    {id:"ph251", status:"needed", code:"PH 251", title:"Physics I + Lab", credits:5, prio:"high",
-     notes:"Prereq Calc I (done). Foundation for Statics & Physics II."},
-    {id:"ch110", status:"needed", code:"CH 110", title:"College Chemistry I + Lab", credits:4, prio:"high", verify:true,
-     notes:"Ask advisor if CH 106 (grade A, done) already substitutes."},
-    {id:"ma260", status:"needed", code:"MA 260", title:"Differential Equations", credits:3, prio:"med",
-     notes:"Prereq Calc II (done)."},
-    {id:"en102", status:"needed", code:"EN 102", title:"Engineering Graphics II", credits:3, prio:"med",
-     notes:"Prereq EN 101 (done, grade A)."},
-    {id:"ph252", status:"needed", code:"PH 252", title:"Physics II + Lab", credits:5, prio:"med",
+    // ---------- GENERAL EDUCATION ELECTIVES (18/20) ----------
+    {id:"ma140",  bucket:"gened", status:"completed", applies:true, code:"MA 140", title:"Trigonometry", wsu:"Gen Ed: Math & Statistics", credits:3, grade:"A", term:"Su 2025 (retaken)"},
+    {id:"ec201",  bucket:"gened", status:"completed", applies:true, code:"EC 201", title:"Prin. of Macroeconomics", wsu:"Gen Ed: Social & Behavioral", credits:3, grade:"A", term:"Sp 2026"},
+    {id:"bs160",  bucket:"gened", status:"completed", applies:true, code:"BS 160", title:"General Psychology", wsu:"Gen Ed: Social & Behavioral", credits:3, grade:"C", term:"Sp 2015"},
+    {id:"ar100",  bucket:"gened", status:"completed", applies:true, code:"AR 100", title:"Art Appreciation", wsu:"Gen Ed: Arts & Humanities", credits:3, grade:"B", term:"Sp 2015"},
+    {id:"hs131",  bucket:"gened", status:"completed", applies:true, code:"HS 131", title:"US History 1", wsu:"Gen Ed: Arts & Humanities", credits:3, grade:"B", term:"Fa 2015"},
+    {id:"ba104",  bucket:"gened", status:"completed", applies:true, code:"BA 104", title:"Info Processing Systems", wsu:"CED 115 Computer Applications", credits:3, grade:"A", term:"Su 2017 · WSU Tech"},
+    // ---------- ENGINEERING MATH & NATURAL SCIENCES (18/30) ----------
+    {id:"ma151",  bucket:"mathsci", status:"completed", applies:true, code:"MA 151", title:"Calc I w/ Analytic Geometry", wsu:"MATH 242 Calculus I", credits:5, grade:"B", term:"Fa 2025 (retaken)"},
+    {id:"ma152",  bucket:"mathsci", status:"completed", applies:true, code:"MA 152", title:"Calc II w/ Analytic Geometry", wsu:"MATH 243 Calculus II", credits:5, grade:"B", term:"Sp 2026"},
+    {id:"ch106",  bucket:"mathsci", status:"completed", applies:true, code:"CH 106", title:"Intro Chem: Gen, Org, Biochem", wsu:"CHEM 211 General Chemistry I + lab", credits:5, grade:"A", term:"Fa 2018 · WSU Tech",
+     notes:"WSU's transfer portal already applied this to the science requirement."},
+    {id:"ma253",  bucket:"mathsci", status:"progress", applies:true, code:"MA 253", title:"Calc III w/ Analytic Geometry", wsu:"MATH 344 Calculus III", credits:3, term:"Fall 2026",
+     notes:"In progress right now. WSU's portal is already counting it."},
+    {id:"ma260",  bucket:"mathsci", status:"needed", applies:true, code:"MA 260", title:"Differential Equations", wsu:"MATH 555 Differential Equations I", credits:3, prio:"med",
+     notes:"Butler equivalent. Prereq Calc II (done)."},
+    {id:"ph251",  bucket:"mathsci", status:"needed", applies:true, code:"PH 251", title:"Physics I (Scientists)", wsu:"PHYS 313 Physics for Scientists I", credits:4, prio:"high",
+     notes:"Biggest unlock you have. Gates Statics, Physics II, and most of the ME core."},
+    {id:"ph251l", bucket:"mathsci", status:"needed", applies:true, code:"PH 251L", title:"Physics I Lab", wsu:"PHYS 315 University Physics Lab I", credits:1, prio:"high",
+     notes:"Take alongside Physics I."},
+    {id:"ph252",  bucket:"mathsci", status:"needed", applies:true, code:"PH 252", title:"Physics II (Scientists)", wsu:"PHYS 314 Physics for Scientists II", credits:4, prio:"med",
      notes:"Prereq Physics I."},
-    {id:"en260", status:"needed", code:"EN 260", title:"Statics", credits:3, prio:"med",
-     notes:"Take with or after Physics I."},
-    {id:"pl292", status:"needed", code:"PL 292", title:"Engineering Ethics", credits:3, prio:"low",
-     notes:"Can take at Butler or WSU."},
 
-    // ===== COMPLETED — Butler CC =====
-    {id:"ec201", status:"completed", code:"EC 201", title:"Prin. of Macroeconomics", credits:3, grade:"A", term:"Sp 2026"},
-    {id:"en101", status:"completed", code:"EN 101", title:"Engineering Graphics I", credits:3, grade:"A", term:"Sp 2026"},
-    {id:"ma152", status:"completed", code:"MA 152", title:"Calc II w/ Analytic Geometry", credits:5, grade:"B", term:"Sp 2026"},
-    {id:"sp100", status:"completed", code:"SP 100", title:"Public Speaking", credits:3, grade:"A", term:"Fa 2025"},
-    {id:"ma151", status:"completed", code:"MA 151", title:"Calc I w/ Analytic Geometry", credits:5, grade:"B", term:"Fa 2025 (retaken)"},
-    {id:"ma140", status:"completed", code:"MA 140", title:"Trigonometry", credits:3, grade:"A", term:"Su 2025 (retaken)"},
-    {id:"eg101", status:"completed", code:"EG 101", title:"English Composition 1", credits:3, grade:"B", term:"Sp 2015"},
-    {id:"eg102", status:"completed", code:"EG 102", title:"English Composition 2", credits:3, grade:"C", term:"Fa 2015"},
-    {id:"sp100b", status:"completed", code:"BS 160", title:"General Psychology", credits:3, grade:"C", term:"Sp 2015"},
-    {id:"ar100", status:"completed", code:"AR 100", title:"Art Appreciation", credits:3, grade:"B", term:"Sp 2015"},
-    {id:"ba110", status:"completed", code:"BA 110", title:"Intro to Business", credits:3, grade:"B", term:"Fa 2015"},
-    {id:"hs131", status:"completed", code:"HS 131", title:"US History 1", credits:3, grade:"B", term:"Fa 2015"},
-    {id:"fw190", status:"completed", code:"FW 190", title:"Fitness for Life", credits:2, grade:"B", term:"Sp 2016"},
-    {id:"eg060", status:"completed", code:"EG 060", title:"Fund. of English (dev)", credits:3, grade:"B", term:"Fa 2014"},
+    // ---------- ENGINEERING CORE (4/54) ----------
+    {id:"en101",  bucket:"engcore", status:"completed", applies:true, code:"EN 101", title:"Engineering Graphics I", wsu:"IME 222 + 222L Engineering Graphics", credits:3, grade:"A", term:"Sp 2026",
+     notes:"WSU's portal shows 4 credits here because it also picks up EN 102 from your WSU Tech record — your Butler transcript only has the 3."},
+    {id:"en102",  bucket:"engcore", status:"needed", applies:true, code:"EN 102", title:"Engineering Graphics II", credits:0, prio:"med",
+     notes:"Pairs with EN 101 — credits already counted above. Confirm with advisor whether you still need to sit it."},
+    {id:"ae223",  bucket:"engcore", status:"needed", applies:true, code:"AE 223", title:"Statics", credits:3, prio:"high",
+     notes:"Butler equivalent: EN 260. Take with or after Physics I."},
+    {id:"ae333",  bucket:"engcore", status:"needed", applies:true, code:"AE 333", title:"Mechanics of Materials", credits:3, prio:"med", notes:"WSU · prereq Statics."},
+    {id:"ece282", bucket:"engcore", status:"needed", applies:true, code:"ECE 282", title:"Circuits I + Lab", credits:4, prio:"med", notes:"WSU · prereq Physics II."},
+    {id:"me250",  bucket:"engcore", status:"needed", applies:true, code:"ME 250", title:"Materials Engineering", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me251",  bucket:"engcore", status:"needed", applies:true, code:"ME 251", title:"Materials Engineering Lab", credits:1, prio:"low", notes:"WSU · pairs with ME 250."},
+    {id:"me325",  bucket:"engcore", status:"needed", applies:true, code:"ME 325", title:"Numerical Methods for Engineers", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me335",  bucket:"engcore", status:"needed", applies:true, code:"ME 335", title:"Dynamics for Mechanical Engineers", credits:3, prio:"low", notes:"WSU · prereq Statics."},
+    {id:"me339",  bucket:"engcore", status:"needed", applies:true, code:"ME 339", title:"Design of Machinery", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me398",  bucket:"engcore", status:"needed", applies:true, code:"ME 398", title:"Thermodynamics I", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me439",  bucket:"engcore", status:"needed", applies:true, code:"ME 439", title:"Mechanical Engineering Design I", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me475",  bucket:"engcore", status:"needed", applies:true, code:"ME 475", title:"Integrated Design & Manufacturing", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me521",  bucket:"engcore", status:"needed", applies:true, code:"ME 521", title:"Fluid Mechanics", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me522",  bucket:"engcore", status:"needed", applies:true, code:"ME 522", title:"Heat Transfer", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me533",  bucket:"engcore", status:"needed", applies:true, code:"ME 533", title:"Mechanical Engineering Laboratory", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me633",  bucket:"engcore", status:"needed", applies:true, code:"ME 633", title:"ME Systems Laboratory", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me659",  bucket:"engcore", status:"needed", applies:true, code:"ME 659", title:"Mechanical Control Systems", credits:3, prio:"low", notes:"WSU upper division."},
+    {id:"me662",  bucket:"engcore", status:"needed", applies:true, code:"ME 662", title:"Senior Capstone Design", credits:3, prio:"low",
+     notes:"Also satisfies the Applied Learning Experience requirement."},
+    {id:"phil385",bucket:"engcore", status:"needed", applies:true, code:"PHIL 385", title:"Engineering Ethics", credits:3, prio:"low",
+     notes:"Butler equivalent: PL 292 — cheap credit, knock it out early."},
 
-    // ===== COMPLETED — WSU Tech (transfer credit) =====
-    {id:"ch106", status:"completed", code:"CH 106", title:"Intro Chem: Gen, Org, Biochem", credits:5, grade:"A", term:"Fa 2018 · WSU Tech"},
-    {id:"ba104", status:"completed", code:"BA 104", title:"Info Processing Systems", credits:3, grade:"A", term:"Su 2017 · WSU Tech"},
-    {id:"it100a", status:"completed", code:"IT 100.1", title:"Integrated Technology Elective", credits:4, grade:"A", term:"Sp 2017 · WSU Tech"},
-    {id:"it100b", status:"completed", code:"IT 100.1", title:"Integrated Technology Elective", credits:4, grade:"A", term:"Sp 2017 · WSU Tech"},
-    {id:"gn100b", status:"completed", code:"GN 100.1", title:"General Elective", credits:2, grade:"B", term:"Sp 2017 · WSU Tech"},
-    {id:"it100c", status:"completed", code:"IT 100.1", title:"Integrated Technology Elective", credits:4, grade:"A", term:"Fa 2016 · WSU Tech"},
-    {id:"gn100a", status:"completed", code:"GN 100.1", title:"General Elective", credits:4, grade:"A", term:"Fa 2016 · WSU Tech"},
+    // ---------- TECHNICAL ELECTIVES (0/15) ----------
+    {id:"te_mdes", bucket:"techelec", status:"needed", applies:true, code:"TECH ELEC", title:"Mechanical Design Elective", credits:3, prio:"low",
+     notes:"Pick 1: ME 541 / ME 637 / ME 729 / ME 749."},
+    {id:"te_mfg",  bucket:"techelec", status:"needed", applies:true, code:"TECH ELEC", title:"Design & Manufacturing Elective", credits:3, prio:"low",
+     notes:"Pick 1: ME 672 / ME 680 / ME 737 Robotics / ME 761 Autonomous Vehicles / ME 762 Composites."},
+    {id:"te_th1",  bucket:"techelec", status:"needed", applies:true, code:"TECH ELEC", title:"Thermal Systems Elective #1", credits:3, prio:"low",
+     notes:"Pick from ME 502 / 602 / 625 / 690 / 702 / 740 / 770 / 782."},
+    {id:"te_th2",  bucket:"techelec", status:"needed", applies:true, code:"TECH ELEC", title:"Thermal Systems Elective #2", credits:3, prio:"low",
+     notes:"Same list as above — ME 782 CFD is the aerospace-friendly pick."},
+    {id:"te_energy",bucket:"techelec", status:"needed", applies:true, code:"TECH ELEC", title:"Energy Systems Design Elective", credits:3, prio:"low",
+     notes:"Pick 1: ME 644 HVAC / ME 671 Fluid Machinery / ME 731 Heat Exchangers / ME 745 Thermal Systems."},
   ],
 
-  // ---- ROADMAP ----
+  /* ==================================================================
+     EARNED BUT DOESN'T COUNT TOWARD THE DEGREE
+     These are real credits WSU accepts (they're on your transcript and
+     they help your GPA and full-time status) — but they don't fill any
+     BSME requirement, so they don't move the percentage.
+     THIS IS THE 55% vs 38% GAP.
+     ================================================================== */
+  extras: [
+    {code:"IT 100.1 ×3",  title:"Integrated Technology Electives (WSU Tech)", credits:12,
+     why:"This is where your CATIA and Blueprint Reading work landed — Butler recorded it as generic technology elective credit. WSU accepts it, but it fills no BSME requirement."},
+    {code:"GN 100.1 ×2",  title:"General Electives (WSU Tech)", credits:6,
+     why:"Generic transfer credit — no requirement match in the ME plan."},
+    {code:"BA 110",       title:"Intro to Business", credits:3,
+     why:"Business elective. Counted toward your Business Administration AS, not the BSME."},
+    {code:"FW 190",       title:"Fitness for Life", credits:2,
+     why:"There's no PE requirement in the BSME."},
+    {code:"EG 060 · EC 200", title:"Fund. of English (developmental) · Micro Econ (F, then WD)", credits:0,
+     why:"Zero degree credit — developmental and a failed/withdrawn attempt."},
+  ],
+
+  /* ---- ROADMAP ---- */
   roadmap: [
-    {term:"Spring 2027", note:"Butler · part-time", load:"8–9 cr",
-     courses:[{name:"PH 251 Physics I + Lab",cr:"5 cr"},{name:"CH 110 College Chemistry I (if needed)",cr:"4 cr"}]},
-    {term:"Summer 2027", note:"Butler · light load", load:"3–5 cr",
-     courses:[{name:"MA 260 Differential Equations",cr:"3–5 cr"},{name:"— or — EN 102 Engineering Graphics II",cr:"3 cr"}]},
-    {term:"Fall 2027", note:"Butler · part-time", load:"8 cr",
-     courses:[{name:"PH 252 Physics II + Lab",cr:"5 cr"},{name:"EN 260 Statics",cr:"3 cr"}]},
-    {term:"Spring 2028", note:"Butler · finish prereqs", load:"varies",
-     courses:[{name:"Remaining Butler prereqs (EN 102 / PL 292)",cr:"3–6 cr"},{name:"Submit WSU transfer app for Fall 2028",cr:"—"}]},
+    {term:"Spring 2027", note:"Butler · part-time", load:"9 cr",
+     courses:[{name:"PH 251 Physics I + Lab",cr:"5 cr"},{name:"PL 292 Engineering Ethics",cr:"3 cr"}]},
+    {term:"Summer 2027", note:"Butler · light load", load:"3 cr",
+     courses:[{name:"MA 260 Differential Equations",cr:"3 cr"}]},
+    {term:"Fall 2027", note:"Butler · part-time", load:"7 cr",
+     courses:[{name:"PH 252 Physics II",cr:"4 cr"},{name:"EN 260 Statics",cr:"3 cr"}]},
+    {term:"Spring 2028", note:"Butler · finish prereqs + apply", load:"varies",
+     courses:[{name:"Any remaining Butler prereqs",cr:"3–6 cr"},{name:"Submit WSU transfer app for Fall 2028",cr:"—"}]},
     {term:"Fall 2028", note:"Transfer to WSU · junior standing", load:"part-time",
-     courses:[{name:"Begin WSU ME upper-division coursework",cr:"6–9 cr"},{name:"Join AIAA / Shocker Racing",cr:"—"}]},
-    {term:"2028 → ~2031–32", note:"WSU · part-time to finish", load:"~62–64 cr",
-     courses:[{name:"Complete BS Mechanical Engineering",cr:"~62–64 cr"},{name:"Aerospace technical electives + senior design",cr:"—"}]},
-    {term:"🎓 Graduation", note:"BS Mechanical Engineering", load:"129 cr", grad:true,
+     courses:[{name:"Begin WSU ME upper-division core",cr:"6–9 cr"},{name:"Join AIAA / Shocker Racing",cr:"—"}]},
+    {term:"2028 → ~2032", note:"WSU · part-time to finish", load:"~79 cr",
+     courses:[{name:"Engineering core + technical electives",cr:"~64 cr"},{name:"ME 662 Senior Capstone Design",cr:"3 cr"}]},
+    {term:"🎓 Graduation", note:"BS Mechanical Engineering", load:"128 cr", grad:true,
      courses:[{name:"Target aerospace internships: Spirit, Textron, Bombardier",cr:"→ SpaceX"}]},
   ],
 
-  // ---- SEMESTER CHECKLIST ----
-  // Everything to DO — aid, scholarships, registration, advising — by term.
-  // Tap an item to check it off (saves on your device). Add items freely.
-  // tag (optional): "deadline" | "aid" | "school" | "done"
+  /* ---- SEMESTER CHECKLIST ---- */
   checklist: [
     {term:"Right Now · Fall 2026", note:"Current semester", items:[
       {id:"ck_fafsa2627", text:"FAFSA 2026–27 — filed ✓", done:true, tag:"done"},
-      {id:"ck_advisor", text:"Email WSU Engineering advisor: part-time ME plan, CH 106→CH 110 substitution, which scholarships allow part-time, ME vs AE for a SpaceX goal", tag:"school"},
-      {id:"ck_chsub", text:"Confirm with advisor: does CH 106 substitute for CH 110?", tag:"school"},
+      {id:"ck_advisor", text:"Email WSU Engineering advisor: part-time ME plan, CH 106→CHEM 211 substitution, which scholarships allow part-time", tag:"school"},
+      {id:"ck_geneed", text:"Ask advisor: KS Systemwide Gen Ed is complete — does that clear the last 2 gen-ed elective credits?", tag:"school"},
+      {id:"ck_en102", text:"Ask advisor: does EN 101 alone satisfy IME 222 + 222L, or do you still need EN 102?", tag:"school"},
       {id:"ck_butler", text:"Meet Butler advisor — confirm courses match the 2026–27 WSU transfer guide", tag:"school"},
       {id:"ck_fafsa2728", text:"October: renew FAFSA for 2027–28 (opens Oct 1)", tag:"aid"},
       {id:"ck_wsusch_open", text:"Nov 1: WSU Engineering scholarship application opens — start it (90+ funds)", tag:"aid"},
-      {id:"ck_reg_sp27", text:"Register for Spring 2027 — Physics I (+ CH 110 if needed)", tag:"school"},
+      {id:"ck_reg_sp27", text:"Register for Spring 2027 — Physics I is the priority", tag:"school"},
     ]},
-    {term:"Spring 2027", note:"Physics I + Chemistry", items:[
+    {term:"Spring 2027", note:"Physics I + Ethics", items:[
       {id:"ck_wsusch_due", text:"Mar 1: submit WSU Engineering scholarship application (deadline)", tag:"deadline"},
       {id:"ck_ksgrant2728", text:"Before Apr 1: apply for 2027–28 KS Comprehensive Grant (first-come, first-served)", tag:"deadline"},
       {id:"ck_reg_su27", text:"Register for Summer & Fall 2027", tag:"school"},
     ]},
     {term:"Summer 2027", note:"Light load", items:[
-      {id:"ck_take_su27", text:"Take MA 260 Differential Equations or EN 102 Engineering Graphics II", tag:"school"},
+      {id:"ck_take_su27", text:"Take MA 260 Differential Equations", tag:"school"},
     ]},
     {term:"Fall 2027", note:"Physics II + Statics", items:[
       {id:"ck_fafsa2829", text:"October: renew FAFSA for 2028–29", tag:"aid"},
@@ -122,7 +185,8 @@ const DATA = {
       {id:"ck_reg_fa28", text:"Register for Fall 2028", tag:"school"},
     ]},
     {term:"Fall 2028 · Transfer to WSU", note:"Junior standing", items:[
-      {id:"ck_wsu_advisor", text:"Meet WSU advisor — plan the upper-division ME course sequence", tag:"school"},
+      {id:"ck_wsu_advisor", text:"Meet WSU advisor — plan the upper-division ME sequence", tag:"school"},
+      {id:"ck_eplus", text:"Start the Engineering+ requirement — 3 of 7 activities, needs chair approval", tag:"school"},
       {id:"ck_orgs", text:"Join AIAA and/or Shocker Racing (Formula SAE) for the aerospace résumé", tag:"school"},
     ]},
     {term:"Every year — don't forget", note:"Recurring deadlines", recurring:true, items:[
@@ -132,7 +196,15 @@ const DATA = {
     ]},
   ],
 
-  // ---- CONTACTS ----
+  /* ---- STATS shown in the KPI row ---- */
+  stats: {
+    gpaOverall: "3.07",
+    gpaRecent: "3.54",
+    gpaRecentLabel: "Spring 2026 GPA",
+    totalEarnedAllCredits: 68,
+  },
+
+  /* ---- CONTACTS ---- */
   contacts: [
     {who:"WSU Engineering Advising", email:"engineering.advising@wichita.edu", phone:"316-978-3400"},
     {who:"WSU Financial Aid", phone:"316-978-3430"},

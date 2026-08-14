@@ -1,104 +1,109 @@
-# Rafael's WSU Mechanical Engineering Transfer Tracker
+# Rafael's WSU ME Transfer Tracker
 
-A calm, phone-friendly dashboard to track progress transferring from **Butler
-Community College** to **Wichita State University** for a **BS in Mechanical
-Engineering**. No accounts, no backend — just a web page you can pull up anytime.
-
-**Live site:** `https://<your-username>.github.io/wsu-me-tracker/`
+A single-page tracker for the **BS Mechanical Engineering at Wichita State** (128 credit hours, 2026–27 catalog). Works on phone and laptop. No build step, no server — just `index.html` + `data.js`.
 
 ---
 
-## What's in here
+## How the percentage works (read this once)
 
-| File | What it is |
-|------|------------|
-| `index.html` | The page itself (layout + styling). You rarely touch this. |
-| `data.js` | **All your data** — courses, GPA, aid, tasks. This is the one file you edit. |
-| `README.md` | This file. |
-| `.gitignore` | Tells git to ignore junk files. |
+**The percentage is requirement-based, not credit-based.**
+
+The old version did `all credits I ever earned ÷ 128` and reported ~55%. That's the wrong math, and it's why the site disagreed with WSU's transfer portal.
+
+WSU only counts a credit once it **fills a specific degree requirement**. The tracker now does the same thing:
+
+```
+progress = Σ (credits filling each requirement bucket, capped at that bucket)  ÷  128
+```
+
+The five buckets add up to exactly 128 with no double-counting:
+
+| Bucket | Required | Currently filled |
+|---|---|---|
+| English & Communication | 9 | 9 ✓ |
+| General Education Electives | 18 | 18 ✓ |
+| Engineering Math & Natural Sciences | 30 | 18 |
+| Engineering Core (ME) | 56 | 3 |
+| Technical Electives | 15 | 0 |
+| **Total** | **128** | **48** |
+
+**48 ÷ 128 = 38%** — matches the WSU transfer portal exactly.
+
+Two numbers are available via the toggle in the header:
+
+- **Incl. in progress — 38%.** Counts MA 253 Calc III, which you're taking now. This is what WSU's portal shows.
+- **Confirmed only — 35%.** Finished and graded credits only.
+
+### Where the missing 20 points went
+
+You've earned **68 credits total**. Only **45** of them fill a BSME requirement. The other **23** are real, accepted credits that fill nothing in this degree:
+
+- IT 100.1 ×3 (12 cr) — WSU Tech technology electives, where the CATIA and Blueprint Reading work landed
+- GN 100.1 ×2 (6 cr) — WSU Tech general electives
+- BA 110 Intro to Business (3 cr) — counts toward the Business Administration AS, not the BSME
+- FW 190 Fitness for Life (2 cr) — no PE requirement in the BSME
+
+They're listed on the page under **"Earned — but doesn't count toward this degree."** They help your GPA and your full-time status. They don't move the degree bar.
 
 ---
 
-## How to update a course (the thing you'll do most)
+## Adding classes yourself
 
-Two ways:
+Use the **+ Add a class** button in the Course Tracker. You do not need to edit any file or ask Claude.
 
-**Easy way (just for you, on your device):** open the site and **tap a course**
-in *Still Needed* or *In Progress*. It fills in green, the progress ring goes up,
-and it's remembered on that phone/laptop. Nothing to commit.
+Fill in the code, title, credits, pick **which requirement it fills**, and set the status. The percentage and the bucket bars update immediately.
 
-**Permanent way (shows up everywhere):** edit `data.js`.
+- Picking a requirement bucket → the credits count toward the degree.
+- Picking **"Fills no requirement"** → the credits are recorded as earned but don't move the percentage. Use this for anything an advisor tells you won't apply.
+- Classes you add show an **"added by you"** tag and can be removed with the ✕.
 
-1. Open `data.js`.
-2. Find the course, e.g.:
-   ```js
-   {id:"ph251", status:"needed", code:"PH 251", title:"Physics I + Lab", credits:5, prio:"high", ...}
-   ```
-3. Change `status:"needed"` to `status:"completed"` and add a grade + term:
-   ```js
-   {id:"ph251", status:"completed", code:"PH 251", title:"Physics I + Lab", credits:5, grade:"A", term:"Sp 2027"}
-   ```
-4. Save, then push (below). The site updates in about a minute.
+Anything you add — and every check-off — saves in that browser's local storage. It's per-device: adding a class on your phone won't show up on your laptop. To make a change permanent across devices, edit `data.js` and commit.
 
-Your **overall progress and credit count update automatically** from whatever is
-marked completed.
+You can also tap the checkbox on any "Still Needed" course to mark it done, and untick a completed one to put it back.
 
 ---
 
-## The semester checklist
+## Files
 
-Instead of listing dollar figures, the site has a **Semester Checklist** — every
-to-do grouped by term (FAFSA, KS Comprehensive Grant, WSU scholarships,
-registration, advisor emails). Tap an item to check it off; it saves on your
-device. There's also an "Every year — don't forget" group for recurring deadlines.
+- **`index.html`** — layout, styling, and all rendering logic. You shouldn't need to touch this.
+- **`data.js`** — every course, requirement bucket, roadmap term, and checklist item. Edit this to bake a change into the repo permanently.
+- **`README.md`** — this file.
 
-To add, remove, or reword an item, edit the `checklist` array in `data.js`. Each
-item needs a unique `id`. Example:
+### Editing `data.js`
+
+Each course looks like:
 
 ```js
-{id:"ck_mynewtask", text:"Do the thing before Friday", tag:"deadline"},
+{id:"ph251", bucket:"mathsci", status:"needed", applies:true,
+ code:"PH 251", title:"Physics I (Scientists)", wsu:"PHYS 313 Physics for Scientists I",
+ credits:4, prio:"high", notes:"Gates Statics, Physics II, and most of the ME core."}
 ```
 
-`tag` is optional and can be `"deadline"`, `"aid"`, or `"school"` (it just colors
-a little label). No personal or financial account data lives on the site.
+- `bucket` — which requirement it fills (`englcomm`, `gened`, `mathsci`, `engcore`, `techelec`)
+- `status` — `"completed"` | `"progress"` | `"needed"`
+- `applies` — `true` if it fills a requirement, `false` if it's earned credit that counts for nothing
+- `wsu` — the WSU course it transfers in as (optional, shown in blue)
+- `prio` — `"high"` | `"med"` | `"low"` (only meaningful on `needed` courses)
+- `verify: true` — adds a "Verify w/ advisor" tag
+
+If you change a bucket's `req`, make sure all five still sum to `totalCredits` (128), or the percentage will be wrong.
 
 ---
 
-## How to push changes to GitHub
+## Open questions for your advisor
 
-If you have the repo on your computer:
+These are flagged on the site and in the Fall 2026 checklist:
 
-```bash
-cd wsu-me-tracker
-git add .
-git commit -m "Completed Physics I"
-git push
-```
-
-Or edit `data.js` right in the GitHub website (pencil icon → edit → **Commit
-changes**). Either way, GitHub Pages rebuilds automatically in ~1 minute.
+1. **CH 106 → CHEM 211.** WSU's portal already applied it to the science requirement. Get it confirmed in writing.
+2. **EN 102.** WSU's portal shows 4 graphics credits; your Butler transcript has 3. Ask whether EN 101 alone satisfies IME 222 + 222L.
+3. **Gen Ed.** Your transcript says *KS Systemwide GE Completed* — confirm that closes the gen-ed bucket entirely.
+4. **Engineering+ requirement.** 3 of 7 activities, chair approval, 0 credits — but still required to graduate.
 
 ---
 
-## How to enable GitHub Pages (one-time setup)
+## Sources
 
-1. Push these files to a GitHub repo named `wsu-me-tracker`.
-2. In the repo, go to **Settings → Pages**.
-3. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-4. Set **Branch: `main`** and **Folder: `/ (root)`**. Click **Save**.
-5. Wait ~1 minute. Your site is live at
-   `https://<your-username>.github.io/wsu-me-tracker/`.
-
-Bookmark it on your phone's home screen and you're done.
-
----
-
-## Quick reference — the numbers
-
-- **129** total credits for the WSU BS Mechanical Engineering
-- **68** credits earned so far (~53%)
-- **~64** transfer to WSU = **junior standing**
-- **3.07** overall GPA (WSU needs 2.0 to transfer ✅)
-- KS Systemwide General Education: **complete**
-
-Built to feel like progress, not overwhelm. Keep going. 🚀
+- [WSU Catalog — BS in Mechanical Engineering](https://catalog.wichita.edu/undergraduate/engineering/mechanical-engineering/mechanical-engineering-bs/)
+- [WSU ME Undergraduate Check Sheet](https://www.wichita.edu/academics/engineering/advising/_documents/ME-UG-Check-Sheet_FA24_PLAN_A.pdf)
+- WSU Transfer Major Detail portal export (Mechanical Engineering) — 49 credits apply, 25 may apply, 38%
+- Butler CC unofficial transcript — 68 credits earned, overall GPA 3.07

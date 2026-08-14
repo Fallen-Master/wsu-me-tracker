@@ -6,34 +6,17 @@
 <meta name="theme-color" content="#000000">
 <title>Rafael's WSU ME Transfer Tracker</title>
 <style>
-/* ============================================================
-   ALL YOUR DATA IS IN data.js — you don't need to touch this file
-   to update a course. See README.md.
-   ============================================================ */
 :root{
-  --gold:#FFCD00;
-  --gold-soft:#FFE580;
-  --black:#111111;
-  --ink:#1c1c1c;
-  --muted:#6b6b6b;
-  --bg:#faf9f6;
-  --card:#ffffff;
-  --line:#e9e7e1;
-  --green:#1f9d55;
-  --green-soft:#e4f5ec;
-  --amber:#b7791f;
-  --amber-soft:#fdf3e0;
-  --blue:#2b6cb0;
+  --gold:#FFCD00; --gold-soft:#FFE580; --gold-dark:#b58a00;
+  --black:#111; --ink:#1c1c1c; --muted:#6b6b6b; --bg:#faf9f6; --card:#fff; --line:#e9e7e1;
+  --green:#1f9d55; --green-soft:#e4f5ec; --amber:#b7791f; --amber-soft:#fdf3e0;
+  --blue:#2b6cb0; --blue-soft:#eef2f7; --red:#c53030; --red-soft:#fdeaea;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.05);
   --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{
-  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  background:var(--bg);color:var(--ink);line-height:1.5;
-  padding-bottom:56px;
-}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:56px}
 .wrap{max-width:820px;margin:0 auto;padding:0 16px}
 h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .section{margin-top:34px}
@@ -41,30 +24,26 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 
 /* ---------- HERO ---------- */
-.hero{
-  background:linear-gradient(160deg,#000 0%,#1a1a1a 60%,#232323 100%);
-  color:#fff;border-radius:0 0 26px 26px;padding:26px 0 30px;
-  box-shadow:0 6px 24px rgba(0,0,0,.18);
-}
+.hero{background:linear-gradient(160deg,#000 0%,#1a1a1a 60%,#232323 100%);color:#fff;border-radius:0 0 26px 26px;padding:26px 0 30px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
 .hero .wrap{display:flex;flex-direction:column;gap:20px}
 .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 .hero h1{font-size:1.5rem;line-height:1.15;letter-spacing:-.02em}
 .hero .goal{color:var(--gold);font-weight:600;font-size:1.02rem;margin-top:4px}
 .hero .meta{color:#c9c9c9;font-size:.83rem;margin-top:8px}
 .hero .meta b{color:#fff;font-weight:600}
-.badge{display:inline-block;background:rgba(255,205,0,.14);color:var(--gold);
-  border:1px solid rgba(255,205,0,.35);border-radius:999px;padding:3px 11px;font-size:.72rem;font-weight:600;letter-spacing:.02em}
-
-/* progress ring */
+.badge{display:inline-block;background:rgba(255,205,0,.14);color:var(--gold);border:1px solid rgba(255,205,0,.35);border-radius:999px;padding:3px 11px;font-size:.72rem;font-weight:600;letter-spacing:.02em}
 .ring-wrap{display:flex;align-items:center;gap:16px}
 .ring{position:relative;width:118px;height:118px;flex-shrink:0}
 .ring svg{transform:rotate(-90deg)}
 .ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .ring .pct{font-size:1.7rem;font-weight:700;letter-spacing:-.02em}
-.ring .lbl{font-size:.62rem;color:#bdbdbd;text-transform:uppercase;letter-spacing:.08em}
+.ring .lbl{font-size:.58rem;color:#bdbdbd;text-transform:uppercase;letter-spacing:.07em;text-align:center;line-height:1.3}
 .motiv{font-size:1.02rem;font-weight:600}
 .motiv b{color:var(--gold)}
 .motiv .sub{display:block;color:#bdbdbd;font-size:.8rem;font-weight:400;margin-top:4px}
+.mode{display:flex;gap:5px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px;margin-top:12px;max-width:340px}
+.mode button{flex:1;border:none;background:transparent;color:#bdbdbd;font-family:inherit;font-size:.74rem;font-weight:600;padding:7px 6px;border-radius:7px;cursor:pointer}
+.mode button.on{background:rgba(255,255,255,.14);color:#fff}
 
 /* ---------- KPI ---------- */
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
@@ -75,13 +54,37 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .kpi.ok .n{color:var(--green)}
 .kpi.gold{background:linear-gradient(150deg,#fffdf3,#fff8dc);border-color:#f2e6a8}
 
+/* ---------- EXPLAINER ---------- */
+.explain{padding:16px 18px;background:linear-gradient(150deg,#fffdf3,#fffaea);border-color:#f2e6a8}
+.explain .t{font-weight:700;font-size:.95rem;margin-bottom:6px}
+.explain p{font-size:.85rem;color:#5c5340;margin-bottom:8px}
+.explain p:last-child{margin-bottom:0}
+.explain b{color:var(--ink)}
+
+/* ---------- BUCKETS ---------- */
+.bkt{padding:15px 16px;margin-bottom:10px}
+.bkt-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:3px}
+.bkt-name{font-weight:700;font-size:.94rem}
+.bkt-num{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.bkt-num b{color:var(--ink);font-size:.92rem}
+.bkt-blurb{color:var(--muted);font-size:.78rem;margin-bottom:10px}
+.bar{height:9px;background:#f0efe9;border-radius:999px;overflow:hidden;display:flex}
+.bar .fill{background:var(--green);transition:width .4s}
+.bar .fill.prog{background:var(--gold)}
+.bkt-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:.75rem;color:var(--muted)}
+.bkt.full{background:linear-gradient(150deg,#f6fdf8,#eef9f2);border-color:#c6e9d4}
+.bkt.full .bkt-name{color:var(--green)}
+.legend{display:flex;gap:14px;font-size:.72rem;color:var(--muted);margin-bottom:12px;flex-wrap:wrap}
+.legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
+
 /* ---------- TABS ---------- */
-.tabs{display:flex;gap:6px;background:#f0efe9;padding:5px;border-radius:12px;margin-bottom:14px}
-.tab{flex:1;border:none;background:transparent;padding:9px 6px;border-radius:8px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s}
+.tabs{display:flex;gap:6px;background:#f0efe9;padding:5px;border-radius:12px;margin-bottom:14px;flex-wrap:wrap}
+.tab{flex:1;min-width:90px;border:none;background:transparent;padding:9px 6px;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s}
 .tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
-.tab .cnt{opacity:.6;font-weight:600}
+.tab .cnt{opacity:.6}
 
 /* ---------- COURSE ROWS ---------- */
+.grp-hdr{padding:10px 15px 6px;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:#fcfbf8;border-bottom:1px solid var(--line)}
 .course{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line)}
 .course:last-child{border-bottom:none}
 .course .check{width:22px;height:22px;border-radius:7px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;background:#fff}
@@ -89,21 +92,46 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .course .check svg{opacity:0;transition:.15s}
 .course.done .check svg{opacity:1}
 .course.static .check{cursor:default;border-radius:50%;border-color:var(--green);background:var(--green)}
+.course.static .check svg{opacity:1}
+.course.noapply .check{border-color:#d8d5cc;background:#f4f3ef;cursor:default;border-radius:50%}
+.course.noapply .check svg{opacity:.45;stroke:#999}
 .course .body{flex:1;min-width:0}
 .course .title{font-weight:600;font-size:.92rem}
 .course.done .title{color:var(--muted)}
 .course .code{color:var(--muted);font-weight:600;font-size:.78rem}
 .course .notes{color:var(--muted);font-size:.79rem;margin-top:3px}
+.course .maps{font-size:.74rem;color:var(--blue);margin-top:2px}
 .course .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
 .pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
 .pill.grade{background:var(--green-soft);color:var(--green)}
 .pill.cr{background:#f0efe9;color:#555}
-.pill.hi{background:#fdeaea;color:#c53030}
+.pill.hi{background:var(--red-soft);color:var(--red)}
 .pill.med{background:var(--amber-soft);color:var(--amber)}
-.pill.low{background:#eef2f7;color:var(--blue)}
-.pill.verify{background:#fdf3e0;color:var(--amber)}
+.pill.low{background:var(--blue-soft);color:var(--blue)}
+.pill.verify{background:var(--amber-soft);color:var(--amber)}
+.pill.mine{background:#efe7fb;color:#6b46c1}
+.pill.no{background:#f0efe9;color:#8a8a8a}
+.del{background:none;border:none;color:#bbb;font-size:1rem;cursor:pointer;padding:0 2px;line-height:1;font-family:inherit}
+.del:hover{color:var(--red)}
 
-/* ---------- ROADMAP ---------- */
+/* ---------- ADD FORM ---------- */
+.addbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.btn{background:var(--black);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.gold{background:var(--gold);color:#3a2f00}
+.addform{padding:16px;margin-bottom:14px;display:none}
+.addform.open{display:block}
+.fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.f{display:flex;flex-direction:column;gap:4px}
+.f.full{grid-column:1/-1}
+.f label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.f input,.f select,.f textarea{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:.88rem;font-family:inherit;background:var(--bg);color:var(--ink)}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.25)}
+.f .hint{font-size:.72rem;color:var(--muted)}
+.formfoot{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.formerr{color:var(--red);font-size:.78rem;flex:1}
+
+/* ---------- ROADMAP / TERM CARDS ---------- */
 .term{margin-bottom:10px;overflow:hidden}
 .term-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;gap:10px}
 .term-head .t{font-weight:700;font-size:.95rem}
@@ -120,18 +148,6 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .term.grad .term-head{background:linear-gradient(150deg,#fffdf3,#fff4c8);border-color:#f2e6a8}
 .term.grad .t{color:#8a6d00}
 
-/* ---------- AID ---------- */
-.aid-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.aid{padding:14px 15px}
-.aid .h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
-.aid .name{font-weight:600;font-size:.86rem}
-.aid .amt{font-size:1.15rem;font-weight:700;letter-spacing:-.01em;margin:3px 0 5px}
-.aid .d{color:var(--muted);font-size:.78rem}
-.tag{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
-.tag.on{background:var(--green-soft);color:var(--green)}
-.tag.soon{background:var(--amber-soft);color:var(--amber)}
-.tag.off{background:#f0efe9;color:#888}
-
 /* ---------- TASKS ---------- */
 .task{display:flex;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);align-items:flex-start}
 .task:last-child{border-bottom:none}
@@ -140,35 +156,28 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .task .check svg{opacity:0}.task.done .check svg{opacity:1}
 .task .txt{font-size:.88rem}
 .task.done .txt{color:var(--muted);text-decoration:line-through}
-.task .n{font-weight:700;color:var(--gold-dark,#b58a00);margin-right:2px}
 .ctag{font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;margin-left:5px;display:inline-block;vertical-align:middle}
-.ctag.deadline{background:#fdeaea;color:#c53030}
+.ctag.deadline{background:var(--red-soft);color:var(--red)}
 .ctag.aid{background:var(--green-soft);color:var(--green)}
-.ctag.school{background:#eef2f7;color:var(--blue)}
+.ctag.school{background:var(--blue-soft);color:var(--blue)}
 
-/* ---------- CONTACTS ---------- */
+/* ---------- MISC ---------- */
 .contacts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .contact{padding:13px 15px}
 .contact .who{font-weight:600;font-size:.86rem}
 .contact a{color:var(--blue);text-decoration:none;font-size:.8rem;display:block;margin-top:3px;word-break:break-word}
-
-/* ---------- LOCK ---------- */
-.lock{padding:22px 18px;text-align:center}
-.lock .lk{font-size:1.6rem;line-height:1}
-.lock .lt{font-weight:600;margin:8px 0 2px}
-.lock .ls{color:var(--muted);font-size:.8rem;margin-bottom:14px}
-.lock .row{display:flex;gap:8px;max-width:320px;margin:0 auto}
-.lock input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;font-family:inherit;background:var(--bg)}
-.lock input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.25)}
-.lock button{background:var(--black);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit}
-.lock .err{color:#c53030;font-size:.78rem;margin-top:9px;min-height:1em}
-.relock{background:none;border:none;color:var(--muted);font-size:.74rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:10px}
+.extra{display:flex;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line);align-items:flex-start}
+.extra:last-child{border-bottom:none}
+.extra .n{font-weight:600;font-size:.88rem}
+.extra .c{color:var(--muted);font-weight:600;font-size:.78rem}
+.extra .w{color:var(--muted);font-size:.78rem;margin-top:2px}
 .reset{background:none;border:none;color:var(--muted);font-size:.76rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:16px}
 .foot{text-align:center;color:var(--muted);font-size:.74rem;margin:30px 0 10px;line-height:1.7}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:.85rem}
 
 @media(max-width:560px){
-  .kpis{grid-template-columns:repeat(2,1fr)}
-  .aid-grid,.contacts{grid-template-columns:1fr}
+  .contacts,.fgrid{grid-template-columns:1fr}
+  .f.full{grid-column:auto}
   .hero-top{flex-direction:column}
   .hero h1{font-size:1.35rem}
 }
@@ -176,7 +185,6 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 </head>
 <body>
 
-<!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
     <div class="hero-top">
@@ -192,232 +200,532 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
             <circle cx="59" cy="59" r="50" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="11"/>
             <circle id="ringFill" cx="59" cy="59" r="50" fill="none" stroke="#FFCD00" stroke-width="11" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
           </svg>
-          <div class="val"><div class="pct" id="ringPct">0%</div><div class="lbl">complete</div></div>
+          <div class="val"><div class="pct" id="ringPct">0%</div><div class="lbl" id="ringLbl">degree<br>complete</div></div>
         </div>
       </div>
     </div>
     <div class="motiv" id="motiv">Loading…</div>
+    <div class="mode" id="mode">
+      <button data-mode="progress" class="on">Incl. in progress</button>
+      <button data-mode="confirmed">Confirmed only</button>
+    </div>
   </div>
 </header>
 
 <div class="wrap">
 
-  <!-- ============ KPIs ============ -->
   <section class="section" style="margin-top:22px">
     <div class="kpis" id="kpis"></div>
   </section>
 
-  <!-- ============ COURSE TRACKER ============ -->
+  <section class="section">
+    <div class="card explain">
+      <div class="t">Why this says 38% and not 55%</div>
+      <p>The old version divided <b>every credit you'd ever earned</b> by 128. That's the wrong math. WSU only counts a credit once it <b>fills a specific degree requirement</b>.</p>
+      <p>You've earned <b id="exTotal">68</b> credits total. Only <b id="exApplied">49</b> of them slot into a BSME requirement. The other <b id="exWasted">19</b> — CATIA, WSU Tech electives, Intro to Business, Fitness for Life — are accepted by WSU but fill nothing in this degree. They're listed at the bottom of this page.</p>
+      <p>This tracker now uses WSU's method: <b>credits that fill a requirement ÷ 128</b>. That's why it matches your transfer portal.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Requirements</h2>
+    <div class="section-sub">Every bucket the BSME requires, and how full each one is. This is what the percentage is built from.</div>
+    <div class="legend">
+      <span><i style="background:var(--green)"></i>Done &amp; confirmed</span>
+      <span><i style="background:var(--gold)"></i>In progress</span>
+      <span><i style="background:#f0efe9"></i>Still needed</span>
+    </div>
+    <div id="buckets"></div>
+    <div id="nonCredit"></div>
+  </section>
+
   <section class="section">
     <h2>Course Tracker</h2>
-    <div class="section-sub">Tap a course in “Still Needed” or “In Progress” to check it off. Your progress ring updates and saves on this device.</div>
+    <div class="section-sub">Tap the box on any course to mark it done — the percentage updates instantly and saves on this device.</div>
+    <div class="addbar">
+      <button class="btn gold" id="addToggle">+ Add a class</button>
+      <span style="font-size:.78rem;color:var(--muted)">Add classes yourself — no need to ask Claude.</span>
+    </div>
+    <div class="card addform" id="addForm">
+      <div class="fgrid">
+        <div class="f"><label>Course code</label><input id="fCode" placeholder="PH 251" autocomplete="off"></div>
+        <div class="f"><label>Credits</label><input id="fCredits" type="number" min="0" max="12" step="0.5" placeholder="4"></div>
+        <div class="f full"><label>Title</label><input id="fTitle" placeholder="Physics I for Scientists" autocomplete="off"></div>
+        <div class="f full">
+          <label>Which requirement does it fill?</label>
+          <select id="fBucket"></select>
+          <span class="hint">Pick "Fills no requirement" if it's an elective WSU won't apply — it'll be earned credit but won't move the %.</span>
+        </div>
+        <div class="f"><label>Status</label>
+          <select id="fStatus">
+            <option value="completed">Completed</option>
+            <option value="progress">In progress</option>
+            <option value="needed">Still need to take</option>
+          </select>
+        </div>
+        <div class="f"><label>Grade <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fGrade" placeholder="A" autocomplete="off"></div>
+        <div class="f full"><label>Term <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fTerm" placeholder="Spring 2027" autocomplete="off"></div>
+      </div>
+      <div class="formfoot">
+        <button class="btn" id="fSave">Save class</button>
+        <button class="btn ghost" id="fCancel">Cancel</button>
+        <span class="formerr" id="fErr"></span>
+      </div>
+    </div>
     <div class="tabs" id="tabs"></div>
     <div class="card" id="courseList"></div>
   </section>
 
-  <!-- ============ ROADMAP ============ -->
   <section class="section">
     <h2>Roadmap to Graduation</h2>
     <div class="section-sub">Part-time plan · ~6–9 credits/semester. Tap a semester to expand.</div>
     <div id="roadmap"></div>
   </section>
 
-  <!-- ============ SEMESTER CHECKLIST ============ -->
   <section class="section">
     <h2>Semester Checklist</h2>
-    <div class="section-sub">Everything to get done, by term — FAFSA, state grant, scholarships, registration, advising. Tap to check off; saved on this device.</div>
+    <div class="section-sub">FAFSA, state grant, scholarships, registration, advising — by term. Tap to check off.</div>
     <div id="checklist"></div>
-    <button class="reset" id="resetBtn">Reset all check-offs on this device</button>
   </section>
 
-  <!-- ============ CONTACTS ============ -->
+  <section class="section">
+    <h2>Earned — but doesn't count toward this degree</h2>
+    <div class="section-sub">Real credits on your transcript that fill no BSME requirement. This is the whole 55% vs 38% gap.</div>
+    <div class="card" id="extras"></div>
+  </section>
+
   <section class="section">
     <h2>Key Contacts</h2>
     <div class="contacts" id="contacts"></div>
+    <button class="reset" id="resetBtn">Reset everything saved on this device</button>
   </section>
 
-  <div class="foot">
-    68 credits earned toward a 129-credit BS ME · Overall GPA 3.07<br>
-    You're not behind. You're building this on your own terms. Keep going. 💪
-  </div>
+  <div class="foot" id="foot"></div>
 </div>
 
 <script src="data.js"></script>
 <script>
 /* ============================================================
-   RENDERING LOGIC — you shouldn't need to edit below this line.
-   To update your data, edit data.js.
+   STATE — check-offs and your own added classes live in
+   localStorage so they survive on your phone and laptop.
    ============================================================ */
-const STORE_KEY = 'rafael-wsu-tracker-v1';
+const STORE_KEY = 'rafael-wsu-tracker-v2';
 let state = load();
+if(!state.custom) state.custom = [];
+if(!state.checks) state.checks = {};
 
-function load(){ try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return {}} }
-function save(){ try{localStorage.setItem(STORE_KEY, JSON.stringify(state))}catch(e){} }
-
-// merge saved checkoffs into course/checklist data
-DATA.courses.forEach(c=>{ if(c.id in state) c.done = state[c.id]; });
-DATA.checklist.forEach(g=>g.items.forEach(it=>{ if(it.id in state) it.done = state[it.id]; }));
+function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }catch(e){ return {}; } }
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
 
 const CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* ---------- progress ---------- */
-function computeProgress(){
-  const base = DATA.creditsEarnedBase;
-  const bonus = DATA.courses
-    .filter(c=>c.done && (c.status==='needed'||c.status==='progress'))
-    .reduce((s,c)=>s+c.credits,0);
-  const earned = base + bonus;
-  const pct = Math.min(100, Math.round(earned/DATA.totalCredits*100));
-  return {earned, pct, remaining: DATA.totalCredits-earned};
+/* every course = baked-in data.js courses + the ones you added */
+function allCourses(){ return DATA.courses.concat(state.custom); }
+
+/* a course counts as finished if it shipped as completed, or you ticked it */
+function isDone(c){
+  if(state.checks[c.id] !== undefined) return !!state.checks[c.id];
+  return c.status === 'completed';
 }
+function effStatus(c){
+  if(isDone(c)) return 'completed';
+  // un-ticking a course that shipped as completed puts it back in "still needed"
+  return c.status === 'completed' ? 'needed' : c.status;
+}
+
+/* ============================================================
+   THE PERCENTAGE — requirement-based, the way WSU does it.
+   For each bucket: credits that fill it, capped at what it
+   requires. Sum the buckets, divide by 128.
+   Credits with applies:false never enter this calculation.
+   ============================================================ */
+let MODE = 'progress';   // 'progress' = count in-progress classes (matches WSU portal)
+
+function bucketStats(){
+  const out = {};
+  DATA.buckets.forEach(b => out[b.id] = {...b, done:0, prog:0, needed:0});
+  allCourses().forEach(c => {
+    if(!c.applies || !c.bucket || !out[c.bucket]) return;
+    const cr = Number(c.credits) || 0;
+    const s = effStatus(c);
+    if(s === 'completed')      out[c.bucket].done += cr;
+    else if(s === 'progress')  out[c.bucket].prog += cr;
+    else                       out[c.bucket].needed += cr;
+  });
+  // cap each bucket at what it actually requires — extra credit in a
+  // full bucket doesn't push you past the requirement
+  DATA.buckets.forEach(b => {
+    const o = out[b.id];
+    o.doneCapped = Math.min(o.done, o.req);
+    o.progCapped = Math.min(o.prog, Math.max(0, o.req - o.doneCapped));
+  });
+  return out;
+}
+
+function computeProgress(){
+  const st = bucketStats();
+  let done = 0, prog = 0;
+  DATA.buckets.forEach(b => { done += st[b.id].doneCapped; prog += st[b.id].progCapped; });
+  const counted = MODE === 'progress' ? done + prog : done;
+  const pct = Math.min(100, Math.round(counted / DATA.totalCredits * 100));
+  return {done, prog, counted, pct, remaining: Math.max(0, DATA.totalCredits - counted), st};
+}
+
+/* total credits you've earned, whether or not they apply */
+function earnedAllCredits(){
+  const extras = DATA.extras.reduce((s,e)=>s+(Number(e.credits)||0),0);
+  const applying = allCourses()
+    .filter(c => c.applies && effStatus(c)==='completed')
+    .reduce((s,c)=>s+(Number(c.credits)||0),0);
+  const nonApplying = allCourses()
+    .filter(c => !c.applies && effStatus(c)==='completed')
+    .reduce((s,c)=>s+(Number(c.credits)||0),0);
+  return {applying, notApplying: extras + nonApplying, total: applying + extras + nonApplying};
+}
+
+/* ---------- HERO ---------- */
 function renderRing(){
-  const {earned,pct,remaining}=computeProgress();
-  const circ=314.16;
-  document.getElementById('ringFill').style.strokeDashoffset = circ-(circ*pct/100);
-  document.getElementById('ringPct').textContent = pct+'%';
+  const p = computeProgress();
+  const circ = 314.16;
+  document.getElementById('ringFill').style.strokeDashoffset = circ - (circ * p.pct / 100);
+  document.getElementById('ringPct').textContent = p.pct + '%';
+  document.getElementById('ringLbl').innerHTML = 'degree<br>complete';
+  const note = MODE === 'progress'
+    ? 'includes classes you\'re taking now — this is the number WSU\'s transfer portal shows'
+    : 'finished and confirmed credits only';
   document.getElementById('motiv').innerHTML =
-    `<b>${earned} credits down, ${remaining} to go.</b>`+
-    `<span class="sub">${earned} / ${DATA.totalCredits} toward your BS in Mechanical Engineering</span>`;
+    `<b>${p.counted} of ${DATA.totalCredits} required credits filled.</b>` +
+    `<span class="sub">${p.remaining} credits of actual requirements left · ${note}</span>`;
 }
 
 /* ---------- KPIs ---------- */
 function renderKpis(){
-  const el=document.getElementById('kpis');
-  el.innerHTML = DATA.kpis.map(k=>`
-    <div class="card kpi ${k.cls||''}">
-      <div class="n">${k.value}${k.unit?`<small> ${k.unit}</small>`:''}</div>
-      <div class="k">${k.label}</div>
-    </div>`).join('');
-}
-
-/* ---------- courses ---------- */
-let activeTab='needed';
-function renderTabs(){
-  const counts={completed:0,progress:0,needed:0};
-  DATA.courses.forEach(c=>counts[c.status]++);
-  const tabs=[
-    {id:'needed',label:'Still Needed'},
-    {id:'progress',label:'In Progress'},
-    {id:'completed',label:'Completed'},
+  const p = computeProgress(), e = earnedAllCredits();
+  const kpis = [
+    {label:"Requirement credits filled", value:String(p.counted), unit:"/ "+DATA.totalCredits, cls:"gold"},
+    {label:"Requirements left",          value:String(p.remaining), unit:"cr"},
+    {label:"Overall GPA",                value:DATA.stats.gpaOverall},
+    {label:DATA.stats.gpaRecentLabel,    value:DATA.stats.gpaRecent, cls:"ok"},
+    {label:"Credits earned, all types",  value:String(e.total), unit:"cr"},
+    {label:"Earned but not required",    value:String(e.notApplying), unit:"cr"},
   ];
-  document.getElementById('tabs').innerHTML = tabs.map(t=>
-    `<button class="tab ${t.id===activeTab?'active':''}" data-tab="${t.id}">${t.label} <span class="cnt">${counts[t.id]}</span></button>`
-  ).join('');
-  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderTabs();renderCourses();});
+  document.getElementById('kpis').innerHTML = kpis.map(k=>`
+    <div class="card kpi ${k.cls||''}">
+      <div class="n">${esc(k.value)}${k.unit?`<small> ${esc(k.unit)}</small>`:''}</div>
+      <div class="k">${esc(k.label)}</div>
+    </div>`).join('');
+  document.getElementById('exTotal').textContent = e.total;
+  document.getElementById('exApplied').textContent = computeProgress().counted;
+  document.getElementById('exWasted').textContent = e.notApplying;
 }
-function prioPill(p){
-  if(p==='high')return '<span class="pill hi">High priority</span>';
-  if(p==='med')return '<span class="pill med">Medium</span>';
-  if(p==='low')return '<span class="pill low">Low priority</span>';
-  return '';
-}
-function renderCourses(){
-  const list=DATA.courses.filter(c=>c.status===activeTab);
-  const el=document.getElementById('courseList');
-  el.innerHTML=list.map(c=>{
-    const done=!!c.done;
-    const isStatic=c.status==='completed';
-    const right = isStatic
-      ? `<span class="pill grade">${c.grade}</span><span class="pill cr">${c.credits} cr</span><span class="course-term" style="color:var(--muted);font-size:.72rem">${c.term||''}</span>`
-      : `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
-    return `<div class="course ${done?'done':''} ${isStatic?'static':''}" data-id="${c.id}" data-static="${isStatic}">
-      <div class="check">${CHECK}</div>
-      <div class="body">
-        <div class="code">${c.code}</div>
-        <div class="title">${c.title}</div>
-        ${c.notes?`<div class="notes">${c.notes}</div>`:''}
-      </div>
-      <div class="right">${right}</div>
-    </div>`;
-  }).join('') || '<div style="padding:20px;text-align:center;color:var(--muted);font-size:.85rem">Nothing here.</div>';
 
-  el.querySelectorAll('.course').forEach(row=>{
-    if(row.dataset.static==='true')return;
-    row.querySelector('.check').onclick=()=>{
-      const id=row.dataset.id;
-      const c=DATA.courses.find(x=>x.id===id);
-      c.done=!c.done; state[id]=c.done; save();
-      renderCourses(); renderRing(); renderTabs();
+/* ---------- REQUIREMENT BUCKETS ---------- */
+function renderBuckets(){
+  const st = bucketStats();
+  document.getElementById('buckets').innerHTML = DATA.buckets.map(b=>{
+    const o = st[b.id];
+    const donePct = o.req ? (o.doneCapped / o.req * 100) : 0;
+    const progPct = o.req ? (o.progCapped / o.req * 100) : 0;
+    const filled  = o.doneCapped + o.progCapped;
+    const left    = Math.max(0, o.req - filled);
+    return `<div class="card bkt ${left===0?'full':''}">
+      <div class="bkt-head">
+        <div class="bkt-name">${esc(b.name)}${left===0?' ✓':''}</div>
+        <div class="bkt-num"><b>${filled}</b> / ${o.req} cr</div>
+      </div>
+      <div class="bkt-blurb">${esc(b.blurb)}</div>
+      <div class="bar">
+        <div class="fill" style="width:${donePct}%"></div>
+        <div class="fill prog" style="width:${progPct}%"></div>
+      </div>
+      <div class="bkt-foot">
+        <span>${o.doneCapped} done${o.progCapped?` · ${o.progCapped} in progress`:''}</span>
+        <span>${left===0?'Requirement satisfied':`${left} cr still needed`}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('nonCredit').innerHTML = `<div class="card" style="margin-top:4px">` +
+    DATA.nonCredit.map(n=>{
+      const done = state.checks['nc_'+n.id] !== undefined ? state.checks['nc_'+n.id] : n.done;
+      return `<div class="course ${done?'done':''}" data-nc="${esc(n.id)}">
+        <div class="check">${CHECK}</div>
+        <div class="body">
+          <div class="code">0 CREDITS · STILL REQUIRED</div>
+          <div class="title">${esc(n.name)}</div>
+          <div class="notes">${esc(n.detail)}</div>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+
+  document.querySelectorAll('[data-nc]').forEach(row=>{
+    row.querySelector('.check').onclick = ()=>{
+      const k = 'nc_' + row.dataset.nc;
+      state.checks[k] = !(state.checks[k] !== undefined ? state.checks[k] : false);
+      save(); renderBuckets();
     };
   });
 }
 
-/* ---------- roadmap ---------- */
+/* ---------- COURSE TRACKER ---------- */
+let activeTab = 'needed';
+const BUCKET_NAME = id => (DATA.buckets.find(b=>b.id===id)||{}).name || 'Fills no requirement';
+
+function tabCounts(){
+  const c = {needed:0, progress:0, completed:0, noapply:0};
+  allCourses().forEach(x=>{
+    if(!x.applies){ c.noapply++; return; }
+    c[effStatus(x)]++;
+  });
+  return c;
+}
+function renderTabs(){
+  const c = tabCounts();
+  const tabs = [
+    {id:'needed',    label:'Still Needed'},
+    {id:'progress',  label:'In Progress'},
+    {id:'completed', label:'Completed'},
+    {id:'noapply',   label:"Doesn't Count"},
+  ];
+  document.getElementById('tabs').innerHTML = tabs.map(t=>
+    `<button class="tab ${t.id===activeTab?'active':''}" data-tab="${t.id}">${t.label} <span class="cnt">${c[t.id]}</span></button>`
+  ).join('');
+  document.querySelectorAll('.tab').forEach(b=> b.onclick = ()=>{ activeTab=b.dataset.tab; renderTabs(); renderCourses(); });
+}
+function prioPill(p){
+  if(p==='high') return '<span class="pill hi">High priority</span>';
+  if(p==='med')  return '<span class="pill med">Medium</span>';
+  if(p==='low')  return '<span class="pill low">Later</span>';
+  return '';
+}
+function renderCourses(){
+  const list = allCourses().filter(c =>
+    activeTab === 'noapply' ? !c.applies : (c.applies && effStatus(c) === activeTab)
+  );
+  const el = document.getElementById('courseList');
+
+  if(!list.length){ el.innerHTML = '<div class="empty">Nothing here yet.</div>'; return; }
+
+  // group by requirement bucket
+  const order = DATA.buckets.map(b=>b.id).concat(['']);
+  const groups = {};
+  list.forEach(c => { const k = c.applies ? (c.bucket||'') : ''; (groups[k]=groups[k]||[]).push(c); });
+
+  el.innerHTML = order.filter(k=>groups[k]).map(k=>{
+    const hdr = activeTab==='noapply' ? '' : `<div class="grp-hdr">${esc(BUCKET_NAME(k))}</div>`;
+    return hdr + groups[k].map(c=>{
+      const done = isDone(c);
+      const noapply = !c.applies;
+      const st = effStatus(c);
+      const mine = !!c.custom;
+      let right;
+      if(noapply){
+        right = `<span class="pill no">no requirement</span><span class="pill cr">${c.credits} cr</span>`;
+      } else if(st === 'completed'){
+        right = `${c.grade?`<span class="pill grade">${esc(c.grade)}</span>`:''}<span class="pill cr">${c.credits} cr</span>` +
+                `${c.term?`<span style="color:var(--muted);font-size:.72rem">${esc(c.term)}</span>`:''}`;
+      } else {
+        right = `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
+      }
+      if(mine) right = `<span class="pill mine">added by you</span>` + right;
+      return `<div class="course ${done?'done':''} ${noapply?'noapply':''}" data-id="${esc(c.id)}">
+        <div class="check">${CHECK}</div>
+        <div class="body">
+          <div class="code">${esc(c.code)}${c.term && st!=='completed'?` · ${esc(c.term)}`:''}</div>
+          <div class="title">${esc(c.title)}</div>
+          ${c.wsu?`<div class="maps">→ counts as ${esc(c.wsu)}</div>`:''}
+          ${c.notes?`<div class="notes">${esc(c.notes)}</div>`:''}
+        </div>
+        <div class="right">${right}${mine?`<button class="del" data-del="${esc(c.id)}" title="Remove">✕</button>`:''}</div>
+      </div>`;
+    }).join('');
+  }).join('');
+
+  el.querySelectorAll('.course').forEach(row=>{
+    const c = allCourses().find(x=>x.id===row.dataset.id);
+    if(!c || !c.applies) return;
+    row.querySelector('.check').onclick = ()=>{
+      state.checks[c.id] = !isDone(c);
+      save(); renderAll();
+    };
+  });
+  el.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.del;
+      if(!confirm('Remove this class from your tracker?')) return;
+      state.custom = state.custom.filter(x=>x.id!==id);
+      delete state.checks[id];
+      save(); renderAll();
+    };
+  });
+}
+
+/* ---------- ADD A CLASS ---------- */
+function initForm(){
+  const sel = document.getElementById('fBucket');
+  sel.innerHTML = DATA.buckets.map(b=>`<option value="${b.id}">${esc(b.name)} — ${b.req} cr required</option>`).join('')
+    + `<option value="">Fills no requirement (earned credit only)</option>`;
+
+  const form = document.getElementById('addForm');
+  document.getElementById('addToggle').onclick = ()=>{
+    form.classList.toggle('open');
+    if(form.classList.contains('open')) document.getElementById('fCode').focus();
+  };
+  document.getElementById('fCancel').onclick = ()=>{ form.classList.remove('open'); clearForm(); };
+  document.getElementById('fSave').onclick = saveNewCourse;
+  form.addEventListener('keydown', e=>{ if(e.key==='Enter' && e.target.tagName!=='TEXTAREA') saveNewCourse(); });
+}
+function clearForm(){
+  ['fCode','fTitle','fCredits','fGrade','fTerm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fErr').textContent = '';
+}
+function saveNewCourse(){
+  const code    = document.getElementById('fCode').value.trim();
+  const title   = document.getElementById('fTitle').value.trim();
+  const credits = parseFloat(document.getElementById('fCredits').value);
+  const bucket  = document.getElementById('fBucket').value;
+  const status  = document.getElementById('fStatus').value;
+  const grade   = document.getElementById('fGrade').value.trim();
+  const term    = document.getElementById('fTerm').value.trim();
+  const err     = document.getElementById('fErr');
+
+  if(!code && !title){ err.textContent = 'Give it at least a course code or a title.'; return; }
+  if(isNaN(credits) || credits < 0){ err.textContent = 'Enter the credit hours.'; return; }
+
+  const c = {
+    id: 'my_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    custom: true,
+    bucket: bucket,
+    applies: !!bucket,
+    status: status,
+    code: code || '—',
+    title: title || code,
+    credits: credits,
+  };
+  if(grade) c.grade = grade;
+  if(term)  c.term  = term;
+
+  state.custom.push(c);
+  save();
+  clearForm();
+  document.getElementById('addForm').classList.remove('open');
+  activeTab = c.applies ? (status==='needed'?'needed':status) : 'noapply';
+  renderAll();
+  document.querySelector('#courseList').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---------- ROADMAP ---------- */
 function renderRoadmap(){
   document.getElementById('roadmap').innerHTML = DATA.roadmap.map((t,i)=>`
     <div class="card term ${i===0?'open':''} ${t.grad?'grad':''}">
       <div class="term-head">
-        <div class="t">${t.term}${t.note?`<span>${t.note}</span>`:''}</div>
+        <div class="t">${esc(t.term)}${t.note?`<span>${esc(t.note)}</span>`:''}</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span class="load">${t.load}</span>
-          <span class="chev">▶</span>
+          <span class="load">${esc(t.load)}</span><span class="chev">▶</span>
         </div>
       </div>
       <div class="term-body">
-        <ul>${t.courses.map(c=>`<li><span>${c.name}</span><span>${c.cr}</span></li>`).join('')}</ul>
+        <ul>${t.courses.map(c=>`<li><span>${esc(c.name)}</span><span>${esc(c.cr)}</span></li>`).join('')}</ul>
       </div>
     </div>`).join('');
-  document.querySelectorAll('.term-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
+  document.querySelectorAll('#roadmap .term-head').forEach(h=> h.onclick = ()=> h.parentElement.classList.toggle('open'));
 }
 
-/* ---------- semester checklist ---------- */
-const TAG_LABEL={deadline:'Deadline', aid:'Aid', school:'School'};
+/* ---------- CHECKLIST ---------- */
+const TAG_LABEL = {deadline:'Deadline', aid:'Aid', school:'School'};
 function renderChecklist(){
-  const el=document.getElementById('checklist');
+  const el = document.getElementById('checklist');
   el.innerHTML = DATA.checklist.map((g,gi)=>{
-    const total=g.items.length, done=g.items.filter(i=>i.done).length;
-    const allDone = done===total;
-    const rows=g.items.map(it=>{
+    const items = g.items.map(it => ({...it, done: state.checks[it.id] !== undefined ? state.checks[it.id] : !!it.done}));
+    const total = items.length, done = items.filter(i=>i.done).length;
+    const rows = items.map(it=>{
       const tag = (it.tag && TAG_LABEL[it.tag]) ? ` <span class="ctag ${it.tag}">${TAG_LABEL[it.tag]}</span>` : '';
-      return `<div class="task ${it.done?'done':''}" data-id="${it.id}">
-        <div class="check">${CHECK}</div>
-        <div class="txt">${it.text}${tag}</div>
+      return `<div class="task ${it.done?'done':''}" data-id="${esc(it.id)}">
+        <div class="check">${CHECK}</div><div class="txt">${esc(it.text)}${tag}</div>
       </div>`;
     }).join('');
     return `<div class="card term ${gi===0?'open':''} ${g.recurring?'grad':''}">
       <div class="term-head">
-        <div class="t">${g.term}${g.note?`<span>${g.note}</span>`:''}</div>
+        <div class="t">${esc(g.term)}${g.note?`<span>${esc(g.note)}</span>`:''}</div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span class="load">${done}/${total}${allDone&&total?' ✓':''}</span>
-          <span class="chev">▶</span>
+          <span class="load">${done}/${total}${done===total&&total?' ✓':''}</span><span class="chev">▶</span>
         </div>
       </div>
       <div class="term-body" style="padding-top:0">${rows}</div>
     </div>`;
   }).join('');
 
-  el.querySelectorAll('.term-head').forEach(h=>h.onclick=(e)=>{
+  el.querySelectorAll('.term-head').forEach(h=> h.onclick = e =>{
     if(e.target.closest('.task')) return;
     h.parentElement.classList.toggle('open');
   });
   el.querySelectorAll('.task').forEach(row=>{
-    row.querySelector('.check').onclick=(e)=>{
+    row.querySelector('.check').onclick = e =>{
       e.stopPropagation();
-      const id=row.dataset.id;
-      let item; DATA.checklist.forEach(g=>g.items.forEach(i=>{if(i.id===id)item=i;}));
-      if(!item)return;
-      item.done=!item.done; state[id]=item.done; save(); renderChecklist();
+      const id = row.dataset.id;
+      let base = false;
+      DATA.checklist.forEach(g=>g.items.forEach(i=>{ if(i.id===id) base = !!i.done; }));
+      const cur = state.checks[id] !== undefined ? state.checks[id] : base;
+      state.checks[id] = !cur;
+      save(); renderChecklist();
     };
   });
 }
 
-/* ---------- contacts ---------- */
-function renderContacts(){
-  document.getElementById('contacts').innerHTML = DATA.contacts.map(c=>`
-    <div class="card contact">
-      <div class="who">${c.who}</div>
-      ${c.email?`<a href="mailto:${c.email}">${c.email}</a>`:''}
-      ${c.phone?`<a href="tel:${c.phone.replace(/[^0-9]/g,'')}">${c.phone}</a>`:''}
+/* ---------- EXTRAS ---------- */
+function renderExtras(){
+  const mine = allCourses().filter(c=>!c.applies && c.custom).map(c=>({
+    code:c.code, title:c.title, credits:c.credits, why:'Added by you — marked as filling no requirement.'
+  }));
+  document.getElementById('extras').innerHTML = DATA.extras.concat(mine).map(x=>`
+    <div class="extra">
+      <div>
+        <div class="n">${esc(x.title)}</div>
+        <div class="c">${esc(x.code)}</div>
+        <div class="w">${esc(x.why)}</div>
+      </div>
+      <div class="c" style="white-space:nowrap">${x.credits} cr</div>
     </div>`).join('');
 }
 
-document.getElementById('resetBtn').onclick=()=>{
-  if(confirm('Reset all check-offs on this device? Your data.js is not affected.')){
+/* ---------- CONTACTS + FOOT ---------- */
+function renderContacts(){
+  document.getElementById('contacts').innerHTML = DATA.contacts.map(c=>`
+    <div class="card contact">
+      <div class="who">${esc(c.who)}</div>
+      ${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}
+      ${c.phone?`<a href="tel:${esc(c.phone).replace(/[^0-9]/g,'')}">${esc(c.phone)}</a>`:''}
+    </div>`).join('');
+}
+function renderFoot(){
+  const p = computeProgress(), e = earnedAllCredits();
+  document.getElementById('foot').innerHTML =
+    `${p.counted} of ${DATA.totalCredits} required credits · ${e.total} total credits earned · Overall GPA ${DATA.stats.gpaOverall}<br>` +
+    `${DATA.program} · catalog ${DATA.catalogYear}<br>` +
+    `You're not behind. You're building this on your own terms. Keep going. 💪`;
+}
+
+/* ---------- MODE TOGGLE + RESET ---------- */
+document.querySelectorAll('#mode button').forEach(b=>{
+  b.onclick = ()=>{
+    MODE = b.dataset.mode;
+    document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on', x===b));
+    renderRing(); renderKpis(); renderFoot();
+  };
+});
+document.getElementById('resetBtn').onclick = ()=>{
+  if(confirm('This clears your check-offs AND any classes you added on this device. data.js is not affected. Continue?')){
     localStorage.removeItem(STORE_KEY); location.reload();
   }
 };
 
-renderRing();renderKpis();renderTabs();renderCourses();renderRoadmap();renderChecklist();renderContacts();
+function renderAll(){
+  renderRing(); renderKpis(); renderBuckets(); renderTabs(); renderCourses();
+  renderExtras(); renderFoot();
+}
+initForm(); renderAll(); renderRoadmap(); renderChecklist(); renderContacts();
 </script>
 </body>
 </html>
