@@ -59,9 +59,61 @@ Fill in the code, title, credits, pick **which requirement it fills**, and set t
 
 Anything you add — and every check-off — saves in that browser's local storage. It's per-device: adding a class on your phone won't show up on your laptop. To make a change permanent across devices, edit `data.js` and commit.
 
-You can also tap the checkbox on any "Still Needed" course to mark it done, and untick a completed one to put it back.
+## Moving a class through its stages
+
+Tap the box on any course. Each tap advances it one stage and loops back around:
+
+```
+☐ Still needed  →  🟡 Taking it now  →  ✅ Completed  →  ☐ Still needed
+```
+
+- **Still needed** (empty box) — doesn't count toward the percentage.
+- **Taking it now** (gold) — counts in the "Incl. in progress" number, not in "Confirmed only". This is exactly how MA 253 Calc III is treated, and it's the 3 credits separating 35% from 38%.
+- **Completed** (green) — counts in both.
+
+Tapped one time too many? Keep tapping — it comes back around. The course also moves between the Still Needed / In Progress / Completed tabs as you go, and the bucket bar for its requirement updates at the same time.
 
 ---
+
+## Semester Planner
+
+Every remaining credit starts out already assigned to a semester — Fall 2026 through Spring 2033, paced at ~6–8 credits per term. You edit it in place:
+
+- **← →** move a class to the previous or next semester
+- **✕** drops it back to **Unplanned** (nothing is lost — it reappears in the pool at the bottom)
+- **+ Add a class to…** dropdown puts an unplanned class into that semester
+- Click the **semester name or note** to rename it
+- **+ Add semester** / **Delete semester** to change the shape of the plan
+- **Reset plan to the original** restores the seed in `data.js`
+
+Each term shows a credit-load pill — *light* (≤4), *sustainable* (5–8), *heavy* (9–11), *too much part-time* (12+). The banner at the top projects your graduation term from the last semester that still has unfinished work, and warns if any class isn't placed anywhere.
+
+Completing a class strikes it through in the plan and removes its credits from that term's load, so the plan thins out as you go.
+
+The starting plan lives in `DATA.planSeed` in `data.js`. Your edits are saved on your device and override it.
+
+## Viewing on your phone / sharing it
+
+The repo is a plain static site, so **GitHub Pages** will host it free:
+
+1. Go to the repo → **Settings** → **Pages**
+2. Under *Source*, pick **Deploy from a branch** → branch `main`, folder `/ (root)` → **Save**
+3. Wait ~1 minute. Your URL: `https://fallen-master.github.io/wsu-me-tracker/`
+
+That link works on any phone or computer, and it's the link to share.
+
+On iPhone, open it in Safari → Share → **Add to Home Screen**. It gets an icon and opens fullscreen like an app. Android: Chrome menu → **Add to Home screen**.
+
+### Important limitation when sharing
+
+Check-offs, added classes, and planner edits are stored in **that browser's** local storage. They do **not** sync.
+
+- Your laptop and your phone keep separate copies.
+- Anyone you share the link with sees whatever is committed in `data.js` — not your personal edits.
+
+So to make a change everyone sees, edit `data.js` and push. The on-site editing is your fast scratch layer; `data.js` is the shared source of truth.
+
+**If the repo is public,** anyone with the URL can see your name, GPA, full course history, and your advisors' contact info. Making the repo **private** still allows GitHub Pages on a personal account, and the Pages URL stays shareable — worth considering.
 
 ## Files
 

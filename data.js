@@ -135,22 +135,29 @@ const DATA = {
      why:"Zero degree credit — developmental and a failed/withdrawn attempt."},
   ],
 
-  /* ---- ROADMAP ---- */
-  roadmap: [
-    {term:"Spring 2027", note:"Butler · part-time", load:"9 cr",
-     courses:[{name:"PH 251 Physics I + Lab",cr:"5 cr"},{name:"PL 292 Engineering Ethics",cr:"3 cr"}]},
-    {term:"Summer 2027", note:"Butler · light load", load:"3 cr",
-     courses:[{name:"MA 260 Differential Equations",cr:"3 cr"}]},
-    {term:"Fall 2027", note:"Butler · part-time", load:"7 cr",
-     courses:[{name:"PH 252 Physics II",cr:"4 cr"},{name:"EN 260 Statics",cr:"3 cr"}]},
-    {term:"Spring 2028", note:"Butler · finish prereqs + apply", load:"varies",
-     courses:[{name:"Any remaining Butler prereqs",cr:"3–6 cr"},{name:"Submit WSU transfer app for Fall 2028",cr:"—"}]},
-    {term:"Fall 2028", note:"Transfer to WSU · junior standing", load:"part-time",
-     courses:[{name:"Begin WSU ME upper-division core",cr:"6–9 cr"},{name:"Join AIAA / Shocker Racing",cr:"—"}]},
-    {term:"2028 → ~2032", note:"WSU · part-time to finish", load:"~79 cr",
-     courses:[{name:"Engineering core + technical electives",cr:"~64 cr"},{name:"ME 662 Senior Capstone Design",cr:"3 cr"}]},
-    {term:"🎓 Graduation", note:"BS Mechanical Engineering", load:"128 cr", grad:true,
-     courses:[{name:"Target aerospace internships: Spirit, Textron, Bombardier",cr:"→ SpaceX"}]},
+  /* ==================================================================
+     SEMESTER PLAN — the starting plan, every remaining credit assigned.
+     You can edit all of this ON THE SITE (drag-free: arrows and menus).
+     Your edits are saved on your device and override this seed.
+     "Reset plan" on the site brings you back to exactly this.
+     Paced at ~6–8 credits/semester — part-time, sustainable, working.
+     ================================================================== */
+  planSeed: [
+    {id:"fa26", name:"Fall 2026",    note:"Butler · right now",            courses:["ma253"]},
+    {id:"sp27", name:"Spring 2027",  note:"Butler · the big unlock",       courses:["ph251","ph251l","phil385"]},
+    {id:"su27", name:"Summer 2027",  note:"Butler · light",                courses:["ma260"]},
+    {id:"fa27", name:"Fall 2027",    note:"Butler",                        courses:["ph252","ae223"]},
+    {id:"sp28", name:"Spring 2028",  note:"Butler · apply to transfer",    courses:["en102"]},
+    {id:"fa28", name:"Fall 2028",    note:"→ WSU · junior standing",       courses:["ae333","me250","me251"]},
+    {id:"sp29", name:"Spring 2029",  note:"WSU",                           courses:["ece282","me335"]},
+    {id:"fa29", name:"Fall 2029",    note:"WSU",                           courses:["me398","me325"]},
+    {id:"sp30", name:"Spring 2030",  note:"WSU",                           courses:["me339","me521"]},
+    {id:"fa30", name:"Fall 2030",    note:"WSU",                           courses:["me522","me439"]},
+    {id:"sp31", name:"Spring 2031",  note:"WSU",                           courses:["me533","me659"]},
+    {id:"fa31", name:"Fall 2031",    note:"WSU",                           courses:["me475","me633"]},
+    {id:"sp32", name:"Spring 2032",  note:"WSU · electives begin",         courses:["te_th1","te_mdes"]},
+    {id:"fa32", name:"Fall 2032",    note:"WSU",                           courses:["te_th2","te_mfg"]},
+    {id:"sp33", name:"Spring 2033",  note:"WSU · capstone 🎓",             courses:["te_energy","me662"]},
   ],
 
   /* ---- SEMESTER CHECKLIST ---- */

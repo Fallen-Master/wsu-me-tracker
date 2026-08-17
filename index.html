@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#000000">
+<meta name="description" content="Rafael Gomez — progress toward a BS in Mechanical Engineering at Wichita State, tracked against actual degree requirements.">
+<!-- lets you "Add to Home Screen" on iPhone/Android and open it like an app -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="ME Tracker">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23111'/><text y='72' x='50' font-size='60' text-anchor='middle' fill='%23FFCD00' font-family='system-ui' font-weight='bold'>ME</text></svg>">
 <title>Rafael's WSU ME Transfer Tracker</title>
 <style>
 :root{
@@ -87,17 +94,15 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .grp-hdr{padding:10px 15px 6px;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:#fcfbf8;border-bottom:1px solid var(--line)}
 .course{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line)}
 .course:last-child{border-bottom:none}
-.course .check{width:22px;height:22px;border-radius:7px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;background:#fff}
-.course.done .check{background:var(--green);border-color:var(--green)}
-.course .check svg{opacity:0;transition:.15s}
-.course.done .check svg{opacity:1}
-.course.static .check{cursor:default;border-radius:50%;border-color:var(--green);background:var(--green)}
-.course.static .check svg{opacity:1}
+.course .check{width:24px;height:24px;border-radius:8px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;background:#fff}
+.course .check:active{transform:scale(.88)}
+.course.st-completed .check{background:var(--green);border-color:var(--green)}
+.course.st-progress  .check{background:var(--gold);border-color:var(--gold)}
 .course.noapply .check{border-color:#d8d5cc;background:#f4f3ef;cursor:default;border-radius:50%}
-.course.noapply .check svg{opacity:.45;stroke:#999}
 .course .body{flex:1;min-width:0}
 .course .title{font-weight:600;font-size:.92rem}
-.course.done .title{color:var(--muted)}
+.course.st-completed .title{color:var(--muted)}
+.pill.st{background:var(--gold-soft);color:#7a5c00}
 .course .code{color:var(--muted);font-weight:600;font-size:.78rem}
 .course .notes{color:var(--muted);font-size:.79rem;margin-top:3px}
 .course .maps{font-size:.74rem;color:var(--blue);margin-top:2px}
@@ -160,6 +165,44 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 .ctag.deadline{background:var(--red-soft);color:var(--red)}
 .ctag.aid{background:var(--green-soft);color:var(--green)}
 .ctag.school{background:var(--blue-soft);color:var(--blue)}
+
+/* ---------- PLANNER ---------- */
+.gradbox{padding:15px 17px;margin-bottom:14px;background:linear-gradient(150deg,#fffdf3,#fff4c8);border-color:#f2e6a8}
+.gradbox .g1{font-size:1.15rem;font-weight:700;color:#8a6d00;letter-spacing:-.01em}
+.gradbox .g2{font-size:.82rem;color:#7a6a3a;margin-top:3px}
+.pterm{padding:0;margin-bottom:10px;overflow:hidden}
+.pterm-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pterm-head input.tname{border:1px solid transparent;background:transparent;font-family:inherit;font-weight:700;font-size:.95rem;color:var(--ink);padding:4px 7px;border-radius:8px;width:135px}
+.pterm-head input.tnote{border:1px solid transparent;background:transparent;font-family:inherit;font-size:.79rem;color:var(--muted);padding:4px 7px;border-radius:8px;flex:1;min-width:90px}
+.pterm-head input:hover{border-color:var(--line)}
+.pterm-head input:focus{outline:none;background:#fff;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.22)}
+.load-pill{font-size:.71rem;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.load-pill.light{background:var(--blue-soft);color:var(--blue)}
+.load-pill.ok{background:var(--green-soft);color:var(--green)}
+.load-pill.heavy{background:var(--amber-soft);color:var(--amber)}
+.load-pill.over{background:var(--red-soft);color:var(--red)}
+.load-pill.none{background:#f0efe9;color:#999}
+.prow{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:none}
+.prow .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:#d5d2ca}
+.prow.st-progress .dot{background:var(--gold)}
+.prow.st-completed .dot{background:var(--green)}
+.prow .pc{flex:1;min-width:0;font-size:.85rem}
+.prow .pc b{font-weight:600}
+.prow .pc span{color:var(--muted);font-size:.76rem;display:block}
+.prow.st-completed .pc b{color:var(--muted);text-decoration:line-through}
+.prow .cr{font-size:.72rem;font-weight:700;color:#555;background:#f0efe9;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.mini{background:#fff;border:1px solid var(--line);color:var(--muted);border-radius:7px;width:26px;height:26px;font-size:.8rem;cursor:pointer;font-family:inherit;flex-shrink:0;line-height:1;padding:0}
+.mini:hover:not(:disabled){border-color:var(--gold);color:var(--ink);background:#fffdf3}
+.mini:disabled{opacity:.3;cursor:default}
+.mini.x:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+.pterm-foot{display:flex;gap:8px;padding:10px 14px;align-items:center;background:#fcfbf8;flex-wrap:wrap}
+.pterm-foot select{flex:1;min-width:150px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;font-size:.8rem;font-family:inherit;background:#fff;color:var(--ink)}
+.pterm-foot select:focus{outline:none;border-color:var(--gold)}
+.delterm{background:none;border:none;color:#bbb;font-size:.74rem;cursor:pointer;font-family:inherit;text-decoration:underline}
+.delterm:hover{color:var(--red)}
+.unp-head{padding:13px 15px;font-weight:700;font-size:.9rem;border-bottom:1px solid var(--line)}
+.unp-head span{font-weight:400;color:var(--muted);font-size:.79rem}
 
 /* ---------- MISC ---------- */
 .contacts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
@@ -241,7 +284,12 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
 
   <section class="section">
     <h2>Course Tracker</h2>
-    <div class="section-sub">Tap the box on any course to mark it done — the percentage updates instantly and saves on this device.</div>
+    <div class="section-sub">Tap the box on any course to move it along: <b>still needed → taking it now → completed</b>, then back to the start. The percentage and the bars update instantly and save on this device.</div>
+    <div class="legend" style="margin-bottom:14px">
+      <span><i style="background:#fff;border:2px solid #cfcdc5;width:14px;height:14px;border-radius:4px"></i>Still needed</span>
+      <span><i style="background:var(--gold);width:14px;height:14px;border-radius:4px"></i>Taking it now — counts in the 38%</span>
+      <span><i style="background:var(--green);width:14px;height:14px;border-radius:4px"></i>Completed</span>
+    </div>
     <div class="addbar">
       <button class="btn gold" id="addToggle">+ Add a class</button>
       <span style="font-size:.78rem;color:var(--muted)">Add classes yourself — no need to ask Claude.</span>
@@ -277,9 +325,15 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
   </section>
 
   <section class="section">
-    <h2>Roadmap to Graduation</h2>
-    <div class="section-sub">Part-time plan · ~6–9 credits/semester. Tap a semester to expand.</div>
-    <div id="roadmap"></div>
+    <h2>Semester Planner</h2>
+    <div class="section-sub">Your plan, already filled in — every remaining credit is assigned to a semester. Change any of it: rename a term, move a class with ← →, drop it back to Unplanned with ✕, or add a semester.</div>
+    <div class="card gradbox" id="gradBox"></div>
+    <div id="planner"></div>
+    <div class="addbar" style="margin-top:12px">
+      <button class="btn ghost" id="addTerm">+ Add semester</button>
+      <button class="btn ghost" id="resetPlan">Reset plan to the original</button>
+    </div>
+    <div class="card" id="unplanned" style="margin-top:14px"></div>
   </section>
 
   <section class="section">
@@ -318,20 +372,29 @@ function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; 
 function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
 
 const CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+const DOT   = '<svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="#fff"/></svg>';
+const MARK  = st => st === 'completed' ? CHECK : (st === 'progress' ? DOT : '');
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* every course = baked-in data.js courses + the ones you added */
 function allCourses(){ return DATA.courses.concat(state.custom); }
 
-/* a course counts as finished if it shipped as completed, or you ticked it */
-function isDone(c){
-  if(state.checks[c.id] !== undefined) return !!state.checks[c.id];
-  return c.status === 'completed';
-}
+/* ---- three-state status: needed -> progress -> completed -> needed ----
+   Whatever you set on the site wins over what data.js shipped with.
+   Older saves stored true/false booleans; those still read correctly. */
+const STATES = ['needed','progress','completed'];
 function effStatus(c){
-  if(isDone(c)) return 'completed';
-  // un-ticking a course that shipped as completed puts it back in "still needed"
-  return c.status === 'completed' ? 'needed' : c.status;
+  const s = state.checks[c.id];
+  if(typeof s === 'string' && STATES.includes(s)) return s;
+  if(s === true)  return 'completed';
+  if(s === false) return 'needed';
+  return c.status;
+}
+function isDone(c){ return effStatus(c) === 'completed'; }
+function cycleStatus(c){
+  const next = STATES[(STATES.indexOf(effStatus(c)) + 1) % STATES.length];
+  state.checks[c.id] = next;
+  save(); renderAll();
 }
 
 /* ============================================================
@@ -449,8 +512,8 @@ function renderBuckets(){
   document.getElementById('nonCredit').innerHTML = `<div class="card" style="margin-top:4px">` +
     DATA.nonCredit.map(n=>{
       const done = state.checks['nc_'+n.id] !== undefined ? state.checks['nc_'+n.id] : n.done;
-      return `<div class="course ${done?'done':''}" data-nc="${esc(n.id)}">
-        <div class="check">${CHECK}</div>
+      return `<div class="course st-${done?'completed':'needed'}" data-nc="${esc(n.id)}">
+        <div class="check">${MARK(done?'completed':'needed')}</div>
         <div class="body">
           <div class="code">0 CREDITS · STILL REQUIRED</div>
           <div class="title">${esc(n.name)}</div>
@@ -515,7 +578,6 @@ function renderCourses(){
   el.innerHTML = order.filter(k=>groups[k]).map(k=>{
     const hdr = activeTab==='noapply' ? '' : `<div class="grp-hdr">${esc(BUCKET_NAME(k))}</div>`;
     return hdr + groups[k].map(c=>{
-      const done = isDone(c);
       const noapply = !c.applies;
       const st = effStatus(c);
       const mine = !!c.custom;
@@ -525,12 +587,15 @@ function renderCourses(){
       } else if(st === 'completed'){
         right = `${c.grade?`<span class="pill grade">${esc(c.grade)}</span>`:''}<span class="pill cr">${c.credits} cr</span>` +
                 `${c.term?`<span style="color:var(--muted);font-size:.72rem">${esc(c.term)}</span>`:''}`;
+      } else if(st === 'progress'){
+        right = `<span class="pill st">Taking it now</span><span class="pill cr">${c.credits} cr</span>`;
       } else {
         right = `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
       }
       if(mine) right = `<span class="pill mine">added by you</span>` + right;
-      return `<div class="course ${done?'done':''} ${noapply?'noapply':''}" data-id="${esc(c.id)}">
-        <div class="check">${CHECK}</div>
+      const tip = noapply ? '' : ' title="Tap to change: still needed → in progress → completed"';
+      return `<div class="course st-${st} ${noapply?'noapply':''}" data-id="${esc(c.id)}">
+        <div class="check"${tip}>${MARK(st)}</div>
         <div class="body">
           <div class="code">${esc(c.code)}${c.term && st!=='completed'?` · ${esc(c.term)}`:''}</div>
           <div class="title">${esc(c.title)}</div>
@@ -545,10 +610,7 @@ function renderCourses(){
   el.querySelectorAll('.course').forEach(row=>{
     const c = allCourses().find(x=>x.id===row.dataset.id);
     if(!c || !c.applies) return;
-    row.querySelector('.check').onclick = ()=>{
-      state.checks[c.id] = !isDone(c);
-      save(); renderAll();
-    };
+    row.querySelector('.check').onclick = ()=> cycleStatus(c);
   });
   el.querySelectorAll('[data-del]').forEach(btn=>{
     btn.onclick = (e)=>{
@@ -616,22 +678,155 @@ function saveNewCourse(){
   document.querySelector('#courseList').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-/* ---------- ROADMAP ---------- */
-function renderRoadmap(){
-  document.getElementById('roadmap').innerHTML = DATA.roadmap.map((t,i)=>`
-    <div class="card term ${i===0?'open':''} ${t.grad?'grad':''}">
-      <div class="term-head">
-        <div class="t">${esc(t.term)}${t.note?`<span>${esc(t.note)}</span>`:''}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="load">${esc(t.load)}</span><span class="chev">▶</span>
-        </div>
-      </div>
-      <div class="term-body">
-        <ul>${t.courses.map(c=>`<li><span>${esc(c.name)}</span><span>${esc(c.cr)}</span></li>`).join('')}</ul>
-      </div>
-    </div>`).join('');
-  document.querySelectorAll('#roadmap .term-head').forEach(h=> h.onclick = ()=> h.parentElement.classList.toggle('open'));
+/* ============================================================
+   SEMESTER PLANNER
+   state.plan overrides DATA.planSeed once you touch anything.
+   ============================================================ */
+function getPlan(){
+  if(!Array.isArray(state.plan)) state.plan = JSON.parse(JSON.stringify(DATA.planSeed));
+  return state.plan;
 }
+function savePlan(){ save(); renderPlanner(); }
+function courseById(id){ return allCourses().find(c=>c.id===id); }
+
+/* courses that still need doing and aren't in any semester yet */
+function unplannedCourses(){
+  const inPlan = new Set();
+  getPlan().forEach(t => t.courses.forEach(id => inPlan.add(id)));
+  return allCourses().filter(c => c.applies && effStatus(c) !== 'completed' && !inPlan.has(c.id));
+}
+function termCredits(t){
+  return t.courses.map(courseById).filter(Boolean)
+    .filter(c => effStatus(c) !== 'completed')
+    .reduce((s,c) => s + (Number(c.credits)||0), 0);
+}
+function loadPill(cr, n){
+  if(!n)       return '<span class="load-pill none">nothing planned</span>';
+  if(cr === 0) return '<span class="load-pill light">0 cr</span>';
+  const cls = cr <= 4 ? 'light' : cr <= 8 ? 'ok' : cr <= 11 ? 'heavy' : 'over';
+  const word = cr <= 4 ? 'light' : cr <= 8 ? 'sustainable' : cr <= 11 ? 'heavy' : 'too much part-time';
+  return `<span class="load-pill ${cls}">${cr} cr · ${word}</span>`;
+}
+
+function renderPlanner(){
+  const plan = getPlan();
+
+  /* graduation projection = last term that still has unfinished work */
+  const active = plan.filter(t => termCredits(t) > 0);
+  const last = active[active.length - 1];
+  const totalLeft = plan.reduce((s,t) => s + termCredits(t), 0);
+  const stray = unplannedCourses().reduce((s,c) => s + (Number(c.credits)||0), 0);
+  document.getElementById('gradBox').innerHTML =
+    `<div class="g1">🎓 ${last ? esc(last.name) : 'Everything is done'}</div>` +
+    `<div class="g2">${totalLeft} credits planned across ${active.length} semester${active.length===1?'':'s'}` +
+    `${stray ? ` · <b>${stray} cr not yet placed in a semester</b>` : ''}</div>`;
+
+  document.getElementById('planner').innerHTML = plan.map((t,ti)=>{
+    const courses = t.courses.map(courseById).filter(Boolean);
+    const rows = courses.length ? courses.map(c=>{
+      const st = effStatus(c);
+      return `<div class="prow st-${st}">
+        <span class="dot"></span>
+        <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}
+          ${st==='completed'?'<span>done ✓</span>':st==='progress'?'<span>taking it now</span>':''}</div>
+        <span class="cr">${c.credits} cr</span>
+        <button class="mini" data-mv="prev" data-t="${ti}" data-c="${esc(c.id)}" ${ti===0?'disabled':''} title="Move to earlier semester">←</button>
+        <button class="mini" data-mv="next" data-t="${ti}" data-c="${esc(c.id)}" ${ti===plan.length-1?'disabled':''} title="Move to later semester">→</button>
+        <button class="mini x" data-unassign="${esc(c.id)}" title="Remove from this semester">✕</button>
+      </div>`;
+    }).join('') : `<div class="prow" style="color:var(--muted);font-size:.83rem">Nothing planned for this semester yet.</div>`;
+
+    const avail = unplannedCourses();
+    return `<div class="card pterm">
+      <div class="pterm-head">
+        <input class="tname" value="${esc(t.name)}" data-rename="${ti}" aria-label="Semester name">
+        <input class="tnote" value="${esc(t.note||'')}" data-renote="${ti}" placeholder="note (optional)" aria-label="Semester note">
+        ${loadPill(termCredits(t), courses.filter(c=>effStatus(c)!=='completed').length)}
+      </div>
+      ${rows}
+      <div class="pterm-foot">
+        <select data-addto="${ti}">
+          <option value="">+ Add a class to ${esc(t.name)}…</option>
+          ${avail.map(c=>`<option value="${esc(c.id)}">${esc(c.code)} · ${esc(c.title)} (${c.credits} cr)</option>`).join('')}
+        </select>
+        <button class="delterm" data-delterm="${ti}">Delete semester</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  /* unplanned pool */
+  const up = unplannedCourses();
+  document.getElementById('unplanned').innerHTML =
+    `<div class="unp-head">Unplanned <span>— ${up.length ? `${up.length} class${up.length===1?'':'es'} not assigned to any semester yet` : 'nothing left over, every class has a home'}</span></div>` +
+    up.map(c=>`<div class="prow st-${effStatus(c)}">
+      <span class="dot"></span>
+      <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}</div>
+      <span class="cr">${c.credits} cr</span>
+    </div>`).join('');
+
+  wirePlanner();
+}
+
+function wirePlanner(){
+  const plan = getPlan();
+  document.querySelectorAll('[data-mv]').forEach(b=>{
+    b.onclick = ()=>{
+      const ti = +b.dataset.t, id = b.dataset.c;
+      const to = b.dataset.mv === 'prev' ? ti-1 : ti+1;
+      if(to < 0 || to >= plan.length) return;
+      plan[ti].courses = plan[ti].courses.filter(x=>x!==id);
+      if(!plan[to].courses.includes(id)) plan[to].courses.push(id);
+      savePlan();
+    };
+  });
+  document.querySelectorAll('[data-unassign]').forEach(b=>{
+    b.onclick = ()=>{
+      const id = b.dataset.unassign;
+      plan.forEach(t => t.courses = t.courses.filter(x=>x!==id));
+      savePlan();
+    };
+  });
+  document.querySelectorAll('[data-addto]').forEach(sel=>{
+    sel.onchange = ()=>{
+      const id = sel.value; if(!id) return;
+      const ti = +sel.dataset.addto;
+      plan.forEach(t => t.courses = t.courses.filter(x=>x!==id));
+      plan[ti].courses.push(id);
+      savePlan();
+    };
+  });
+  document.querySelectorAll('[data-rename]').forEach(inp=>{
+    inp.onchange = inp.onblur = ()=>{
+      const v = inp.value.trim();
+      if(v){ plan[+inp.dataset.rename].name = v; save(); }
+      renderPlanner();
+    };
+  });
+  document.querySelectorAll('[data-renote]').forEach(inp=>{
+    inp.onchange = inp.onblur = ()=>{ plan[+inp.dataset.renote].note = inp.value.trim(); save(); };
+  });
+  document.querySelectorAll('[data-delterm]').forEach(b=>{
+    b.onclick = ()=>{
+      const ti = +b.dataset.delterm, t = plan[ti];
+      const n = t.courses.length;
+      if(n && !confirm(`Delete ${t.name}? Its ${n} class${n===1?'':'es'} will go back to Unplanned — nothing is lost.`)) return;
+      plan.splice(ti,1);
+      savePlan();
+    };
+  });
+}
+
+document.getElementById('addTerm').onclick = ()=>{
+  const plan = getPlan();
+  plan.push({id:'t'+Date.now().toString(36), name:'New semester', note:'', courses:[]});
+  savePlan();
+  document.querySelector('#planner .pterm:last-child .tname').select();
+};
+document.getElementById('resetPlan').onclick = ()=>{
+  if(!confirm('Throw away your changes and go back to the original plan? Your course check-offs are not affected.')) return;
+  state.plan = JSON.parse(JSON.stringify(DATA.planSeed));
+  savePlan();
+};
 
 /* ---------- CHECKLIST ---------- */
 const TAG_LABEL = {deadline:'Deadline', aid:'Aid', school:'School'};
@@ -723,9 +918,9 @@ document.getElementById('resetBtn').onclick = ()=>{
 
 function renderAll(){
   renderRing(); renderKpis(); renderBuckets(); renderTabs(); renderCourses();
-  renderExtras(); renderFoot();
+  renderPlanner(); renderExtras(); renderFoot();
 }
-initForm(); renderAll(); renderRoadmap(); renderChecklist(); renderContacts();
+initForm(); renderAll(); renderChecklist(); renderContacts();
 </script>
 </body>
 </html>
