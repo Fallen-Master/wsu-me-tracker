@@ -76,10 +76,8 @@ const DATA = {
      notes:"Also 5 credits at Butler. WSU's PHYS 314 is only 4, so 1 credit comes over as extra. Prereq Physics 1."},
 
     // ---------- ENGINEERING CORE (4/54) ----------
-    {id:"en101",  bucket:"engcore", status:"completed", applies:true, code:"EN 101", title:"Engineering Graphics I", wsu:"IME 222 + 222L Engineering Graphics", credits:3, grade:"A", term:"Sp 2026",
-     notes:"WSU's portal shows 4 credits here because it also picks up EN 102 from your WSU Tech record — your Butler transcript only has the 3."},
-    {id:"en102",  bucket:"engcore", status:"completed", applies:true, code:"EN 102", title:"Engineering Graphics II", wsu:"IME 222 + 222L Engineering Graphics", credits:1, grade:"—", term:"WSU Tech", verify:true,
-     notes:"WSU's portal reports EN 101 + EN 102 as 4 credits transferred. Your Butler transcript shows EN 101 at 3, so EN 102 is the remaining 1 credit and came from your WSU Tech record. Worth confirming with an advisor."},
+    {id:"en101",  bucket:"engcore", status:"completed", applies:true, code:"EN 101 + EN 102", title:"Engineering Graphics I & II", wsu:"IME 222 + 222L Engineering Graphics", credits:4, grade:"A", term:"Sp 2026", verify:true,
+     notes:"WSU's transfer portal reports these two together as 4 credits and applies all 4 — so they're kept as one line here, exactly the way WSU counts them. Your Butler transcript shows EN 101 at 3 credits; the 4th comes from your WSU Tech record. Ask an advisor to confirm the pair fully closes IME 222 + 222L."},
     {id:"ae223",  bucket:"engcore", status:"needed", applies:true, code:"EN 260", title:"Statics", wsu:"AE 223 Statics", credits:3, prio:"high",
      notes:"Take it AT BUTLER — confirmed on the official 2026–27 WSU engineering transfer guide. Much cheaper than AE 223 at WSU. Take with or after Physics 1."},
     {id:"ae333",  bucket:"engcore", status:"needed", applies:true, code:"AE 333", title:"Mechanics of Materials", credits:3, prio:"med", notes:"WSU · prereq Statics."},
