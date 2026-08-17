@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23111'/><text y='72' x='50' font-size='60' text-anchor='middle' fill='%23FFCD00' font-family='system-ui' font-weight='bold'>ME</text></svg>">
+<link rel="stylesheet" href="style.css?v=6">
+<title>Courses · WSU ME Tracker</title>
+</head>
+<body>
+
+<header class="hero slim">
+  <div class="wrap">
+    <div>
+      <h1>Course Tracker</h1>
+      <div class="meta" id="hdrSub">–</div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section" style="margin-top:22px">
+    <div class="section-sub">Tap the box on any course to move it along: <b>still needed → taking it now → completed</b>, then back to the start.</div>
+    <div class="legend" style="margin-bottom:14px">
+      <span><i style="background:#fff;border:2px solid #cfcdc5;width:14px;height:14px;border-radius:4px"></i>Still needed</span>
+      <span><i style="background:var(--gold);width:14px;height:14px;border-radius:4px"></i>Taking it now</span>
+      <span><i style="background:var(--green);width:14px;height:14px;border-radius:4px"></i>Completed</span>
+    </div>
+
+    <div class="addbar">
+      <button class="btn gold" id="addToggle">+ Add a class</button>
+      <span style="font-size:.78rem;color:var(--muted)">For anything not already on the list.</span>
+    </div>
+    <div class="card addform" id="addForm">
+      <div class="fgrid">
+        <div class="f"><label>Course code</label><input id="fCode" placeholder="PH 251" autocomplete="off"></div>
+        <div class="f"><label>Credits</label><input id="fCredits" type="number" min="0" max="12" step="0.5" placeholder="5"></div>
+        <div class="f full"><label>Title</label><input id="fTitle" placeholder="Physics 1" autocomplete="off"></div>
+        <div class="f full">
+          <label>Which requirement does it fill?</label>
+          <select id="fBucket"></select>
+          <span class="hint">Pick "Fills no requirement" if an advisor says it won't apply — it'll be recorded as earned credit without moving the %.</span>
+        </div>
+        <div class="f"><label>Status</label>
+          <select id="fStatus">
+            <option value="completed">Completed</option>
+            <option value="progress">Taking it now</option>
+            <option value="needed">Still need to take</option>
+          </select>
+        </div>
+        <div class="f"><label>Grade <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fGrade" placeholder="A" autocomplete="off"></div>
+        <div class="f full"><label>Term <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fTerm" placeholder="Spring 2027" autocomplete="off"></div>
+      </div>
+      <div class="formfoot">
+        <button class="btn" id="fSave">Save class</button>
+        <button class="btn ghost" id="fCancel">Cancel</button>
+        <span class="formerr" id="fErr"></span>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+    <div class="card" id="courseList"></div>
+  </section>
+
+  <section class="section">
+    <h2>Earned — but doesn't count toward this degree</h2>
+    <div class="section-sub">Real credits on your transcript that fill no BSME requirement. This is the whole 55% vs 38% gap.</div>
+    <div class="card" id="extras"></div>
+    <button class="reset" id="resetBtn">Reset everything saved on this device</button>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="data.js?v=6"></script>
+<script src="app.js?v=6"></script>
+<script>
+let activeTab = 'needed';
+const BUCKET_NAME = id => (DATA.buckets.find(b=>b.id===id)||{}).name || 'Fills no requirement';
+
+function tabCounts(){
+  const c = {needed:0, progress:0, completed:0, noapply:0};
+  allCourses().forEach(x=>{ if(!x.applies){ c.noapply++; return; } c[effStatus(x)]++; });
+  return c;
+}
+function renderTabs(){
+  const c = tabCounts();
+  $('tabs').innerHTML = [
+    {id:'needed',label:'Still Needed'},{id:'progress',label:'In Progress'},
+    {id:'completed',label:'Completed'},{id:'noapply',label:"Doesn't Count"},
+  ].map(t=>`<button class="tab ${t.id===activeTab?'active':''}" data-tab="${t.id}">${t.label} <span class="cnt">${c[t.id]}</span></button>`).join('');
+  document.querySelectorAll('.tab').forEach(b=> b.onclick = ()=>{ activeTab=b.dataset.tab; renderTabs(); renderCourses(); });
+}
+function prioPill(p){
+  if(p==='high') return '<span class="pill hi">High priority</span>';
+  if(p==='med')  return '<span class="pill med">Medium</span>';
+  if(p==='low')  return '<span class="pill low">Later</span>';
+  return '';
+}
+function renderCourses(){
+  const list = allCourses().filter(c => activeTab==='noapply' ? !c.applies : (c.applies && effStatus(c)===activeTab));
+  const el = $('courseList');
+  if(!list.length){ el.innerHTML = '<div class="empty">Nothing here.</div>'; return; }
+  const order = DATA.buckets.map(b=>b.id).concat(['']);
+  const groups = {};
+  list.forEach(c => { const k = c.applies ? (c.bucket||'') : ''; (groups[k]=groups[k]||[]).push(c); });
+
+  el.innerHTML = order.filter(k=>groups[k]).map(k=>{
+    const hdr = activeTab==='noapply' ? '' : `<div class="grp-hdr">${esc(BUCKET_NAME(k))}</div>`;
+    return hdr + groups[k].map(c=>{
+      const noapply = !c.applies, st = effStatus(c), mine = !!c.custom;
+      let right;
+      if(noapply) right = `<span class="pill no">no requirement</span><span class="pill cr">${c.credits} cr</span>`;
+      else if(st==='completed') right = `${c.grade?`<span class="pill grade">${esc(c.grade)}</span>`:''}<span class="pill cr">${c.credits} cr</span>${c.term?`<span style="color:var(--muted);font-size:.72rem">${esc(c.term)}</span>`:''}`;
+      else if(st==='progress') right = `<span class="pill st">Taking it now</span><span class="pill cr">${c.credits} cr</span>`;
+      else right = `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
+      if(mine) right = `<span class="pill mine">added by you</span>` + right;
+      const tip = noapply ? '' : ' title="Tap: still needed → taking it now → completed"';
+      return `<div class="course st-${st} ${noapply?'noapply':''}" data-id="${esc(c.id)}">
+        <div class="check"${tip}>${MARK(st)}</div>
+        <div class="body">
+          <div class="code">${esc(c.code)}${c.term && st!=='completed'?` · ${esc(c.term)}`:''}</div>
+          <div class="title">${esc(c.title)}</div>
+          ${c.wsu?`<div class="maps">→ counts as ${esc(c.wsu)}</div>`:''}
+          ${c.notes?`<div class="notes">${esc(c.notes)}</div>`:''}
+        </div>
+        <div class="right">${right}${mine?`<button class="del" data-del="${esc(c.id)}" title="Remove">✕</button>`:''}</div>
+      </div>`;
+    }).join('');
+  }).join('');
+
+  el.querySelectorAll('.course').forEach(row=>{
+    const c = courseById(row.dataset.id);
+    if(!c || !c.applies) return;
+    row.querySelector('.check').onclick = ()=> cycleStatus(c, renderAll);
+  });
+  el.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.onclick = e =>{
+      e.stopPropagation();
+      if(!confirm('Remove this class from your tracker?')) return;
+      state.custom = state.custom.filter(x=>x.id!==btn.dataset.del);
+      delete state.checks[btn.dataset.del];
+      save(); renderAll();
+    };
+  });
+}
+function renderExtras(){
+  const mine = allCourses().filter(c=>!c.applies && c.custom).map(c=>({
+    code:c.code, title:c.title, credits:c.credits, why:'Added by you — marked as filling no requirement.'}));
+  $('extras').innerHTML = DATA.extras.concat(mine).map(x=>`
+    <div class="extra">
+      <div><div class="n">${esc(x.title)}</div><div class="c">${esc(x.code)}</div><div class="w">${esc(x.why)}</div></div>
+      <div class="c" style="white-space:nowrap">${x.credits} cr</div>
+    </div>`).join('');
+}
+function renderHdr(){
+  const p = computeProgress();
+  $('hdrSub').innerHTML = `<b>${p.counted}</b> of ${DATA.totalCredits} required credits filled · <b>${p.remaining}</b> to go`;
+}
+/* ---- add a class ---- */
+function initForm(){
+  $('fBucket').innerHTML = DATA.buckets.map(b=>`<option value="${b.id}">${esc(b.name)} — ${b.req} cr required</option>`).join('')
+    + `<option value="">Fills no requirement (earned credit only)</option>`;
+  const form = $('addForm');
+  $('addToggle').onclick = ()=>{ form.classList.toggle('open'); if(form.classList.contains('open')) $('fCode').focus(); };
+  $('fCancel').onclick = ()=>{ form.classList.remove('open'); clearForm(); };
+  $('fSave').onclick = saveNewCourse;
+  form.addEventListener('keydown', e=>{ if(e.key==='Enter') saveNewCourse(); });
+}
+function clearForm(){ ['fCode','fTitle','fCredits','fGrade','fTerm'].forEach(id=>$(id).value=''); $('fErr').textContent=''; }
+function saveNewCourse(){
+  const code=$('fCode').value.trim(), title=$('fTitle').value.trim();
+  const credits=parseFloat($('fCredits').value), bucket=$('fBucket').value;
+  const status=$('fStatus').value, grade=$('fGrade').value.trim(), term=$('fTerm').value.trim();
+  if(!code && !title){ $('fErr').textContent='Give it at least a course code or a title.'; return; }
+  if(isNaN(credits) || credits<0){ $('fErr').textContent='Enter the credit hours.'; return; }
+  const c = {id:'my_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), custom:true,
+             bucket, applies:!!bucket, status, code:code||'—', title:title||code, credits};
+  if(grade) c.grade=grade; if(term) c.term=term;
+  state.custom.push(c); save(); clearForm();
+  $('addForm').classList.remove('open');
+  activeTab = c.applies ? status : 'noapply';
+  renderAll();
+}
+function renderAll(){ renderHdr(); renderTabs(); renderCourses(); renderExtras(); renderFoot(); }
+renderNav('courses.html'); initForm(); wireReset(); renderAll();
+</script>
+</body>
+</html>

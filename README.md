@@ -1,188 +1,177 @@
 # Rafael's WSU ME Transfer Tracker
 
-A single-page tracker for the **BS Mechanical Engineering at Wichita State** (128 credit hours, 2026–27 catalog). Works on phone and laptop. No build step, no server — just `index.html` + `data.js`.
+Tracks progress toward the **BS Mechanical Engineering at Wichita State** (128 credit hours, 2026–27 catalog). Works on phone and laptop. No build step, no server — plain HTML, CSS and JS.
 
 ---
 
-## How the percentage works (read this once)
+## Pages
 
-**The percentage is requirement-based, not credit-based.**
+| File | What's on it |
+|---|---|
+| `index.html` | Landing page — progress ring, next semester, requirement bars, key numbers |
+| `courses.html` | Course tracker, add-a-class form, and the credits that don't count |
+| `planner.html` | Editable semester-by-semester plan through graduation |
+| `checklist.html` | FAFSA / scholarship / advising deadlines by term, plus contacts |
+| `data.js` | **All your data.** Edit this to change anything permanently. |
+| `app.js` | Shared logic — progress math, state, plan helpers |
+| `style.css` | Shared styles |
 
-The old version did `all credits I ever earned ÷ 128` and reported ~55%. That's the wrong math, and it's why the site disagreed with WSU's transfer portal.
+Every page has the same nav bar. State is shared across pages (same local storage key), so checking a class off on Courses updates the ring on Overview.
 
-WSU only counts a credit once it **fills a specific degree requirement**. The tracker now does the same thing:
+---
+
+## How the percentage works
+
+**Requirement-based, not credit-based.** An early version did `all credits ever earned ÷ 128` and reported ~55%, which disagreed with WSU's transfer portal. WSU only counts a credit once it **fills a specific degree requirement**:
 
 ```
-progress = Σ (credits filling each requirement bucket, capped at that bucket)  ÷  128
+progress = Σ (credits filling each requirement bucket, capped at that bucket) ÷ 128
 ```
 
-The five buckets add up to exactly 128 with no double-counting:
-
-| Bucket | Required | Currently filled |
+| Bucket | Required | Filled |
 |---|---|---|
 | English & Communication | 9 | 9 ✓ |
-| General Education Electives | 18 | 18 ✓ |
-| Engineering Math & Natural Sciences | 30 | 18 |
-| Engineering Core (ME) | 56 | 3 |
-| Technical Electives | 15 | 0 |
-| **Total** | **128** | **48** |
+| General Education Electives | 23 | 23 ✓ |
+| Engineering Math & Natural Sciences | 30 | 13 |
+| Engineering Core (ME) | 48 | 3 |
+| Technical Electives | 18 | 0 |
+| **Total** | **128** | **48 → 38%** |
 
-**48 ÷ 128 = 38%** — matches the WSU transfer portal exactly.
+Toggle in the header:
 
-Two numbers are available via the toggle in the header:
+- **Incl. in progress — 38%.** Counts MA 253 Calc III. Matches WSU's portal.
+- **Confirmed only — 35%.** Graded credits only.
 
-- **Incl. in progress — 38%.** Counts MA 253 Calc III, which you're taking now. This is what WSU's portal shows.
-- **Confirmed only — 35%.** Finished and graded credits only.
+### Where the other 23 credits went
 
-### Where the missing 20 points went
+You've earned **68 credits**. Only **45** fill a BSME requirement. The other 23 — IT 100.1 ×3 (12), GN 100.1 ×2 (6), BA 110 (3), HP 190 Fitness for Life (2) — are accepted by WSU but fill nothing in this degree. Your CATIA and Blueprint Reading work is inside that IT 100.1 block; Butler flattened it into generic technology elective credit. Listed on the Courses page.
 
-You've earned **68 credits total**. Only **45** of them fill a BSME requirement. The other **23** are real, accepted credits that fill nothing in this degree:
+### Requirement credits vs. classes to enroll in
 
-- IT 100.1 ×3 (12 cr) — WSU Tech technology electives, where the CATIA and Blueprint Reading work landed
-- GN 100.1 ×2 (6 cr) — WSU Tech general electives
-- BA 110 Intro to Business (3 cr) — counts toward the Business Administration AS, not the BSME
-- FW 190 Fitness for Life (2 cr) — no PE requirement in the BSME
+Two different numbers, both shown:
 
-They're listed on the page under **"Earned — but doesn't count toward this degree."** They help your GPA and your full-time status. They don't move the degree bar.
+- **80 requirement credits remain** (128 − 48) — what the percentage tracks.
+- **~95 credits of classes are in the plan** — what you'll actually sit through.
 
----
-
-## Adding classes yourself
-
-Use the **+ Add a class** button in the Course Tracker. You do not need to edit any file or ask Claude.
-
-Fill in the code, title, credits, pick **which requirement it fills**, and set the status. The percentage and the bucket bars update immediately.
-
-- Picking a requirement bucket → the credits count toward the degree.
-- Picking **"Fills no requirement"** → the credits are recorded as earned but don't move the percentage. Use this for anything an advisor tells you won't apply.
-- Classes you add show an **"added by you"** tag and can be removed with the ✕.
-
-Anything you add — and every check-off — saves in that browser's local storage. It's per-device: adding a class on your phone won't show up on your laptop. To make a change permanent across devices, edit `data.js` and commit.
-
-## Moving a class through its stages
-
-Tap the box on any course. Each tap advances it one stage and loops back around:
-
-```
-☐ Still needed  →  🟡 Taking it now  →  ✅ Completed  →  ☐ Still needed
-```
-
-- **Still needed** (empty box) — doesn't count toward the percentage.
-- **Taking it now** (gold) — counts in the "Incl. in progress" number, not in "Confirmed only". This is exactly how MA 253 Calc III is treated, and it's the 3 credits separating 35% from 38%.
-- **Completed** (green) — counts in both.
-
-Tapped one time too many? Keep tapping — it comes back around. The course also moves between the Still Needed / In Progress / Completed tabs as you go, and the bucket bar for its requirement updates at the same time.
+The gap is real. WSU's plan lets some courses satisfy two things at once, and several Butler courses run heavier than their WSU equivalents (PH 252 is 5 vs. PHYS 314's 4; the graphics pair is 6 vs. 3). Buckets cap at their requirement, so surplus credit fills the bar and stops counting.
 
 ---
 
-## Semester Planner
+## Credit hours — all verified
 
-Every remaining credit starts out already assigned to a semester — Fall 2026 through Spring 2033, paced at ~6–8 credits per term. You edit it in place:
+Checked against WSU's 2026–27 catalog course lists, the ME advising check sheet, Butler's official course outlines (`documents.butlercc.edu`), and the WSU 2026–27 Butler engineering transfer guide.
 
-- **← →** move a class to the previous or next semester
-- **✕** drops it back to **Unplanned** (nothing is lost — it reappears in the pool at the bottom)
-- **+ Add a class to…** dropdown puts an unplanned class into that semester
-- Click the **semester name or note** to rename it
-- **+ Add semester** / **Delete semester** to change the shape of the plan
-- **Reset plan to the original** restores the seed in `data.js`
+### Corrections found
 
-Each term shows a credit-load pill — *light* (≤4), *sustainable* (5–8), *heavy* (9–11), *too much part-time* (12+). The banner at the top projects your graduation term from the last semester that still has unfinished work, and warns if any class isn't placed anywhere.
+| Item | Was | Now | Why |
+|---|---|---|---|
+| **EN 102 Engineering Graphics 2** | unknown / 0 / 1 | **3 credits, still needed** | Butler's official outline states 3 credit hours. It is **not on your Butler transcript**, so you still need to take it. |
+| **CHEM 211 General Chemistry I** | 3 | **5** | Catalog reads "CHEM 211. General Chemistry I (5)" — the lab (CHEM 211L) is a corequisite bundled into those 5 hours, not a separate course. |
+| **Open Technical Elective** | 4 | **3** | The catalog PDF renders "43" — that's footnote 4 followed by 3 hours. Technical electives total **18**, not 15. |
+| **PH 251 / PH 252** | 4 + separate 1-cr lab | **5 each, lab built in** | Butler's outlines specify 3 hrs lecture + 3 hrs lab per week in a single 5-credit course. There is no separate lab section to register for. |
+| **CH 110 College Chemistry I** | — | **5, lab included** | Single course, no separate CH 110L. |
+| **Fitness for Life** | FW 190 | **HP 190** | Butler has no FW 190. Credits (2) were right; only the prefix was wrong. Older transcripts show the legacy code. |
+| **BS 160 General Psychology** | BS 160 | **PY 160** | Renumbered by Butler. Same course, same 3 credits. |
 
-Completing a class strikes it through in the plan and removes its credits from that term's load, so the plan thins out as you go.
+### Verified correct, no change
 
-The starting plan lives in `DATA.planSeed` in `data.js`. Your edits are saved on your device and override it.
+All WSU ME core courses (AE 223, AE 333, ECE 282, IME 222 + 222L, ME 250/251/325/335/339/398/439/475/521/522/533/633/659/662, PHIL 385), all WSU math (MATH 242, 243, 344, 555), PHYS 313/314/315, and every Butler course on your transcript.
 
-## Viewing on your phone / sharing it
+**PHYS 316 University Physics Lab II exists but is NOT required** for the BSME — PHYS 314 is taken without a lab.
 
-The repo is a plain static site, so **GitHub Pages** will host it free:
+### Butler courses for the ME path
 
-1. Go to the repo → **Settings** → **Pages**
-2. Under *Source*, pick **Deploy from a branch** → branch `main`, folder `/ (root)` → **Save**
-3. Wait ~1 minute. Your URL: `https://fallen-master.github.io/wsu-me-tracker/`
+From the official transfer guide: **CH 110, MA 151, MA 152, MA 253, MA 260, PH 251, PH 252, EN 101, EN 102, EN 260 Statics, PL 292 Engineering Ethics.**
 
-That link works on any phone or computer, and it's the link to share.
+EN 260 and PL 292 are the two worth noticing — both transfer (to AE 223 and PHIL 385) and both cost far less at Butler than at WSU. PL 292 has no prerequisites.
 
-On iPhone, open it in Safari → Share → **Add to Home Screen**. It gets an icon and opens fullscreen like an app. Android: Chrome menu → **Add to Home screen**.
+---
 
-### Important limitation when sharing
+## Your plan to finish
 
-Check-offs, added classes, and planner edits are stored in **that browser's** local storage. They do **not** sync.
+**At Butler (30 credits):**
 
-- Your laptop and your phone keep separate copies.
-- Anyone you share the link with sees whatever is committed in `data.js` — not your personal edits.
+```
+Fall 2026    MA 253 Calc III                       3 cr   ← now
+Spring 2027  PH 251 Physics 1, PL 292 Ethics       8 cr
+Summer 2027  MA 260 Differential Equations         3 cr
+Fall 2027    PH 252 Physics 2, EN 260 Statics      8 cr
+Spring 2028  CH 110 Chemistry, EN 102 Graphics 2   8 cr  · apply to WSU
+```
 
-So to make a change everyone sees, edit `data.js` and push. The on-site editing is your fast scratch layer; `data.js` is the shared source of truth.
+**At WSU (65 credits),** Fall 2028 through Spring 2033 at 6–7 credits per term, ending with ME 662 Senior Capstone.
 
-**If the repo is public,** anyone with the URL can see your name, GPA, full course history, and your advisors' contact info. Making the repo **private** still allows GitHub Pages on a personal account, and the Pages URL stays shareable — worth considering.
+If an advisor lets CH 106 substitute for CH 110, Spring 2028 drops to 3 credits and everything downstream can pull forward.
 
-## Files
+---
 
-- **`index.html`** — layout, styling, and all rendering logic. You shouldn't need to touch this.
-- **`data.js`** — every course, requirement bucket, roadmap term, and checklist item. Edit this to bake a change into the repo permanently.
-- **`README.md`** — this file.
+## Using the site
 
-### Editing `data.js`
+**Moving a class along** — tap its box on the Courses page:
 
-Each course looks like:
+```
+☐ Still needed  →  🟡 Taking it now  →  ✅ Completed  →  ☐ back to start
+```
+
+**Adding a class** — the *+ Add a class* button on Courses. Pick which requirement it fills, or "Fills no requirement" for something an advisor says won't apply.
+
+**Planning** — on the Planner page: **← →** move a class between semesters, **✕** drops it to Unplanned, the dropdown adds one in, click a semester name to rename it. Load pills flag *light* (≤4), *sustainable* (5–8), *heavy* (9–11), *too much part-time* (12+). **Reset plan** restores the seed in `data.js`.
+
+---
+
+## Viewing on your phone / sharing
+
+GitHub Pages hosts this free:
+
+1. Repo → **Settings** → **Pages**
+2. Source: **Deploy from a branch** → `main` → `/ (root)` → **Save**
+3. About a minute later: `https://fallen-master.github.io/wsu-me-tracker/`
+
+On iPhone, Safari → Share → **Add to Home Screen** for an icon and fullscreen. Android: Chrome menu → **Add to Home screen**.
+
+### Limitations worth knowing
+
+**Nothing syncs.** Check-offs, added classes and planner edits live in *that browser's* local storage. Your laptop and phone keep separate copies, and anyone you share the link with sees only what's committed in `data.js`. To change what everyone sees, edit `data.js` and push.
+
+**Caching.** If a change doesn't appear, hard-refresh (Ctrl+Shift+R). The `?v=` on the script and stylesheet tags exists for this — **bump it in all four HTML files whenever you change `data.js`, `app.js` or `style.css`.**
+
+**Privacy.** A public repo means the Pages URL exposes your name, GPA, full course history and advisor contacts to anyone who finds it. Private repos still serve Pages on personal accounts.
+
+---
+
+## Editing `data.js`
 
 ```js
 {id:"ph251", bucket:"mathsci", status:"needed", applies:true,
- code:"PH 251", title:"Physics I (Scientists)", wsu:"PHYS 313 Physics for Scientists I",
- credits:4, prio:"high", notes:"Gates Statics, Physics II, and most of the ME core."}
+ code:"PH 251", title:"Physics 1", wsu:"PHYS 313 + PHYS 315 lab (5 cr)",
+ credits:5, prio:"high", verify:true, notes:"…"}
 ```
 
-- `bucket` — which requirement it fills (`englcomm`, `gened`, `mathsci`, `engcore`, `techelec`)
-- `status` — `"completed"` | `"progress"` | `"needed"`
-- `applies` — `true` if it fills a requirement, `false` if it's earned credit that counts for nothing
-- `wsu` — the WSU course it transfers in as (optional, shown in blue)
-- `prio` — `"high"` | `"med"` | `"low"` (only meaningful on `needed` courses)
-- `verify: true` — adds a "Verify w/ advisor" tag
+- `bucket` — `englcomm` | `gened` | `mathsci` | `engcore` | `techelec`
+- `status` — `completed` | `progress` | `needed`
+- `applies` — `true` fills a requirement; `false` is earned credit that counts for nothing
+- `wsu` — the WSU equivalent, shown in blue
+- `prio` — `high` | `med` | `low`; `verify: true` adds a "Verify w/ advisor" tag
 
-If you change a bucket's `req`, make sure all five still sum to `totalCredits` (128), or the percentage will be wrong.
+**Invariants:** the five bucket `req` values must sum to `totalCredits` (128), and every id in `planSeed` must exist in `courses`.
 
 ---
 
-## Transfer equivalencies — verified against the official guide
-
-Checked against WSU's **2026–27 Butler CC engineering transfer guide**, which names these Butler
-courses for the Mechanical Engineering path: CH 110, MA 151, MA 152, MA 253, PH 251, PH 252,
-EN 101, EN 102, EN 260 Statics, PL 292 Engineering Ethics.
-
-Corrections this produced:
-
-| Was | Now | Why |
-|---|---|---|
-| PH 251 (4) + invented "PH 251L" (1) | **PH 251 (5)** | Butler's PH 251 is a single 5-credit course with the lab built in. There is no separate lab course. |
-| PH 252 (4) | **PH 252 (5)** | Also 5 at Butler. WSU's PHYS 314 is 4, so 1 credit transfers as excess. |
-| CH 106 → CHEM 211 (engineering chemistry) | **CH 106 → gen-ed science bucket; CH 110 added as still needed** | WSU's portal applied CH 106 to gen-ed Bucket #4, *not* to the engineering requirement. The guide names CH 110 for ME. This is the single biggest correction — see below. |
-| "AE 223 Statics" (take at WSU) | **EN 260 Statics at Butler** → AE 223 | On the guide. Take it at Butler and save money. |
-| "PHIL 385 Engineering Ethics" (take at WSU) | **PL 292 at Butler** → PHIL 385 | On the guide. No prereqs — bank it early. |
-| EN 102 at 0 credits | **EN 102, 1 credit, completed** | WSU reports EN 101 + EN 102 = 4 credits transferred; the Butler transcript shows EN 101 at 3, so EN 102 is the remaining 1 credit, from the WSU Tech record. Flagged to verify. |
-
-### Requirement credits vs. classes you'll actually enroll in
-
-These are two different numbers and the site shows both:
-
-- **79 requirement credits remain** (128 − 49). That's what the percentage and the bucket bars track.
-- **~89 credits of classes are in the plan.** That's what you'll actually sit through.
-
-The ~10-credit gap is real, not an error. WSU's own degree plan has built-in overlap (a course can satisfy a gen-ed bucket *and* a major requirement), and two Butler courses run heavier than their WSU equivalents (PH 252 is 5 vs. 4; the graphics pair is 4 vs. 3). Buckets are capped at their requirement, so surplus credit fills the bar and then stops counting.
-
 ## Open questions for your advisor
 
-These are flagged on the site and in the Fall 2026 checklist:
-
-1. **CH 106 vs CH 110 — ask this one first.** WSU applied CH 106 to the gen-ed science bucket, and the engineering guide requires CH 110 College Chemistry I for ME. If CH 106 can substitute, you drop a 5-credit class and Spring 2028 opens up. If it can't, CH 110 stays. Worth an email before you plan that far out.
-2. **EN 102.** WSU reports 4 graphics credits; the Butler transcript shows 3. Confirm EN 101 + EN 102 fully satisfies IME 222 + 222L so nothing is left open.
-3. **Gen Ed.** Your transcript says *KS Systemwide GE Completed* — confirm that closes buckets 3–7 entirely.
-4. **Engineering+ requirement.** 3 of 7 activities, chair approval, 0 credits — but still required to graduate.
-5. **MA 260 Differential Equations.** On the guide under Mathematics generally; confirm it's the right course for the ME track rather than a WSU-side MATH 555.
+1. **CH 106 vs CH 110 — ask first.** WSU applied CH 106 to the gen-ed science bucket; the engineering guide requires CH 110 for ME. If CH 106 substitutes, you drop a 5-credit class.
+2. **EN 102.** Butler lists it at 3 credits and it's not on your transcript, but WSU's portal reports the EN 101 / EN 102 pair as 4 credits transferred. Something doesn't line up — confirm whether you still need it.
+3. **Gen Ed.** Transcript says *KS Systemwide GE Completed* — confirm that closes buckets 3–7.
+4. **Engineering+.** 3 of 7 activities, chair approval, 0 credits, still required to graduate.
+5. **MA 260.** Confirm it's the right Differential Equations course for the ME track.
 
 ---
 
 ## Sources
 
 - [WSU Catalog — BS in Mechanical Engineering](https://catalog.wichita.edu/undergraduate/engineering/mechanical-engineering/mechanical-engineering-bs/)
-- [WSU ME Undergraduate Check Sheet](https://www.wichita.edu/academics/engineering/advising/_documents/ME-UG-Check-Sheet_FA24_PLAN_A.pdf)
-- WSU Transfer Major Detail portal export (Mechanical Engineering) — 49 credits apply, 25 may apply, 38%
+- [WSU ME Advising Check Sheet](https://www.wichita.edu/academics/engineering/advising/_documents/ME-UG-Check-Sheet_FA24_PLAN_A.pdf)
+- [WSU 2026–27 Butler CC Engineering Transfer Guide](https://www.wichita.edu/admissions/transferguide/butler/guides/ENGR_2026-27_ButlerCC.pdf)
+- WSU catalog course lists: [ME](https://catalog.wichita.edu/undergraduate/courses/me/me.pdf) · [AE](https://catalog.wichita.edu/undergraduate/courses/ae/ae.pdf) · [ECE](https://catalog.wichita.edu/undergraduate/courses/ece/ece.pdf) · [IME](https://catalog.wichita.edu/undergraduate/courses/ime/ime.pdf) · [MATH](https://catalog.wichita.edu/undergraduate/courses/math/math.pdf) · [PHYS](https://catalog.wichita.edu/undergraduate/courses/phys/phys.pdf) · [CHEM](https://catalog.wichita.edu/undergraduate/courses/chem/chem.pdf) · [PHIL](https://catalog.wichita.edu/undergraduate/courses/phil/phil.pdf)
+- Butler official course outlines at `documents.butlercc.edu` — [EN 102](https://documents.butlercc.edu/outline/STEM/EN_Eng%20Technology%20and%20Math/022223%20New%20Div%20Title%20FA23/EN102NFoutline202480.pdf), [EN 260](https://documents.butlercc.edu/outline/STEM/EN_Eng%20Technology%20and%20Math/022223%20New%20Div%20Title%20FA23/EN260NFoutline202380.pdf), [PH 251](https://documents.butlercc.edu/outline/STEM/PH_Physics/022323%20New%20Div%20Title%20FA23/PH251NFoutline202380.pdf), [CH 110](https://documents.butlercc.edu/outline/STEM/CH_Chemistry/022223%20New%20Div%20Title%20FA23/CH110NFoutline202280.pdf), and others
 - Butler CC unofficial transcript — 68 credits earned, overall GPA 3.07

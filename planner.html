@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23111'/><text y='72' x='50' font-size='60' text-anchor='middle' fill='%23FFCD00' font-family='system-ui' font-weight='bold'>ME</text></svg>">
+<link rel="stylesheet" href="style.css?v=6">
+<title>Planner · WSU ME Tracker</title>
+</head>
+<body>
+
+<header class="hero slim">
+  <div class="wrap">
+    <div>
+      <h1>Semester Planner</h1>
+      <div class="meta" id="hdrSub">–</div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="section" style="margin-top:22px">
+    <div class="section-sub">Every remaining class is already placed. Change any of it: <b>← →</b> move a class between semesters, <b>✕</b> drops it to Unplanned, the dropdown adds one in, and you can click a semester's name to rename it.</div>
+    <div class="card gradbox" id="gradBox"></div>
+    <div id="planner"></div>
+    <div class="addbar" style="margin-top:12px">
+      <button class="btn ghost" id="addTerm">+ Add semester</button>
+      <button class="btn ghost" id="resetPlan">Reset plan to the original</button>
+    </div>
+    <div class="card" id="unplanned" style="margin-top:14px"></div>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="data.js?v=6"></script>
+<script src="app.js?v=6"></script>
+<script>
+function loadPill(cr, n){
+  if(!n)       return '<span class="load-pill none">nothing planned</span>';
+  if(cr === 0) return '<span class="load-pill light">0 cr</span>';
+  const cls  = cr<=4?'light':cr<=8?'ok':cr<=11?'heavy':'over';
+  const word = cr<=4?'light':cr<=8?'sustainable':cr<=11?'heavy':'too much part-time';
+  return `<span class="load-pill ${cls}">${cr} cr · ${word}</span>`;
+}
+function savePlan(){ save(); renderAll(); }
+
+function renderPlanner(){
+  const plan = getPlan();
+  const active = plan.filter(t => termCredits(t) > 0);
+  const g = active[active.length-1];
+  const totalLeft = plan.reduce((s,t)=>s+termCredits(t),0);
+  const stray = unplannedCourses().reduce((s,c)=>s+(Number(c.credits)||0),0);
+  $('gradBox').innerHTML =
+    `<div class="g1">🎓 ${g ? esc(g.name) : 'Everything is done'}</div>` +
+    `<div class="g2">${totalLeft} credits of classes across ${active.length} semester${active.length===1?'':'s'}` +
+    `${stray ? ` · <b>${stray} cr not placed in a semester yet</b>` : ''}</div>`;
+
+  $('planner').innerHTML = plan.map((t,ti)=>{
+    const courses = t.courses.map(courseById).filter(Boolean);
+    const rows = courses.length ? courses.map(c=>{
+      const st = effStatus(c);
+      return `<div class="prow st-${st}">
+        <span class="dot"></span>
+        <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}
+          ${st==='completed'?'<span>done ✓</span>':st==='progress'?'<span>taking it now</span>':''}</div>
+        <span class="cr">${c.credits} cr</span>
+        <button class="mini" data-mv="prev" data-t="${ti}" data-c="${esc(c.id)}" ${ti===0?'disabled':''} title="Earlier semester">←</button>
+        <button class="mini" data-mv="next" data-t="${ti}" data-c="${esc(c.id)}" ${ti===plan.length-1?'disabled':''} title="Later semester">→</button>
+        <button class="mini x" data-unassign="${esc(c.id)}" title="Remove from this semester">✕</button>
+      </div>`;
+    }).join('') : `<div class="prow" style="color:var(--muted);font-size:.83rem">Nothing planned for this semester yet.</div>`;
+    const avail = unplannedCourses();
+    return `<div class="card pterm">
+      <div class="pterm-head">
+        <input class="tname" value="${esc(t.name)}" data-rename="${ti}" aria-label="Semester name">
+        <input class="tnote" value="${esc(t.note||'')}" data-renote="${ti}" placeholder="note (optional)" aria-label="Semester note">
+        ${loadPill(termCredits(t), courses.filter(c=>effStatus(c)!=='completed').length)}
+      </div>
+      ${rows}
+      <div class="pterm-foot">
+        <select data-addto="${ti}">
+          <option value="">+ Add a class to ${esc(t.name)}…</option>
+          ${avail.map(c=>`<option value="${esc(c.id)}">${esc(c.code)} · ${esc(c.title)} (${c.credits} cr)</option>`).join('')}
+        </select>
+        <button class="delterm" data-delterm="${ti}">Delete semester</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const up = unplannedCourses();
+  $('unplanned').innerHTML =
+    `<div class="unp-head">Unplanned <span>— ${up.length ? `${up.length} class${up.length===1?'':'es'} with no semester yet` : 'nothing left over, every class has a home'}</span></div>` +
+    up.map(c=>`<div class="prow st-${effStatus(c)}">
+      <span class="dot"></span>
+      <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}</div>
+      <span class="cr">${c.credits} cr</span></div>`).join('');
+  wirePlanner();
+}
+
+function wirePlanner(){
+  const plan = getPlan();
+  document.querySelectorAll('[data-mv]').forEach(b=>{
+    b.onclick = ()=>{
+      const ti=+b.dataset.t, id=b.dataset.c, to = b.dataset.mv==='prev'?ti-1:ti+1;
+      if(to<0 || to>=plan.length) return;
+      plan[ti].courses = plan[ti].courses.filter(x=>x!==id);
+      if(!plan[to].courses.includes(id)) plan[to].courses.push(id);
+      savePlan();
+    };
+  });
+  document.querySelectorAll('[data-unassign]').forEach(b=>{
+    b.onclick = ()=>{ const id=b.dataset.unassign; plan.forEach(t=>t.courses=t.courses.filter(x=>x!==id)); savePlan(); };
+  });
+  document.querySelectorAll('[data-addto]').forEach(sel=>{
+    sel.onchange = ()=>{
+      const id=sel.value; if(!id) return;
+      const ti=+sel.dataset.addto;
+      plan.forEach(t=>t.courses=t.courses.filter(x=>x!==id));
+      plan[ti].courses.push(id); savePlan();
+    };
+  });
+  document.querySelectorAll('[data-rename]').forEach(inp=>{
+    inp.onchange = inp.onblur = ()=>{ const v=inp.value.trim(); if(v) plan[+inp.dataset.rename].name=v; save(); renderAll(); };
+  });
+  document.querySelectorAll('[data-renote]').forEach(inp=>{
+    inp.onchange = inp.onblur = ()=>{ plan[+inp.dataset.renote].note = inp.value.trim(); save(); };
+  });
+  document.querySelectorAll('[data-delterm]').forEach(b=>{
+    b.onclick = ()=>{
+      const ti=+b.dataset.delterm, t=plan[ti], n=t.courses.length;
+      if(n && !confirm(`Delete ${t.name}? Its ${n} class${n===1?'':'es'} go back to Unplanned — nothing is lost.`)) return;
+      plan.splice(ti,1); savePlan();
+    };
+  });
+}
+function renderHdr(){
+  const g = gradTerm(), t = nextTerm();
+  $('hdrSub').innerHTML = t
+    ? `Next: <b>${esc(t.name)}</b>${g?` · graduating <b>${esc(g.name)}</b>`:''}`
+    : 'Nothing left to plan.';
+}
+function renderAll(){ renderHdr(); renderPlanner(); renderFoot(); }
+
+$('addTerm').onclick = ()=>{
+  getPlan().push({id:'t'+Date.now().toString(36), name:'New semester', note:'', courses:[]});
+  savePlan();
+  const el = document.querySelector('#planner .pterm:last-child .tname'); if(el) el.select();
+};
+$('resetPlan').onclick = ()=>{
+  if(!confirm('Throw away your changes and go back to the original plan? Your course check-offs are not affected.')) return;
+  state.plan = JSON.parse(JSON.stringify(DATA.planSeed)); savePlan();
+};
+renderNav('planner.html'); renderAll();
+</script>
+</body>
+</html>

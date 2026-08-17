@@ -5,226 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#000000">
 <meta name="description" content="Rafael Gomez — progress toward a BS in Mechanical Engineering at Wichita State, tracked against actual degree requirements.">
-<!-- lets you "Add to Home Screen" on iPhone/Android and open it like an app -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="ME Tracker">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23111'/><text y='72' x='50' font-size='60' text-anchor='middle' fill='%23FFCD00' font-family='system-ui' font-weight='bold'>ME</text></svg>">
-<title>Rafael's WSU ME Transfer Tracker</title>
-<style>
-:root{
-  --gold:#FFCD00; --gold-soft:#FFE580; --gold-dark:#b58a00;
-  --black:#111; --ink:#1c1c1c; --muted:#6b6b6b; --bg:#faf9f6; --card:#fff; --line:#e9e7e1;
-  --green:#1f9d55; --green-soft:#e4f5ec; --amber:#b7791f; --amber-soft:#fdf3e0;
-  --blue:#2b6cb0; --blue-soft:#eef2f7; --red:#c53030; --red-soft:#fdeaea;
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.05);
-  --radius:16px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:56px}
-.wrap{max-width:820px;margin:0 auto;padding:0 16px}
-h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
-.section{margin-top:34px}
-.section-sub{color:var(--muted);font-size:.85rem;margin-bottom:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-
-/* ---------- HERO ---------- */
-.hero{background:linear-gradient(160deg,#000 0%,#1a1a1a 60%,#232323 100%);color:#fff;border-radius:0 0 26px 26px;padding:26px 0 30px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.hero .wrap{display:flex;flex-direction:column;gap:20px}
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.hero h1{font-size:1.5rem;line-height:1.15;letter-spacing:-.02em}
-.hero .goal{color:var(--gold);font-weight:600;font-size:1.02rem;margin-top:4px}
-.hero .meta{color:#c9c9c9;font-size:.83rem;margin-top:8px}
-.hero .meta b{color:#fff;font-weight:600}
-.badge{display:inline-block;background:rgba(255,205,0,.14);color:var(--gold);border:1px solid rgba(255,205,0,.35);border-radius:999px;padding:3px 11px;font-size:.72rem;font-weight:600;letter-spacing:.02em}
-.ring-wrap{display:flex;align-items:center;gap:16px}
-.ring{position:relative;width:118px;height:118px;flex-shrink:0}
-.ring svg{transform:rotate(-90deg)}
-.ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring .pct{font-size:1.7rem;font-weight:700;letter-spacing:-.02em}
-.ring .lbl{font-size:.58rem;color:#bdbdbd;text-transform:uppercase;letter-spacing:.07em;text-align:center;line-height:1.3}
-.motiv{font-size:1.02rem;font-weight:600}
-.motiv b{color:var(--gold)}
-.motiv .sub{display:block;color:#bdbdbd;font-size:.8rem;font-weight:400;margin-top:4px}
-.mode{display:flex;gap:5px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px;margin-top:12px;max-width:340px}
-.mode button{flex:1;border:none;background:transparent;color:#bdbdbd;font-family:inherit;font-size:.74rem;font-weight:600;padding:7px 6px;border-radius:7px;cursor:pointer}
-.mode button.on{background:rgba(255,255,255,.14);color:#fff}
-
-/* ---------- KPI ---------- */
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.kpi{padding:15px 16px}
-.kpi .n{font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1}
-.kpi .n small{font-size:.85rem;color:var(--muted);font-weight:600}
-.kpi .k{color:var(--muted);font-size:.76rem;margin-top:7px;text-transform:uppercase;letter-spacing:.04em}
-.kpi.ok .n{color:var(--green)}
-.kpi.gold{background:linear-gradient(150deg,#fffdf3,#fff8dc);border-color:#f2e6a8}
-
-/* ---------- EXPLAINER ---------- */
-.explain{padding:16px 18px;background:linear-gradient(150deg,#fffdf3,#fffaea);border-color:#f2e6a8}
-.explain .t{font-weight:700;font-size:.95rem;margin-bottom:6px}
-.explain p{font-size:.85rem;color:#5c5340;margin-bottom:8px}
-.explain p:last-child{margin-bottom:0}
-.explain b{color:var(--ink)}
-
-/* ---------- BUCKETS ---------- */
-.bkt{padding:15px 16px;margin-bottom:10px}
-.bkt-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:3px}
-.bkt-name{font-weight:700;font-size:.94rem}
-.bkt-num{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
-.bkt-num b{color:var(--ink);font-size:.92rem}
-.bkt-blurb{color:var(--muted);font-size:.78rem;margin-bottom:10px}
-.bar{height:9px;background:#f0efe9;border-radius:999px;overflow:hidden;display:flex}
-.bar .fill{background:var(--green);transition:width .4s}
-.bar .fill.prog{background:var(--gold)}
-.bkt-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:.75rem;color:var(--muted)}
-.bkt.full{background:linear-gradient(150deg,#f6fdf8,#eef9f2);border-color:#c6e9d4}
-.bkt.full .bkt-name{color:var(--green)}
-.legend{display:flex;gap:14px;font-size:.72rem;color:var(--muted);margin-bottom:12px;flex-wrap:wrap}
-.legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
-
-/* ---------- TABS ---------- */
-.tabs{display:flex;gap:6px;background:#f0efe9;padding:5px;border-radius:12px;margin-bottom:14px;flex-wrap:wrap}
-.tab{flex:1;min-width:90px;border:none;background:transparent;padding:9px 6px;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s}
-.tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
-.tab .cnt{opacity:.6}
-
-/* ---------- COURSE ROWS ---------- */
-.grp-hdr{padding:10px 15px 6px;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:#fcfbf8;border-bottom:1px solid var(--line)}
-.course{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line)}
-.course:last-child{border-bottom:none}
-.course .check{width:24px;height:24px;border-radius:8px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;background:#fff}
-.course .check:active{transform:scale(.88)}
-.course.st-completed .check{background:var(--green);border-color:var(--green)}
-.course.st-progress  .check{background:var(--gold);border-color:var(--gold)}
-.course.noapply .check{border-color:#d8d5cc;background:#f4f3ef;cursor:default;border-radius:50%}
-.course .body{flex:1;min-width:0}
-.course .title{font-weight:600;font-size:.92rem}
-.course.st-completed .title{color:var(--muted)}
-.pill.st{background:var(--gold-soft);color:#7a5c00}
-.course .code{color:var(--muted);font-weight:600;font-size:.78rem}
-.course .notes{color:var(--muted);font-size:.79rem;margin-top:3px}
-.course .maps{font-size:.74rem;color:var(--blue);margin-top:2px}
-.course .right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-.pill{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.pill.grade{background:var(--green-soft);color:var(--green)}
-.pill.cr{background:#f0efe9;color:#555}
-.pill.hi{background:var(--red-soft);color:var(--red)}
-.pill.med{background:var(--amber-soft);color:var(--amber)}
-.pill.low{background:var(--blue-soft);color:var(--blue)}
-.pill.verify{background:var(--amber-soft);color:var(--amber)}
-.pill.mine{background:#efe7fb;color:#6b46c1}
-.pill.no{background:#f0efe9;color:#8a8a8a}
-.del{background:none;border:none;color:#bbb;font-size:1rem;cursor:pointer;padding:0 2px;line-height:1;font-family:inherit}
-.del:hover{color:var(--red)}
-
-/* ---------- ADD FORM ---------- */
-.addbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.btn{background:var(--black);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit}
-.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.btn.gold{background:var(--gold);color:#3a2f00}
-.addform{padding:16px;margin-bottom:14px;display:none}
-.addform.open{display:block}
-.fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.f{display:flex;flex-direction:column;gap:4px}
-.f.full{grid-column:1/-1}
-.f label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.f input,.f select,.f textarea{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:.88rem;font-family:inherit;background:var(--bg);color:var(--ink)}
-.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.25)}
-.f .hint{font-size:.72rem;color:var(--muted)}
-.formfoot{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
-.formerr{color:var(--red);font-size:.78rem;flex:1}
-
-/* ---------- ROADMAP / TERM CARDS ---------- */
-.term{margin-bottom:10px;overflow:hidden}
-.term-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;gap:10px}
-.term-head .t{font-weight:700;font-size:.95rem}
-.term-head .t span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:6px}
-.term-head .load{font-size:.72rem;color:var(--muted);background:#f0efe9;padding:3px 9px;border-radius:999px;font-weight:600}
-.term-head .chev{color:var(--muted);transition:.2s;font-size:.9rem}
-.term.open .chev{transform:rotate(90deg)}
-.term-body{display:none;padding:0 16px 14px;border-top:1px solid var(--line)}
-.term.open .term-body{display:block}
-.term-body ul{list-style:none;margin-top:10px}
-.term-body li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:.86rem;border-bottom:1px dashed var(--line)}
-.term-body li:last-child{border-bottom:none}
-.term-body li span:last-child{color:var(--muted);flex-shrink:0}
-.term.grad .term-head{background:linear-gradient(150deg,#fffdf3,#fff4c8);border-color:#f2e6a8}
-.term.grad .t{color:#8a6d00}
-
-/* ---------- TASKS ---------- */
-.task{display:flex;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);align-items:flex-start}
-.task:last-child{border-bottom:none}
-.task .check{width:22px;height:22px;border-radius:7px;border:2px solid #cfcdc5;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff;transition:.15s}
-.task.done .check{background:var(--green);border-color:var(--green)}
-.task .check svg{opacity:0}.task.done .check svg{opacity:1}
-.task .txt{font-size:.88rem}
-.task.done .txt{color:var(--muted);text-decoration:line-through}
-.ctag{font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;margin-left:5px;display:inline-block;vertical-align:middle}
-.ctag.deadline{background:var(--red-soft);color:var(--red)}
-.ctag.aid{background:var(--green-soft);color:var(--green)}
-.ctag.school{background:var(--blue-soft);color:var(--blue)}
-
-/* ---------- PLANNER ---------- */
-.gradbox{padding:15px 17px;margin-bottom:14px;background:linear-gradient(150deg,#fffdf3,#fff4c8);border-color:#f2e6a8}
-.gradbox .g1{font-size:1.15rem;font-weight:700;color:#8a6d00;letter-spacing:-.01em}
-.gradbox .g2{font-size:.82rem;color:#7a6a3a;margin-top:3px}
-.pterm{padding:0;margin-bottom:10px;overflow:hidden}
-.pterm-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.pterm-head input.tname{border:1px solid transparent;background:transparent;font-family:inherit;font-weight:700;font-size:.95rem;color:var(--ink);padding:4px 7px;border-radius:8px;width:135px}
-.pterm-head input.tnote{border:1px solid transparent;background:transparent;font-family:inherit;font-size:.79rem;color:var(--muted);padding:4px 7px;border-radius:8px;flex:1;min-width:90px}
-.pterm-head input:hover{border-color:var(--line)}
-.pterm-head input:focus{outline:none;background:#fff;border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,205,0,.22)}
-.load-pill{font-size:.71rem;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
-.load-pill.light{background:var(--blue-soft);color:var(--blue)}
-.load-pill.ok{background:var(--green-soft);color:var(--green)}
-.load-pill.heavy{background:var(--amber-soft);color:var(--amber)}
-.load-pill.over{background:var(--red-soft);color:var(--red)}
-.load-pill.none{background:#f0efe9;color:#999}
-.prow{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line)}
-.prow:last-child{border-bottom:none}
-.prow .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:#d5d2ca}
-.prow.st-progress .dot{background:var(--gold)}
-.prow.st-completed .dot{background:var(--green)}
-.prow .pc{flex:1;min-width:0;font-size:.85rem}
-.prow .pc b{font-weight:600}
-.prow .pc span{color:var(--muted);font-size:.76rem;display:block}
-.prow.st-completed .pc b{color:var(--muted);text-decoration:line-through}
-.prow .cr{font-size:.72rem;font-weight:700;color:#555;background:#f0efe9;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.mini{background:#fff;border:1px solid var(--line);color:var(--muted);border-radius:7px;width:26px;height:26px;font-size:.8rem;cursor:pointer;font-family:inherit;flex-shrink:0;line-height:1;padding:0}
-.mini:hover:not(:disabled){border-color:var(--gold);color:var(--ink);background:#fffdf3}
-.mini:disabled{opacity:.3;cursor:default}
-.mini.x:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
-.pterm-foot{display:flex;gap:8px;padding:10px 14px;align-items:center;background:#fcfbf8;flex-wrap:wrap}
-.pterm-foot select{flex:1;min-width:150px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;font-size:.8rem;font-family:inherit;background:#fff;color:var(--ink)}
-.pterm-foot select:focus{outline:none;border-color:var(--gold)}
-.delterm{background:none;border:none;color:#bbb;font-size:.74rem;cursor:pointer;font-family:inherit;text-decoration:underline}
-.delterm:hover{color:var(--red)}
-.unp-head{padding:13px 15px;font-weight:700;font-size:.9rem;border-bottom:1px solid var(--line)}
-.unp-head span{font-weight:400;color:var(--muted);font-size:.79rem}
-
-/* ---------- MISC ---------- */
-.contacts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.contact{padding:13px 15px}
-.contact .who{font-weight:600;font-size:.86rem}
-.contact a{color:var(--blue);text-decoration:none;font-size:.8rem;display:block;margin-top:3px;word-break:break-word}
-.extra{display:flex;justify-content:space-between;gap:12px;padding:12px 15px;border-bottom:1px solid var(--line);align-items:flex-start}
-.extra:last-child{border-bottom:none}
-.extra .n{font-weight:600;font-size:.88rem}
-.extra .c{color:var(--muted);font-weight:600;font-size:.78rem}
-.extra .w{color:var(--muted);font-size:.78rem;margin-top:2px}
-.reset{background:none;border:none;color:var(--muted);font-size:.76rem;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:16px}
-.foot{text-align:center;color:var(--muted);font-size:.74rem;margin:30px 0 10px;line-height:1.7}
-.empty{padding:22px;text-align:center;color:var(--muted);font-size:.85rem}
-
-@media(max-width:560px){
-  .contacts,.fgrid{grid-template-columns:1fr}
-  .f.full{grid-column:auto}
-  .hero-top{flex-direction:column}
-  .hero h1{font-size:1.35rem}
-}
-</style>
+<link rel="stylesheet" href="style.css?v=6">
+<title>Rafael's WSU ME Tracker</title>
 </head>
 <body>
 
@@ -243,7 +30,7 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
             <circle cx="59" cy="59" r="50" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="11"/>
             <circle id="ringFill" cx="59" cy="59" r="50" fill="none" stroke="#FFCD00" stroke-width="11" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
           </svg>
-          <div class="val"><div class="pct" id="ringPct">0%</div><div class="lbl" id="ringLbl">degree<br>complete</div></div>
+          <div class="val"><div class="pct" id="ringPct">0%</div><div class="lbl">degree<br>complete</div></div>
         </div>
       </div>
     </div>
@@ -252,688 +39,120 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
       <button data-mode="progress" class="on">Incl. in progress</button>
       <button data-mode="confirmed">Confirmed only</button>
     </div>
+    <nav class="nav" id="nav"></nav>
   </div>
 </header>
 
 <div class="wrap">
 
   <section class="section" style="margin-top:22px">
+    <div class="card gradbox" id="nextUp"></div>
+  </section>
+
+  <section class="section" style="margin-top:14px">
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="section">
     <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section class="section">
+    <h2>Requirements</h2>
+    <div class="section-sub">Every bucket the degree requires, and how full each one is. This is what the percentage is built from.</div>
+    <div class="legend">
+      <span><i style="background:var(--green)"></i>Done</span>
+      <span><i style="background:var(--gold)"></i>In progress</span>
+      <span><i style="background:#f0efe9"></i>Still needed</span>
+    </div>
+    <div id="buckets"></div>
+    <div class="card" id="nonCredit"></div>
   </section>
 
   <section class="section">
     <div class="card explain">
       <div class="t">Why this says 38% and not 55%</div>
-      <p>The old version divided <b>every credit you'd ever earned</b> by 128. That's the wrong math. WSU only counts a credit once it <b>fills a specific degree requirement</b>.</p>
-      <p>You've earned <b id="exTotal">68</b> credits total. Only <b id="exApplied">49</b> of them slot into a BSME requirement. The other <b id="exWasted">19</b> — CATIA, WSU Tech electives, Intro to Business, Fitness for Life — are accepted by WSU but fill nothing in this degree. They're listed at the bottom of this page.</p>
-      <p>This tracker now uses WSU's method: <b>credits that fill a requirement ÷ 128</b>. That's why it matches your transfer portal.</p>
+      <p>An earlier version divided <b>every credit you'd ever earned</b> by 128. That's the wrong math. WSU only counts a credit once it <b>fills a specific degree requirement</b>.</p>
+      <p>You've earned <b id="exTotal">–</b> credits. Only <b id="exApplied">–</b> of them slot into a BSME requirement. The other <b id="exWasted">–</b> — the WSU Tech electives, Intro to Business, Fitness for Life — are accepted by WSU but fill nothing here. They're listed on the <a href="courses.html" style="color:var(--blue)">Courses page</a>.</p>
+      <p>One more thing worth knowing: <b id="exReqLeft">–</b> requirement credits remain, but the plan holds <b id="exClassLeft">–</b> credits of actual classes. WSU's plan lets some courses satisfy two things at once, and a few Butler courses run heavier than their WSU equivalents.</p>
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Requirements</h2>
-    <div class="section-sub">Every bucket the BSME requires, and how full each one is. This is what the percentage is built from.</div>
-    <div class="legend">
-      <span><i style="background:var(--green)"></i>Done &amp; confirmed</span>
-      <span><i style="background:var(--gold)"></i>In progress</span>
-      <span><i style="background:#f0efe9"></i>Still needed</span>
-    </div>
-    <div id="buckets"></div>
-    <div id="nonCredit"></div>
-  </section>
-
-  <section class="section">
-    <h2>Course Tracker</h2>
-    <div class="section-sub">Tap the box on any course to move it along: <b>still needed → taking it now → completed</b>, then back to the start. The percentage and the bars update instantly and save on this device.</div>
-    <div class="legend" style="margin-bottom:14px">
-      <span><i style="background:#fff;border:2px solid #cfcdc5;width:14px;height:14px;border-radius:4px"></i>Still needed</span>
-      <span><i style="background:var(--gold);width:14px;height:14px;border-radius:4px"></i>Taking it now — counts in the 38%</span>
-      <span><i style="background:var(--green);width:14px;height:14px;border-radius:4px"></i>Completed</span>
-    </div>
-    <div class="addbar">
-      <button class="btn gold" id="addToggle">+ Add a class</button>
-      <span style="font-size:.78rem;color:var(--muted)">Add classes yourself — no need to ask Claude.</span>
-    </div>
-    <div class="card addform" id="addForm">
-      <div class="fgrid">
-        <div class="f"><label>Course code</label><input id="fCode" placeholder="PH 251" autocomplete="off"></div>
-        <div class="f"><label>Credits</label><input id="fCredits" type="number" min="0" max="12" step="0.5" placeholder="4"></div>
-        <div class="f full"><label>Title</label><input id="fTitle" placeholder="Physics I for Scientists" autocomplete="off"></div>
-        <div class="f full">
-          <label>Which requirement does it fill?</label>
-          <select id="fBucket"></select>
-          <span class="hint">Pick "Fills no requirement" if it's an elective WSU won't apply — it'll be earned credit but won't move the %.</span>
-        </div>
-        <div class="f"><label>Status</label>
-          <select id="fStatus">
-            <option value="completed">Completed</option>
-            <option value="progress">In progress</option>
-            <option value="needed">Still need to take</option>
-          </select>
-        </div>
-        <div class="f"><label>Grade <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fGrade" placeholder="A" autocomplete="off"></div>
-        <div class="f full"><label>Term <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="fTerm" placeholder="Spring 2027" autocomplete="off"></div>
-      </div>
-      <div class="formfoot">
-        <button class="btn" id="fSave">Save class</button>
-        <button class="btn ghost" id="fCancel">Cancel</button>
-        <span class="formerr" id="fErr"></span>
-      </div>
-    </div>
-    <div class="tabs" id="tabs"></div>
-    <div class="card" id="courseList"></div>
-  </section>
-
-  <section class="section">
-    <h2>Semester Planner</h2>
-    <div class="section-sub">Your plan, already filled in — every remaining credit is assigned to a semester. Change any of it: rename a term, move a class with ← →, drop it back to Unplanned with ✕, or add a semester.</div>
-    <div class="card gradbox" id="gradBox"></div>
-    <div id="planner"></div>
-    <div class="addbar" style="margin-top:12px">
-      <button class="btn ghost" id="addTerm">+ Add semester</button>
-      <button class="btn ghost" id="resetPlan">Reset plan to the original</button>
-    </div>
-    <div class="card" id="unplanned" style="margin-top:14px"></div>
-  </section>
-
-  <section class="section">
-    <h2>Semester Checklist</h2>
-    <div class="section-sub">FAFSA, state grant, scholarships, registration, advising — by term. Tap to check off.</div>
-    <div id="checklist"></div>
-  </section>
-
-  <section class="section">
-    <h2>Earned — but doesn't count toward this degree</h2>
-    <div class="section-sub">Real credits on your transcript that fill no BSME requirement. This is the whole 55% vs 38% gap.</div>
-    <div class="card" id="extras"></div>
-  </section>
-
-  <section class="section">
-    <h2>Key Contacts</h2>
-    <div class="contacts" id="contacts"></div>
-    <button class="reset" id="resetBtn">Reset everything saved on this device</button>
   </section>
 
   <div class="foot" id="foot"></div>
 </div>
 
-<!-- ?v= busts the browser/GitHub Pages cache. Bump it whenever data.js changes
-     shape, so an old cached data.js can never pair with a new index.html. -->
-<script src="data.js?v=5"></script>
+<script src="data.js?v=6"></script>
+<script src="app.js?v=6"></script>
 <script>
-/* ============================================================
-   STATE — check-offs and your own added classes live in
-   localStorage so they survive on your phone and laptop.
-   ============================================================ */
-const STORE_KEY = 'rafael-wsu-tracker-v2';
-let state = load();
-if(!state.custom) state.custom = [];
-if(!state.checks) state.checks = {};
-
-function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }catch(e){ return {}; } }
-function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
-
-const CHECK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-const DOT   = '<svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="#fff"/></svg>';
-const MARK  = st => st === 'completed' ? CHECK : (st === 'progress' ? DOT : '');
-const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-/* every course = baked-in data.js courses + the ones you added */
-function allCourses(){ return DATA.courses.concat(state.custom); }
-
-/* ---- three-state status: needed -> progress -> completed -> needed ----
-   Whatever you set on the site wins over what data.js shipped with.
-   Older saves stored true/false booleans; those still read correctly. */
-const STATES = ['needed','progress','completed'];
-function effStatus(c){
-  const s = state.checks[c.id];
-  if(typeof s === 'string' && STATES.includes(s)) return s;
-  if(s === true)  return 'completed';
-  if(s === false) return 'needed';
-  return c.status;
+function renderNextUp(){
+  const t = nextTerm(), g = gradTerm();
+  const courses = t ? t.courses.map(courseById).filter(c=>c && effStatus(c)!=='completed') : [];
+  $('nextUp').innerHTML = t
+    ? `<div class="g1">Next up: ${esc(t.name)}</div>
+       <div class="g2">${courses.map(c=>esc(c.code)+' '+esc(c.title)+' ('+c.credits+' cr)').join(' · ') || 'Nothing planned yet'}
+       ${g ? ` — on track to graduate <b>${esc(g.name)}</b>` : ''}</div>`
+    : `<div class="g1">🎓 Everything is done</div><div class="g2">Nothing left in the plan.</div>`;
 }
-function isDone(c){ return effStatus(c) === 'completed'; }
-function cycleStatus(c){
-  const next = STATES[(STATES.indexOf(effStatus(c)) + 1) % STATES.length];
-  state.checks[c.id] = next;
-  save(); renderAll();
-}
-
-/* ============================================================
-   THE PERCENTAGE — requirement-based, the way WSU does it.
-   For each bucket: credits that fill it, capped at what it
-   requires. Sum the buckets, divide by 128.
-   Credits with applies:false never enter this calculation.
-   ============================================================ */
-let MODE = 'progress';   // 'progress' = count in-progress classes (matches WSU portal)
-
-function bucketStats(){
-  const out = {};
-  DATA.buckets.forEach(b => out[b.id] = {...b, done:0, prog:0, needed:0});
-  allCourses().forEach(c => {
-    if(!c.applies || !c.bucket || !out[c.bucket]) return;
-    const cr = Number(c.credits) || 0;
-    const s = effStatus(c);
-    if(s === 'completed')      out[c.bucket].done += cr;
-    else if(s === 'progress')  out[c.bucket].prog += cr;
-    else                       out[c.bucket].needed += cr;
-  });
-  // cap each bucket at what it actually requires — extra credit in a
-  // full bucket doesn't push you past the requirement
-  DATA.buckets.forEach(b => {
-    const o = out[b.id];
-    o.doneCapped = Math.min(o.done, o.req);
-    o.progCapped = Math.min(o.prog, Math.max(0, o.req - o.doneCapped));
-  });
-  return out;
-}
-
-function computeProgress(){
-  const st = bucketStats();
-  let done = 0, prog = 0;
-  DATA.buckets.forEach(b => { done += st[b.id].doneCapped; prog += st[b.id].progCapped; });
-  const counted = MODE === 'progress' ? done + prog : done;
-  const pct = Math.min(100, Math.round(counted / DATA.totalCredits * 100));
-  return {done, prog, counted, pct, remaining: Math.max(0, DATA.totalCredits - counted), st};
-}
-
-/* total credits you've earned, whether or not they apply */
-function earnedAllCredits(){
-  const extras = DATA.extras.reduce((s,e)=>s+(Number(e.credits)||0),0);
-  const applying = allCourses()
-    .filter(c => c.applies && effStatus(c)==='completed')
-    .reduce((s,c)=>s+(Number(c.credits)||0),0);
-  const nonApplying = allCourses()
-    .filter(c => !c.applies && effStatus(c)==='completed')
-    .reduce((s,c)=>s+(Number(c.credits)||0),0);
-  return {applying, notApplying: extras + nonApplying, total: applying + extras + nonApplying};
-}
-
-/* ---------- HERO ---------- */
-function renderRing(){
+function renderTiles(){
   const p = computeProgress();
-  const circ = 314.16;
-  document.getElementById('ringFill').style.strokeDashoffset = circ - (circ * p.pct / 100);
-  document.getElementById('ringPct').textContent = p.pct + '%';
-  document.getElementById('ringLbl').innerHTML = 'degree<br>complete';
-  const note = MODE === 'progress'
-    ? 'includes classes you\'re taking now — this is the number WSU\'s transfer portal shows'
-    : 'finished and confirmed credits only';
-  document.getElementById('motiv').innerHTML =
-    `<b>${p.counted} of ${DATA.totalCredits} required credits filled.</b>` +
-    `<span class="sub">${p.remaining} credits of actual requirements left · ${note}</span>`;
+  const needed = allCourses().filter(c=>c.applies && effStatus(c)==='needed').length;
+  const t = nextTerm();
+  const todo = DATA.checklist.reduce((s,g)=>s+g.items.filter(i=>{
+    const v = state.checks[i.id]; return !(v===undefined ? !!i.done : v);
+  }).length, 0);
+  $('tiles').innerHTML = `
+    <a class="tile card" href="courses.html">
+      <div class="ic">📋</div><div class="tt">Courses</div>
+      <div class="ts">Mark classes done, add your own</div>
+      <div class="tn">${needed} still needed</div></a>
+    <a class="tile card" href="planner.html">
+      <div class="ic">🗓️</div><div class="tt">Planner</div>
+      <div class="ts">Build your semester-by-semester plan</div>
+      <div class="tn">${t ? esc(t.name)+' is next' : 'All planned'}</div></a>
+    <a class="tile card" href="checklist.html">
+      <div class="ic">✅</div><div class="tt">To-Do</div>
+      <div class="ts">FAFSA, scholarships, advising</div>
+      <div class="tn">${todo} open item${todo===1?'':'s'}</div></a>`;
 }
-
-/* ---------- KPIs ---------- */
 function renderKpis(){
   const p = computeProgress(), e = earnedAllCredits();
-  const kpis = [
+  $('kpis').innerHTML = [
     {label:"Requirement credits filled", value:String(p.counted), unit:"/ "+DATA.totalCredits, cls:"gold"},
     {label:"Requirements left",          value:String(p.remaining), unit:"cr"},
     {label:"Overall GPA",                value:DATA.stats.gpaOverall},
     {label:DATA.stats.gpaRecentLabel,    value:DATA.stats.gpaRecent, cls:"ok"},
     {label:"Credits earned, all types",  value:String(e.total), unit:"cr"},
     {label:"Earned but not required",    value:String(e.notApplying), unit:"cr"},
-  ];
-  document.getElementById('kpis').innerHTML = kpis.map(k=>`
-    <div class="card kpi ${k.cls||''}">
+  ].map(k=>`<div class="card kpi ${k.cls||''}">
       <div class="n">${esc(k.value)}${k.unit?`<small> ${esc(k.unit)}</small>`:''}</div>
-      <div class="k">${esc(k.label)}</div>
-    </div>`).join('');
-  document.getElementById('exTotal').textContent = e.total;
-  document.getElementById('exApplied').textContent = computeProgress().counted;
-  document.getElementById('exWasted').textContent = e.notApplying;
+      <div class="k">${esc(k.label)}</div></div>`).join('');
+  $('exTotal').textContent = e.total;
+  $('exApplied').textContent = p.counted;
+  $('exWasted').textContent = e.notApplying;
+  $('exReqLeft').textContent = p.remaining;
+  $('exClassLeft').textContent = classCreditsLeft();
 }
-
-/* ---------- REQUIREMENT BUCKETS ---------- */
-function renderBuckets(){
-  const st = bucketStats();
-  document.getElementById('buckets').innerHTML = DATA.buckets.map(b=>{
-    const o = st[b.id];
-    const donePct = o.req ? (o.doneCapped / o.req * 100) : 0;
-    const progPct = o.req ? (o.progCapped / o.req * 100) : 0;
-    const filled  = o.doneCapped + o.progCapped;
-    const left    = Math.max(0, o.req - filled);
-    return `<div class="card bkt ${left===0?'full':''}">
-      <div class="bkt-head">
-        <div class="bkt-name">${esc(b.name)}${left===0?' ✓':''}</div>
-        <div class="bkt-num"><b>${filled}</b> / ${o.req} cr</div>
-      </div>
-      <div class="bkt-blurb">${esc(b.blurb)}</div>
-      <div class="bar">
-        <div class="fill" style="width:${donePct}%"></div>
-        <div class="fill prog" style="width:${progPct}%"></div>
-      </div>
-      <div class="bkt-foot">
-        <span>${o.doneCapped} done${o.progCapped?` · ${o.progCapped} in progress`:''}</span>
-        <span>${left===0?'Requirement satisfied':`${left} cr still needed`}</span>
-      </div>
-    </div>`;
+function renderNonCredit(){
+  $('nonCredit').innerHTML = DATA.nonCredit.map(n=>{
+    const done = state.checks['nc_'+n.id] !== undefined ? state.checks['nc_'+n.id] : n.done;
+    return `<div class="course st-${done?'completed':'needed'}" data-nc="${esc(n.id)}">
+      <div class="check">${MARK(done?'completed':'needed')}</div>
+      <div class="body">
+        <div class="code">0 CREDITS · STILL REQUIRED</div>
+        <div class="title">${esc(n.name)}</div>
+        <div class="notes">${esc(n.detail)}</div>
+      </div></div>`;
   }).join('');
-
-  document.getElementById('nonCredit').innerHTML = `<div class="card" style="margin-top:4px">` +
-    DATA.nonCredit.map(n=>{
-      const done = state.checks['nc_'+n.id] !== undefined ? state.checks['nc_'+n.id] : n.done;
-      return `<div class="course st-${done?'completed':'needed'}" data-nc="${esc(n.id)}">
-        <div class="check">${MARK(done?'completed':'needed')}</div>
-        <div class="body">
-          <div class="code">0 CREDITS · STILL REQUIRED</div>
-          <div class="title">${esc(n.name)}</div>
-          <div class="notes">${esc(n.detail)}</div>
-        </div>
-      </div>`;
-    }).join('') + `</div>`;
-
   document.querySelectorAll('[data-nc]').forEach(row=>{
     row.querySelector('.check').onclick = ()=>{
       const k = 'nc_' + row.dataset.nc;
       state.checks[k] = !(state.checks[k] !== undefined ? state.checks[k] : false);
-      save(); renderBuckets();
+      save(); renderNonCredit();
     };
   });
 }
-
-/* ---------- COURSE TRACKER ---------- */
-let activeTab = 'needed';
-const BUCKET_NAME = id => (DATA.buckets.find(b=>b.id===id)||{}).name || 'Fills no requirement';
-
-function tabCounts(){
-  const c = {needed:0, progress:0, completed:0, noapply:0};
-  allCourses().forEach(x=>{
-    if(!x.applies){ c.noapply++; return; }
-    c[effStatus(x)]++;
-  });
-  return c;
-}
-function renderTabs(){
-  const c = tabCounts();
-  const tabs = [
-    {id:'needed',    label:'Still Needed'},
-    {id:'progress',  label:'In Progress'},
-    {id:'completed', label:'Completed'},
-    {id:'noapply',   label:"Doesn't Count"},
-  ];
-  document.getElementById('tabs').innerHTML = tabs.map(t=>
-    `<button class="tab ${t.id===activeTab?'active':''}" data-tab="${t.id}">${t.label} <span class="cnt">${c[t.id]}</span></button>`
-  ).join('');
-  document.querySelectorAll('.tab').forEach(b=> b.onclick = ()=>{ activeTab=b.dataset.tab; renderTabs(); renderCourses(); });
-}
-function prioPill(p){
-  if(p==='high') return '<span class="pill hi">High priority</span>';
-  if(p==='med')  return '<span class="pill med">Medium</span>';
-  if(p==='low')  return '<span class="pill low">Later</span>';
-  return '';
-}
-function renderCourses(){
-  const list = allCourses().filter(c =>
-    activeTab === 'noapply' ? !c.applies : (c.applies && effStatus(c) === activeTab)
-  );
-  const el = document.getElementById('courseList');
-
-  if(!list.length){ el.innerHTML = '<div class="empty">Nothing here yet.</div>'; return; }
-
-  // group by requirement bucket
-  const order = DATA.buckets.map(b=>b.id).concat(['']);
-  const groups = {};
-  list.forEach(c => { const k = c.applies ? (c.bucket||'') : ''; (groups[k]=groups[k]||[]).push(c); });
-
-  el.innerHTML = order.filter(k=>groups[k]).map(k=>{
-    const hdr = activeTab==='noapply' ? '' : `<div class="grp-hdr">${esc(BUCKET_NAME(k))}</div>`;
-    return hdr + groups[k].map(c=>{
-      const noapply = !c.applies;
-      const st = effStatus(c);
-      const mine = !!c.custom;
-      let right;
-      if(noapply){
-        right = `<span class="pill no">no requirement</span><span class="pill cr">${c.credits} cr</span>`;
-      } else if(st === 'completed'){
-        right = `${c.grade?`<span class="pill grade">${esc(c.grade)}</span>`:''}<span class="pill cr">${c.credits} cr</span>` +
-                `${c.term?`<span style="color:var(--muted);font-size:.72rem">${esc(c.term)}</span>`:''}`;
-      } else if(st === 'progress'){
-        right = `<span class="pill st">Taking it now</span><span class="pill cr">${c.credits} cr</span>`;
-      } else {
-        right = `${c.verify?'<span class="pill verify">Verify w/ advisor</span>':''}${prioPill(c.prio)}<span class="pill cr">${c.credits} cr</span>`;
-      }
-      if(mine) right = `<span class="pill mine">added by you</span>` + right;
-      const tip = noapply ? '' : ' title="Tap to change: still needed → in progress → completed"';
-      return `<div class="course st-${st} ${noapply?'noapply':''}" data-id="${esc(c.id)}">
-        <div class="check"${tip}>${MARK(st)}</div>
-        <div class="body">
-          <div class="code">${esc(c.code)}${c.term && st!=='completed'?` · ${esc(c.term)}`:''}</div>
-          <div class="title">${esc(c.title)}</div>
-          ${c.wsu?`<div class="maps">→ counts as ${esc(c.wsu)}</div>`:''}
-          ${c.notes?`<div class="notes">${esc(c.notes)}</div>`:''}
-        </div>
-        <div class="right">${right}${mine?`<button class="del" data-del="${esc(c.id)}" title="Remove">✕</button>`:''}</div>
-      </div>`;
-    }).join('');
-  }).join('');
-
-  el.querySelectorAll('.course').forEach(row=>{
-    const c = allCourses().find(x=>x.id===row.dataset.id);
-    if(!c || !c.applies) return;
-    row.querySelector('.check').onclick = ()=> cycleStatus(c);
-  });
-  el.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.onclick = (e)=>{
-      e.stopPropagation();
-      const id = btn.dataset.del;
-      if(!confirm('Remove this class from your tracker?')) return;
-      state.custom = state.custom.filter(x=>x.id!==id);
-      delete state.checks[id];
-      save(); renderAll();
-    };
-  });
-}
-
-/* ---------- ADD A CLASS ---------- */
-function initForm(){
-  const sel = document.getElementById('fBucket');
-  sel.innerHTML = DATA.buckets.map(b=>`<option value="${b.id}">${esc(b.name)} — ${b.req} cr required</option>`).join('')
-    + `<option value="">Fills no requirement (earned credit only)</option>`;
-
-  const form = document.getElementById('addForm');
-  document.getElementById('addToggle').onclick = ()=>{
-    form.classList.toggle('open');
-    if(form.classList.contains('open')) document.getElementById('fCode').focus();
-  };
-  document.getElementById('fCancel').onclick = ()=>{ form.classList.remove('open'); clearForm(); };
-  document.getElementById('fSave').onclick = saveNewCourse;
-  form.addEventListener('keydown', e=>{ if(e.key==='Enter' && e.target.tagName!=='TEXTAREA') saveNewCourse(); });
-}
-function clearForm(){
-  ['fCode','fTitle','fCredits','fGrade','fTerm'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('fErr').textContent = '';
-}
-function saveNewCourse(){
-  const code    = document.getElementById('fCode').value.trim();
-  const title   = document.getElementById('fTitle').value.trim();
-  const credits = parseFloat(document.getElementById('fCredits').value);
-  const bucket  = document.getElementById('fBucket').value;
-  const status  = document.getElementById('fStatus').value;
-  const grade   = document.getElementById('fGrade').value.trim();
-  const term    = document.getElementById('fTerm').value.trim();
-  const err     = document.getElementById('fErr');
-
-  if(!code && !title){ err.textContent = 'Give it at least a course code or a title.'; return; }
-  if(isNaN(credits) || credits < 0){ err.textContent = 'Enter the credit hours.'; return; }
-
-  const c = {
-    id: 'my_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-    custom: true,
-    bucket: bucket,
-    applies: !!bucket,
-    status: status,
-    code: code || '—',
-    title: title || code,
-    credits: credits,
-  };
-  if(grade) c.grade = grade;
-  if(term)  c.term  = term;
-
-  state.custom.push(c);
-  save();
-  clearForm();
-  document.getElementById('addForm').classList.remove('open');
-  activeTab = c.applies ? (status==='needed'?'needed':status) : 'noapply';
-  renderAll();
-  document.querySelector('#courseList').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-/* ============================================================
-   SEMESTER PLANNER
-   state.plan overrides DATA.planSeed once you touch anything.
-   ============================================================ */
-function getPlan(){
-  if(!Array.isArray(state.plan)){
-    // guard: if data.js is stale/cached and has no planSeed, fall back to an
-    // empty plan instead of throwing and killing every other render on the page
-    const seed = Array.isArray(DATA.planSeed) ? DATA.planSeed : [];
-    state.plan = JSON.parse(JSON.stringify(seed));
-  }
-  /* drop any course ids that no longer exist, and repair malformed terms */
-  state.plan = state.plan.filter(t => t && typeof t === 'object').map(t => ({
-    ...t,
-    name: t.name || 'Untitled semester',
-    courses: Array.isArray(t.courses) ? t.courses.filter(id => courseById(id)) : []
-  }));
-  return state.plan;
-}
-function savePlan(){ save(); renderPlanner(); }
-function courseById(id){ return allCourses().find(c=>c.id===id); }
-
-/* courses that still need doing and aren't in any semester yet */
-function unplannedCourses(){
-  const inPlan = new Set();
-  getPlan().forEach(t => t.courses.forEach(id => inPlan.add(id)));
-  return allCourses().filter(c => c.applies && effStatus(c) !== 'completed' && !inPlan.has(c.id));
-}
-function termCredits(t){
-  return t.courses.map(courseById).filter(Boolean)
-    .filter(c => effStatus(c) !== 'completed')
-    .reduce((s,c) => s + (Number(c.credits)||0), 0);
-}
-function loadPill(cr, n){
-  if(!n)       return '<span class="load-pill none">nothing planned</span>';
-  if(cr === 0) return '<span class="load-pill light">0 cr</span>';
-  const cls = cr <= 4 ? 'light' : cr <= 8 ? 'ok' : cr <= 11 ? 'heavy' : 'over';
-  const word = cr <= 4 ? 'light' : cr <= 8 ? 'sustainable' : cr <= 11 ? 'heavy' : 'too much part-time';
-  return `<span class="load-pill ${cls}">${cr} cr · ${word}</span>`;
-}
-
-function renderPlanner(){
-  const plan = getPlan();
-
-  /* graduation projection = last term that still has unfinished work */
-  const active = plan.filter(t => termCredits(t) > 0);
-  const last = active[active.length - 1];
-  const totalLeft = plan.reduce((s,t) => s + termCredits(t), 0);
-  const stray = unplannedCourses().reduce((s,c) => s + (Number(c.credits)||0), 0);
-  document.getElementById('gradBox').innerHTML =
-    `<div class="g1">🎓 ${last ? esc(last.name) : 'Everything is done'}</div>` +
-    `<div class="g2">${totalLeft} credits planned across ${active.length} semester${active.length===1?'':'s'}` +
-    `${stray ? ` · <b>${stray} cr not yet placed in a semester</b>` : ''}</div>`;
-
-  document.getElementById('planner').innerHTML = plan.map((t,ti)=>{
-    const courses = t.courses.map(courseById).filter(Boolean);
-    const rows = courses.length ? courses.map(c=>{
-      const st = effStatus(c);
-      return `<div class="prow st-${st}">
-        <span class="dot"></span>
-        <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}
-          ${st==='completed'?'<span>done ✓</span>':st==='progress'?'<span>taking it now</span>':''}</div>
-        <span class="cr">${c.credits} cr</span>
-        <button class="mini" data-mv="prev" data-t="${ti}" data-c="${esc(c.id)}" ${ti===0?'disabled':''} title="Move to earlier semester">←</button>
-        <button class="mini" data-mv="next" data-t="${ti}" data-c="${esc(c.id)}" ${ti===plan.length-1?'disabled':''} title="Move to later semester">→</button>
-        <button class="mini x" data-unassign="${esc(c.id)}" title="Remove from this semester">✕</button>
-      </div>`;
-    }).join('') : `<div class="prow" style="color:var(--muted);font-size:.83rem">Nothing planned for this semester yet.</div>`;
-
-    const avail = unplannedCourses();
-    return `<div class="card pterm">
-      <div class="pterm-head">
-        <input class="tname" value="${esc(t.name)}" data-rename="${ti}" aria-label="Semester name">
-        <input class="tnote" value="${esc(t.note||'')}" data-renote="${ti}" placeholder="note (optional)" aria-label="Semester note">
-        ${loadPill(termCredits(t), courses.filter(c=>effStatus(c)!=='completed').length)}
-      </div>
-      ${rows}
-      <div class="pterm-foot">
-        <select data-addto="${ti}">
-          <option value="">+ Add a class to ${esc(t.name)}…</option>
-          ${avail.map(c=>`<option value="${esc(c.id)}">${esc(c.code)} · ${esc(c.title)} (${c.credits} cr)</option>`).join('')}
-        </select>
-        <button class="delterm" data-delterm="${ti}">Delete semester</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  /* unplanned pool */
-  const up = unplannedCourses();
-  document.getElementById('unplanned').innerHTML =
-    `<div class="unp-head">Unplanned <span>— ${up.length ? `${up.length} class${up.length===1?'':'es'} not assigned to any semester yet` : 'nothing left over, every class has a home'}</span></div>` +
-    up.map(c=>`<div class="prow st-${effStatus(c)}">
-      <span class="dot"></span>
-      <div class="pc"><b>${esc(c.code)}</b> ${esc(c.title)}</div>
-      <span class="cr">${c.credits} cr</span>
-    </div>`).join('');
-
-  wirePlanner();
-}
-
-function wirePlanner(){
-  const plan = getPlan();
-  document.querySelectorAll('[data-mv]').forEach(b=>{
-    b.onclick = ()=>{
-      const ti = +b.dataset.t, id = b.dataset.c;
-      const to = b.dataset.mv === 'prev' ? ti-1 : ti+1;
-      if(to < 0 || to >= plan.length) return;
-      plan[ti].courses = plan[ti].courses.filter(x=>x!==id);
-      if(!plan[to].courses.includes(id)) plan[to].courses.push(id);
-      savePlan();
-    };
-  });
-  document.querySelectorAll('[data-unassign]').forEach(b=>{
-    b.onclick = ()=>{
-      const id = b.dataset.unassign;
-      plan.forEach(t => t.courses = t.courses.filter(x=>x!==id));
-      savePlan();
-    };
-  });
-  document.querySelectorAll('[data-addto]').forEach(sel=>{
-    sel.onchange = ()=>{
-      const id = sel.value; if(!id) return;
-      const ti = +sel.dataset.addto;
-      plan.forEach(t => t.courses = t.courses.filter(x=>x!==id));
-      plan[ti].courses.push(id);
-      savePlan();
-    };
-  });
-  document.querySelectorAll('[data-rename]').forEach(inp=>{
-    inp.onchange = inp.onblur = ()=>{
-      const v = inp.value.trim();
-      if(v){ plan[+inp.dataset.rename].name = v; save(); }
-      renderPlanner();
-    };
-  });
-  document.querySelectorAll('[data-renote]').forEach(inp=>{
-    inp.onchange = inp.onblur = ()=>{ plan[+inp.dataset.renote].note = inp.value.trim(); save(); };
-  });
-  document.querySelectorAll('[data-delterm]').forEach(b=>{
-    b.onclick = ()=>{
-      const ti = +b.dataset.delterm, t = plan[ti];
-      const n = t.courses.length;
-      if(n && !confirm(`Delete ${t.name}? Its ${n} class${n===1?'':'es'} will go back to Unplanned — nothing is lost.`)) return;
-      plan.splice(ti,1);
-      savePlan();
-    };
-  });
-}
-
-document.getElementById('addTerm').onclick = ()=>{
-  const plan = getPlan();
-  plan.push({id:'t'+Date.now().toString(36), name:'New semester', note:'', courses:[]});
-  savePlan();
-  document.querySelector('#planner .pterm:last-child .tname').select();
-};
-document.getElementById('resetPlan').onclick = ()=>{
-  if(!confirm('Throw away your changes and go back to the original plan? Your course check-offs are not affected.')) return;
-  state.plan = JSON.parse(JSON.stringify(DATA.planSeed));
-  savePlan();
-};
-
-/* ---------- CHECKLIST ---------- */
-const TAG_LABEL = {deadline:'Deadline', aid:'Aid', school:'School'};
-function renderChecklist(){
-  const el = document.getElementById('checklist');
-  el.innerHTML = DATA.checklist.map((g,gi)=>{
-    const items = g.items.map(it => ({...it, done: state.checks[it.id] !== undefined ? state.checks[it.id] : !!it.done}));
-    const total = items.length, done = items.filter(i=>i.done).length;
-    const rows = items.map(it=>{
-      const tag = (it.tag && TAG_LABEL[it.tag]) ? ` <span class="ctag ${it.tag}">${TAG_LABEL[it.tag]}</span>` : '';
-      return `<div class="task ${it.done?'done':''}" data-id="${esc(it.id)}">
-        <div class="check">${CHECK}</div><div class="txt">${esc(it.text)}${tag}</div>
-      </div>`;
-    }).join('');
-    return `<div class="card term ${gi===0?'open':''} ${g.recurring?'grad':''}">
-      <div class="term-head">
-        <div class="t">${esc(g.term)}${g.note?`<span>${esc(g.note)}</span>`:''}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="load">${done}/${total}${done===total&&total?' ✓':''}</span><span class="chev">▶</span>
-        </div>
-      </div>
-      <div class="term-body" style="padding-top:0">${rows}</div>
-    </div>`;
-  }).join('');
-
-  el.querySelectorAll('.term-head').forEach(h=> h.onclick = e =>{
-    if(e.target.closest('.task')) return;
-    h.parentElement.classList.toggle('open');
-  });
-  el.querySelectorAll('.task').forEach(row=>{
-    row.querySelector('.check').onclick = e =>{
-      e.stopPropagation();
-      const id = row.dataset.id;
-      let base = false;
-      DATA.checklist.forEach(g=>g.items.forEach(i=>{ if(i.id===id) base = !!i.done; }));
-      const cur = state.checks[id] !== undefined ? state.checks[id] : base;
-      state.checks[id] = !cur;
-      save(); renderChecklist();
-    };
-  });
-}
-
-/* ---------- EXTRAS ---------- */
-function renderExtras(){
-  const mine = allCourses().filter(c=>!c.applies && c.custom).map(c=>({
-    code:c.code, title:c.title, credits:c.credits, why:'Added by you — marked as filling no requirement.'
-  }));
-  document.getElementById('extras').innerHTML = DATA.extras.concat(mine).map(x=>`
-    <div class="extra">
-      <div>
-        <div class="n">${esc(x.title)}</div>
-        <div class="c">${esc(x.code)}</div>
-        <div class="w">${esc(x.why)}</div>
-      </div>
-      <div class="c" style="white-space:nowrap">${x.credits} cr</div>
-    </div>`).join('');
-}
-
-/* ---------- CONTACTS + FOOT ---------- */
-function renderContacts(){
-  document.getElementById('contacts').innerHTML = DATA.contacts.map(c=>`
-    <div class="card contact">
-      <div class="who">${esc(c.who)}</div>
-      ${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}
-      ${c.phone?`<a href="tel:${esc(c.phone).replace(/[^0-9]/g,'')}">${esc(c.phone)}</a>`:''}
-    </div>`).join('');
-}
-function renderFoot(){
-  const p = computeProgress(), e = earnedAllCredits();
-  document.getElementById('foot').innerHTML =
-    `${p.counted} of ${DATA.totalCredits} required credits · ${e.total} total credits earned · Overall GPA ${DATA.stats.gpaOverall}<br>` +
-    `${DATA.program} · catalog ${DATA.catalogYear}<br>` +
-    `You're not behind. You're building this on your own terms. Keep going. 💪`;
-}
-
-/* ---------- MODE TOGGLE + RESET ---------- */
-document.querySelectorAll('#mode button').forEach(b=>{
-  b.onclick = ()=>{
-    MODE = b.dataset.mode;
-    document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on', x===b));
-    renderRing(); renderKpis(); renderFoot();
-  };
-});
-document.getElementById('resetBtn').onclick = ()=>{
-  if(confirm('This clears your check-offs AND any classes you added on this device. data.js is not affected. Continue?')){
-    localStorage.removeItem(STORE_KEY); location.reload();
-  }
-};
-
-function renderAll(){
-  renderRing(); renderKpis(); renderBuckets(); renderTabs(); renderCourses();
-  renderPlanner(); renderExtras(); renderFoot();
-}
-initForm(); renderAll(); renderChecklist(); renderContacts();
+function renderAll(){ renderRing(); renderKpis(); renderBuckets('buckets'); renderNextUp(); renderTiles(); renderNonCredit(); renderFoot(); }
+renderNav('index.html'); renderModeToggle(renderKpis); renderAll();
 </script>
 </body>
 </html>

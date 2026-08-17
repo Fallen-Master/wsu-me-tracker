@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23111'/><text y='72' x='50' font-size='60' text-anchor='middle' fill='%23FFCD00' font-family='system-ui' font-weight='bold'>ME</text></svg>">
+<link rel="stylesheet" href="style.css?v=6">
+<title>To-Do · WSU ME Tracker</title>
+</head>
+<body>
+
+<header class="hero slim">
+  <div class="wrap">
+    <div>
+      <h1>To-Do &amp; Deadlines</h1>
+      <div class="meta" id="hdrSub">–</div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="section" style="margin-top:22px">
+    <div class="section-sub">FAFSA, the state grant, scholarships, registration and advising — by term. Tap to check off. Tap a semester header to fold it.</div>
+    <div id="checklist"></div>
+  </section>
+
+  <section class="section">
+    <h2>Key Contacts</h2>
+    <div class="contacts" id="contacts"></div>
+    <button class="reset" id="resetBtn">Reset everything saved on this device</button>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="data.js?v=6"></script>
+<script src="app.js?v=6"></script>
+<script>
+const TAG_LABEL = {deadline:'Deadline', aid:'Aid', school:'School'};
+function itemDone(it){ const v = state.checks[it.id]; return v===undefined ? !!it.done : v; }
+
+function renderChecklist(){
+  const el = $('checklist');
+  el.innerHTML = DATA.checklist.map((g,gi)=>{
+    const items = g.items.map(it => ({...it, done: itemDone(it)}));
+    const total = items.length, done = items.filter(i=>i.done).length;
+    const rows = items.map(it=>{
+      const tag = (it.tag && TAG_LABEL[it.tag]) ? ` <span class="ctag ${it.tag}">${TAG_LABEL[it.tag]}</span>` : '';
+      return `<div class="task ${it.done?'done':''}" data-id="${esc(it.id)}">
+        <div class="check">${CHECK}</div><div class="txt">${esc(it.text)}${tag}</div></div>`;
+    }).join('');
+    return `<div class="card term ${gi===0?'open':''} ${g.recurring?'grad':''}">
+      <div class="term-head">
+        <div class="t">${esc(g.term)}${g.note?`<span>${esc(g.note)}</span>`:''}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="load">${done}/${total}${done===total&&total?' ✓':''}</span><span class="chev">▶</span>
+        </div>
+      </div>
+      <div class="term-body" style="padding-top:0">${rows}</div>
+    </div>`;
+  }).join('');
+
+  el.querySelectorAll('.term-head').forEach(h=> h.onclick = e =>{
+    if(e.target.closest('.task')) return;
+    h.parentElement.classList.toggle('open');
+  });
+  el.querySelectorAll('.task').forEach(row=>{
+    row.querySelector('.check').onclick = e =>{
+      e.stopPropagation();
+      const id = row.dataset.id;
+      let base=false; DATA.checklist.forEach(g=>g.items.forEach(i=>{ if(i.id===id) base=!!i.done; }));
+      const cur = state.checks[id]!==undefined ? state.checks[id] : base;
+      state.checks[id] = !cur; save(); renderAll();
+    };
+  });
+}
+function renderContacts(){
+  $('contacts').innerHTML = DATA.contacts.map(c=>`
+    <div class="card contact">
+      <div class="who">${esc(c.who)}</div>
+      ${c.email?`<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:''}
+      ${c.phone?`<a href="tel:${esc(c.phone).replace(/[^0-9]/g,'')}">${esc(c.phone)}</a>`:''}
+    </div>`).join('');
+}
+function renderHdr(){
+  const open = DATA.checklist.reduce((s,g)=>s+g.items.filter(i=>!itemDone(i)).length,0);
+  const dl = DATA.checklist.reduce((s,g)=>s+g.items.filter(i=>!itemDone(i)&&i.tag==='deadline').length,0);
+  $('hdrSub').innerHTML = `<b>${open}</b> open item${open===1?'':'s'}${dl?` · <b>${dl}</b> hard deadline${dl===1?'':'s'}`:''}`;
+}
+function renderAll(){ renderHdr(); renderChecklist(); renderFoot(); }
+renderNav('checklist.html'); renderContacts(); wireReset(); renderAll();
+</script>
+</body>
+</html>
