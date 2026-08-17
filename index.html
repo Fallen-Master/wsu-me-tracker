@@ -357,7 +357,9 @@ h2{font-size:1.15rem;letter-spacing:-.01em;margin-bottom:2px}
   <div class="foot" id="foot"></div>
 </div>
 
-<script src="data.js"></script>
+<!-- ?v= busts the browser/GitHub Pages cache. Bump it whenever data.js changes
+     shape, so an old cached data.js can never pair with a new index.html. -->
+<script src="data.js?v=4"></script>
 <script>
 /* ============================================================
    STATE — check-offs and your own added classes live in
@@ -683,7 +685,18 @@ function saveNewCourse(){
    state.plan overrides DATA.planSeed once you touch anything.
    ============================================================ */
 function getPlan(){
-  if(!Array.isArray(state.plan)) state.plan = JSON.parse(JSON.stringify(DATA.planSeed));
+  if(!Array.isArray(state.plan)){
+    // guard: if data.js is stale/cached and has no planSeed, fall back to an
+    // empty plan instead of throwing and killing every other render on the page
+    const seed = Array.isArray(DATA.planSeed) ? DATA.planSeed : [];
+    state.plan = JSON.parse(JSON.stringify(seed));
+  }
+  /* drop any course ids that no longer exist, and repair malformed terms */
+  state.plan = state.plan.filter(t => t && typeof t === 'object').map(t => ({
+    ...t,
+    name: t.name || 'Untitled semester',
+    courses: Array.isArray(t.courses) ? t.courses.filter(id => courseById(id)) : []
+  }));
   return state.plan;
 }
 function savePlan(){ save(); renderPlanner(); }

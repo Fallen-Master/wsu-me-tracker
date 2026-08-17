@@ -142,14 +142,41 @@ If you change a bucket's `req`, make sure all five still sum to `totalCredits` (
 
 ---
 
+## Transfer equivalencies — verified against the official guide
+
+Checked against WSU's **2026–27 Butler CC engineering transfer guide**, which names these Butler
+courses for the Mechanical Engineering path: CH 110, MA 151, MA 152, MA 253, PH 251, PH 252,
+EN 101, EN 102, EN 260 Statics, PL 292 Engineering Ethics.
+
+Corrections this produced:
+
+| Was | Now | Why |
+|---|---|---|
+| PH 251 (4) + invented "PH 251L" (1) | **PH 251 (5)** | Butler's PH 251 is a single 5-credit course with the lab built in. There is no separate lab course. |
+| PH 252 (4) | **PH 252 (5)** | Also 5 at Butler. WSU's PHYS 314 is 4, so 1 credit transfers as excess. |
+| CH 106 → CHEM 211 (engineering chemistry) | **CH 106 → gen-ed science bucket; CH 110 added as still needed** | WSU's portal applied CH 106 to gen-ed Bucket #4, *not* to the engineering requirement. The guide names CH 110 for ME. This is the single biggest correction — see below. |
+| "AE 223 Statics" (take at WSU) | **EN 260 Statics at Butler** → AE 223 | On the guide. Take it at Butler and save money. |
+| "PHIL 385 Engineering Ethics" (take at WSU) | **PL 292 at Butler** → PHIL 385 | On the guide. No prereqs — bank it early. |
+| EN 102 at 0 credits | **EN 102, 1 credit, completed** | WSU reports EN 101 + EN 102 = 4 credits transferred; the Butler transcript shows EN 101 at 3, so EN 102 is the remaining 1 credit, from the WSU Tech record. Flagged to verify. |
+
+### Requirement credits vs. classes you'll actually enroll in
+
+These are two different numbers and the site shows both:
+
+- **79 requirement credits remain** (128 − 49). That's what the percentage and the bucket bars track.
+- **~89 credits of classes are in the plan.** That's what you'll actually sit through.
+
+The ~10-credit gap is real, not an error. WSU's own degree plan has built-in overlap (a course can satisfy a gen-ed bucket *and* a major requirement), and two Butler courses run heavier than their WSU equivalents (PH 252 is 5 vs. 4; the graphics pair is 4 vs. 3). Buckets are capped at their requirement, so surplus credit fills the bar and then stops counting.
+
 ## Open questions for your advisor
 
 These are flagged on the site and in the Fall 2026 checklist:
 
-1. **CH 106 → CHEM 211.** WSU's portal already applied it to the science requirement. Get it confirmed in writing.
-2. **EN 102.** WSU's portal shows 4 graphics credits; your Butler transcript has 3. Ask whether EN 101 alone satisfies IME 222 + 222L.
-3. **Gen Ed.** Your transcript says *KS Systemwide GE Completed* — confirm that closes the gen-ed bucket entirely.
+1. **CH 106 vs CH 110 — ask this one first.** WSU applied CH 106 to the gen-ed science bucket, and the engineering guide requires CH 110 College Chemistry I for ME. If CH 106 can substitute, you drop a 5-credit class and Spring 2028 opens up. If it can't, CH 110 stays. Worth an email before you plan that far out.
+2. **EN 102.** WSU reports 4 graphics credits; the Butler transcript shows 3. Confirm EN 101 + EN 102 fully satisfies IME 222 + 222L so nothing is left open.
+3. **Gen Ed.** Your transcript says *KS Systemwide GE Completed* — confirm that closes buckets 3–7 entirely.
 4. **Engineering+ requirement.** 3 of 7 activities, chair approval, 0 credits — but still required to graduate.
+5. **MA 260 Differential Equations.** On the guide under Mathematics generally; confirm it's the right course for the ME track rather than a WSU-side MATH 555.
 
 ---
 
